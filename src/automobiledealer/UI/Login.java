@@ -4,25 +4,33 @@
  * and open the template in the editor.
  */
 package automobiledealer.UI; 
-import static automobiledealer.UI.Driver.conn;
-import static automobiledealer.UI.Driver.stmt;
-import static automobiledealer.UI.Driver.rs;
-import static automobiledealer.UI.Driver.loggedUser;
-import automobiledealer.object.Employee;
+import automobiledealer.Contoller.EmployeeController;
+import automobiledealer.Model.Admin;
+import automobiledealer.Model.Manager;
+import automobiledealer.Model.Sales;
+import automobiledealer.Model.Technician;
+import java.sql.Connection;
 import java.sql.SQLException;
 import javax.swing.JOptionPane;
+import static Connection.Connection_to_db.connection;
+import automobiledealer.Model.Employee;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
 
 /**
  *
  * @author AkbarFauzy
  */
 public class Login extends javax.swing.JFrame {
-
+    Connection conn;
+    Employee User;
+    
     /**
      * Creates new form Login
      */
     public Login() {
         initComponents();
+        conn = connection();
     }
 
     /**
@@ -219,18 +227,32 @@ public class Login extends javax.swing.JFrame {
     }//GEN-LAST:event_loginUsernameFocusGained
 
     private void loginButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_loginButtonActionPerformed
+        PreparedStatement stmt = null;
         try{
             stmt = conn.prepareStatement("SELECT * FROM employee WHERE employee.username=? AND employee.password =?");
             stmt.setString(1, loginUsername.getText());
             stmt.setString(2, loginPassword.getText());
-            rs = stmt.executeQuery();
+            ResultSet rs = stmt.executeQuery();
             if(rs.next() != false){
-                loggedUser = new Employee(rs.getString("id"),rs.getString("name"), rs.getDate("birth_date"), rs.getString("gender"));
+                switch(rs.getString("position")){
+                    case "Manager":
+                        User = new Manager(rs.getString("id"),rs.getString("username"),rs.getString("password"), rs.getString("name"), rs.getDate("birth_date"), rs.getString("gender"));                
+                        break;
+                    case "Sales":
+                        User = new Sales(rs.getString("id"),rs.getString("username"),rs.getString("password"),rs.getString("name"), rs.getDate("birth_date"), rs.getString("gender"));
+                        break;
+                    case "Tech":
+                        User = new Technician(rs.getString("id"),rs.getString("username"), rs.getString("password"), rs.getString("name"), rs.getDate("birth_date"), rs.getString("gender"));
+                        break;
+                    case "Admin":
+                        User = new Admin(rs.getString("id"),rs.getString("username"),rs.getString("password"), rs.getString("name"), rs.getDate("birth_date"), rs.getString("gender"));
+                        break;
+                }
                 stmt.close();
                 rs.close();
-                HomePage home = new HomePage();
-                home.show();
                 dispose();
+                MainFrame home = new MainFrame(User);
+                home.setVisible(true);
             }else{
                 JOptionPane.showMessageDialog(this, "Username atau Password Salah", "Dialog", JOptionPane.ERROR_MESSAGE);
             }
