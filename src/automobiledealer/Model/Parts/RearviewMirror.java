@@ -12,8 +12,8 @@ package automobiledealer.Model.Parts;
 public class RearviewMirror extends Parts{
     private String type;
 
-    public RearviewMirror(String _partsNumber, String _name, String _brand, int _price, String _type) {
-        super(_partsNumber, _name, _brand, _price);
+    public RearviewMirror(String _partsNumber, String _name, String _brand, int _price,String _status, String _type) {
+        super(_partsNumber, _name, _brand, _price, _status);
         this.type = _type;
     }
     

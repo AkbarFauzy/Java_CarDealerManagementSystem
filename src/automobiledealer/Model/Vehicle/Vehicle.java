@@ -21,8 +21,10 @@ public class Vehicle {
     private int price;
     private String fuelType;
     private int horsePower;
+    private String status;
     
-    public Vehicle(String _registrationNumber,String _name, String _brand, String _color, int _numWheel, double _weight, int _numDoors, String _transmission, int _price, String _fuelType, int _horsePower){
+    
+    public Vehicle(String _registrationNumber,String _name, String _brand, String _color, int _numWheel, double _weight, int _numDoors, String _transmission, int _price, String _fuelType, int _horsePower, String _status){
         this.registrationNumber = _registrationNumber;
         this.name = _name;
         this.brand = _brand;
@@ -34,6 +36,7 @@ public class Vehicle {
         this.price = _price;
         this.fuelType = _fuelType;
         this.horsePower = _horsePower;
+        this.status = _status;
     }
     
     public void setRegistrationNumber(String registrationNumber){
@@ -80,6 +83,10 @@ public class Vehicle {
         this.horsePower = horsePower;
     }
     
+    public void setStattus(String status){
+        this.status = status;
+    }
+    
     public String getRegistrationNumber(){
         return this.registrationNumber;
     }
@@ -122,5 +129,9 @@ public class Vehicle {
     
     public int getHorsePower(){
         return this.horsePower;
+    }
+    
+    public String getStatus(){
+        return this.status;
     }
 }

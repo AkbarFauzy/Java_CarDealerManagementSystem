@@ -23,35 +23,36 @@ import javax.swing.JOptionPane;
  *
  * @author AkbarFauzy
  */
-public class PartDAO {
+public class PartDAO implements ManageParts{
     
     Connection conn;
     
-    public void PartDAO(){
-        this.conn = connection();
+    public PartDAO(){
+        conn=connection();
     }
     
     public List list(){
         List<Parts> part = new ArrayList<>();
         try{
-            PreparedStatement stmt= conn.prepareStatement("SELECT * FROM `spare_part` main "
+            PreparedStatement stmt = conn.prepareStatement("SELECT * FROM `spare_part` main "
                     + "LEFT JOIN `rims` r on r.FK_partNumber = main.partNumber "
                     + "LEFT JOIN `rearview_mirror` m on m.FK_partNumber = main.partNumber "
                     + "LEFT JOIN `engine` e on e.FK_partNumber= main.partNumber "
                     + "LEFT JOIN `tire` t on t.FK_partNumber = main.partNumber;");
             ResultSet rs = stmt.executeQuery();
             while(rs.next()){
+                
                 Parts P = null;
-                if(rs.getString("rims_id")!=null){
-                    P = new Rims(rs.getString("partNumber"),rs.getString("name"),rs.getString("brand"),rs.getInt("price"),rs.getInt("rim_diameter"));
-                }else if(rs.getString("rearview_mirror_id")!=null){
-                    P = new RearviewMirror(rs.getString("partNumber"),rs.getString("name"),rs.getString("brand"),rs.getInt("price"),rs.getString("mirror_type"));                    
-                }else if(rs.getString("engine_id")!=null){
-                    P = new CarEngine(rs.getString("partNumber"),rs.getString("name"),rs.getString("brand"),rs.getInt("price"),rs.getInt("capacity"),rs.getInt("number_cylinder"));              
-                }else if(rs.getString("tire_id")!=null){
-                    P = new Tire(rs.getString("partNumber"),rs.getString("name"),rs.getString("brand"),rs.getInt("price"),rs.getInt("tire_diameter"),rs.getInt("width"),rs.getString("tire_type"));              
+                if(rs.getString("rims_diameter")!=null){
+                    P = new Rims(rs.getString("partNumber"),rs.getString("name"),rs.getString("brand"),rs.getInt("price"),rs.getString("status"),rs.getInt("rims_diameter"));
+                }else if(rs.getString("mirror_type")!=null){
+                    P = new RearviewMirror(rs.getString("partNumber"),rs.getString("name"),rs.getString("brand"),rs.getInt("price"), rs.getString("status"),rs.getString("mirror_type"));                    
+                }else if(rs.getString("capacity")!=null){
+                    P = new CarEngine(rs.getString("partNumber"),rs.getString("name"),rs.getString("brand"),rs.getInt("price"), rs.getString("status"), rs.getInt("capacity"),rs.getInt("number_cylinder"));              
+                }else if(rs.getString("tire_diameter")!=null){
+                    P = new Tire(rs.getString("partNumber"),rs.getString("name"),rs.getString("brand"),rs.getInt("price"), rs.getString("status"), rs.getInt("tire_diameter"),rs.getInt("width"),rs.getString("tire_type"));              
                 }else{
-
+                
                 }
                 part.add(P);
             }
@@ -116,44 +117,50 @@ public class PartDAO {
     
     public void editPart(Parts P){
         try{
-            try (PreparedStatement stmt = conn.prepareStatement("UPDATE spare_part SET partNumber=?, name=?, brand=?, price=?")) {
+            try (PreparedStatement stmt = conn.prepareStatement("UPDATE spare_part SET partNumber=?, name=?, brand=?, price=? WHERE part_number=?")) {
                 stmt.setString(1, P.getPartsNumber());
                 stmt.setString(2, P.getName());
                 stmt.setString(3, P.getBrand());
                 stmt.setInt(4, P.getPrice());
+                stmt.setString(5, P.getPartsNumber());
                 
                 stmt.executeUpdate();
                 stmt.close();
             }
             
             if(P instanceof Rims){
-                try (PreparedStatement stmt2 = conn.prepareStatement("UPDATE rim SET FK_partNumber=?, rim_diameter=?")) {
+                try (PreparedStatement stmt2 = conn.prepareStatement("UPDATE rim SET FK_partNumber=?, rim_diameter=? WHERE part_number=?")) {
                     stmt2.setString(1,P.getPartsNumber());
                     stmt2.setInt(2, ((Rims)P).getDiameter());
+                    stmt2.setString(3, P.getPartsNumber());
                     
                     stmt2.executeUpdate();
                 }
             }else if(P instanceof RearviewMirror){
-                try (PreparedStatement stmt2 = conn.prepareStatement("UPDATE rearview_mirror SET FK_partNumber=?, type=?")) {
+                try (PreparedStatement stmt2 = conn.prepareStatement("UPDATE rearview_mirror SET FK_partNumber=?, type=? WHERE part_number=?")) {
                     stmt2.setString(1,P.getPartsNumber());
                     stmt2.setString(2, ((RearviewMirror)P).getType());
+                    stmt2.setString(3, P.getPartsNumber());
                     
                     stmt2.executeUpdate();
                 }
             }else if(P instanceof CarEngine){
-                try (PreparedStatement stmt2 = conn.prepareStatement("UPDATE engine SET FK_partNumber=?, capacity=?, number_cylinder=?")) {
+                try (PreparedStatement stmt2 = conn.prepareStatement("UPDATE engine SET FK_partNumber=?, capacity=?, number_cylinder=? WHERE part_number=?")) {
                     stmt2.setString(1,P.getPartsNumber());
                     stmt2.setInt(2, ((CarEngine)P).getCapacity());
                     stmt2.setInt(3, ((CarEngine)P).getNumCylinder());
+                    stmt2.setString(4, P.getPartsNumber());
                     
                     stmt2.executeUpdate();
                 }
             }else if(P instanceof Tire){
-                try (PreparedStatement stmt2 = conn.prepareStatement("UPDATE tire SET FK_partNumber=?, tire_diameter=?,width=?, tire_type=?")) {
+                try (PreparedStatement stmt2 = conn.prepareStatement("UPDATE tire SET FK_partNumber=?, tire_diameter=?,width=?, tire_type=? WHERE part_number=?")) {
                     stmt2.setString(1,P.getPartsNumber());
                     stmt2.setInt(2, ((Tire)P).getDiameter());
                     stmt2.setInt(3, ((Tire)P).getWidth());
                     stmt2.setString(4, ((Tire)P).getType());
+                    stmt2.setString(5, P.getPartsNumber());
+                    
                     
                     stmt2.executeUpdate();
                 }

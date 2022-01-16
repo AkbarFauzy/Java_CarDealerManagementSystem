@@ -6,15 +6,20 @@
 package automobiledealer.Model;
 
 import automobiledealer.Model.Vehicle.Vehicle;
+import java.util.Date;
 
 /**
  *
  * @author AkbarFauzy
  */
 public class SalesInvoice extends Invoice{
-    
-    public SalesInvoice(String _invoiceID, Customer _customer, Employee _employee, Vehicle _vehicle, Payments _payment, String _description) {
-        super(_invoiceID, _customer, _employee, _vehicle, _payment, _description);
+    private Sales employee;
+
+    public SalesInvoice(int _invoiceID, Customer _customer, Vehicle _vehicle, Payments _payment, String _description, Date _date, Sales _employee) {
+        super(_invoiceID, _customer, _vehicle, _payment, _description, _date);
+        this.employee = _employee;
     }
+    
+
     
 }

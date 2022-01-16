@@ -12,8 +12,8 @@ package automobiledealer.Model.Parts;
 public class Rims extends Parts{
     private int diameter;
 
-    public Rims(String _partsNumber, String _name, String _brand, int _price, int _diameter) {
-        super(_partsNumber, _name, _brand, _price);
+    public Rims(String _partsNumber, String _name, String _brand, int _price, String _status, int _diameter) {
+        super(_partsNumber, _name, _brand, _price, _status);
         this.diameter = _diameter;
     }
     

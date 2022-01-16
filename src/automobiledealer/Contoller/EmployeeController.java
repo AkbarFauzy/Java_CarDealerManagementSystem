@@ -13,6 +13,7 @@ import automobiledealer.Model.Employee;
 import automobiledealer.Model.Manager;
 import automobiledealer.Model.Sales;
 import automobiledealer.Model.Technician;
+import java.awt.Color;
 import java.awt.HeadlessException;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -62,13 +63,15 @@ public class EmployeeController implements ActionListener, MouseListener{
     public void actionPerformed(ActionEvent e) {  
         if(e.getSource()==view.getEmployee_PanelButton()){
             view.cardLayout.show(view.getContentPanel(), "EmployeePageContentPanel");
-//            view.Employee_PanelButton.setBackground(new Color(0,90,192));
-//            view.Employee_PanelButton.getComponent(0).setForeground(Color.WHITE);
-//            view.prevMenuButton.setBackground(new Color(255,255,255));
-//            view.prevMenuButton.getComponent(0).setForeground(Color.BLACK);
+            view.prevMenuButton.setBackground(new Color(255,255,255));
+            view.prevMenuButton.setForeground(Color.BLACK);    
+            view.getEmployee_PanelButton().setBackground(new Color(0,90,192));
+            view.getEmployee_PanelButton().setForeground(Color.WHITE);           
             view.prevMenuButton = view.getEmployee_PanelButton();
-            
+            RefreshModel();
             EmployeeList(view.getEmployee_Table());
+            view.getEditEmployeeButton().setEnabled(false);
+            view.getDeleteEmployeeButton().setEnabled(false);
         
         }else if(e.getSource() == view.getEmployeeForm_Button_add()){
             if(view.getEmployeeForm_TextInput_username().getText().trim().isEmpty()){
@@ -92,7 +95,8 @@ public class EmployeeController implements ActionListener, MouseListener{
                 }catch(HeadlessException | ParseException ex){
                     JOptionPane.showMessageDialog(view, ex, "Dialog", JOptionPane.ERROR_MESSAGE);
                 }finally{
-                    refreshModel();
+                    RefreshModel();
+                    EmployeeList(view.getEmployee_Table());
                 }
             }
         }else if(e.getSource()==view.getAddEmployeeButton()){
@@ -113,7 +117,8 @@ public class EmployeeController implements ActionListener, MouseListener{
             int option = JOptionPane.showOptionDialog(null, msg, "",JOptionPane.OK_CANCEL_OPTION, JOptionPane.PLAIN_MESSAGE,null,options,options[0]);
             if(option == JOptionPane.OK_OPTION){     
                 mDAO.deleteEmployee(listEmployee.get(view.getEmployee_Table().getSelectedRow()));    
-                refreshModel();
+                RefreshModel();
+                EmployeeList(view.getEmployee_Table());
             }
         }
     }
@@ -138,8 +143,8 @@ public class EmployeeController implements ActionListener, MouseListener{
         tb.setRowCount(0);  
         Object[]object = new Object[4];
         for(int i=0;i<listEmployee.size();i++){
-            object[0] = listEmployee.get(i).getEmployeeID();
-            object[1] = listEmployee.get(i).getName();
+            object[0] = listEmployee.get(i).getName();
+            object[1] = listEmployee.get(i).getClass().getSimpleName();
             object[2] = listEmployee.get(i).dateOfBirth();
             object[3] = listEmployee.get(i).getGender();
             tb.addRow(object);
@@ -238,10 +243,10 @@ public class EmployeeController implements ActionListener, MouseListener{
         view.getEmployeeForm_ComboBox_yyyy().setSelectedItem(cal.get(Calendar.YEAR)+"");
         view.getEmployeeForm_ComboBox_mm().setSelectedIndex(cal.get(Calendar.MONTH));
         view.getEmployeeForm_ComboBox_dd().setSelectedIndex(cal.get(Calendar.DAY_OF_MONTH - 1));
-
     }
     
-    public void refreshModel(){
+    
+    public void RefreshModel(){
         this.listEmployee = employeeDAO.list();
     }
 

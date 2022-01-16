@@ -12,11 +12,13 @@ import automobiledealer.Model.Vehicle.Truck;
 import automobiledealer.Model.Vehicle.Vehicle;
 import automobiledealer.UI.MainFrame;
 import automobiledealer.UI.ViewVehicleDetail;
+import java.awt.Color;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
 import java.util.List;
+import java.util.stream.Collectors;
 import javax.swing.DefaultComboBoxModel;
 import javax.swing.JFrame;
 import javax.swing.JOptionPane;
@@ -56,13 +58,15 @@ public class VehicleController implements ActionListener, MouseListener{
     public void actionPerformed(ActionEvent e) {
         if(e.getSource() == view.getVehicle_PanelButton()){
             view.getCardLayout().show(view.getContentPanel(), "VehiclePageContentPanel");
-            //        Vehicle_PanelButton1.setBackground(new Color(0,90,192));
-            //        Vehicle_PanelButton1.getComponent(0).setForeground(Color.WHITE);
-            //        prevMenuButton.setBackground(new Color(255,255,255));
-            //        prevMenuButton.getComponent(0).setForeground(Color.BLACK);
+            view.prevMenuButton.setBackground(new Color(255,255,255));
+            view.prevMenuButton.setForeground(Color.BLACK);
+            view.getVehicle_PanelButton().setBackground(new Color(0,90,192));
+            view.getVehicle_PanelButton().setForeground(Color.WHITE);
             view.prevMenuButton = view.getVehicle_PanelButton();
             RefreshModel();
             VehicleList(view.getVehicle_Table());
+            view.getEditVehicleButton().setEnabled(false);
+            view.getDeleteVehicleButton().setEnabled(false);
         }else if(e.getSource() == view.getAddVehicleButton()){
             String msg = "";
             Object[] options ={"Car", "Truck"};
@@ -81,11 +85,7 @@ public class VehicleController implements ActionListener, MouseListener{
                 view.getCardLayout().show(view.getContentPanel(), "VehicleFormPanel");
                 ResetForm();
                 view.getVehicleForm_Button_add().setText("Add");
-            
-            }
-            
-        
-             
+            }             
         }else if(e.getSource() == view.getVehicleForm_Button_add()){
             if(view.getVehicleForm_TextInput_registerNumber().getText().trim().isEmpty()){
                 JOptionPane.showMessageDialog(view, "Register Number Tidak Boleh Kosong", "Dialog", JOptionPane.ERROR_MESSAGE);
@@ -99,16 +99,18 @@ public class VehicleController implements ActionListener, MouseListener{
                     EditVehicle();
                     view.getCardLayout().show(view.getContentPanel(), "VehiclePageContentPanel");
                 }
+                RefreshModel();
+                VehicleList(view.getVehicle_Table());
             }
         }else if(e.getSource() == view.getEditVehicleButton()){
             selectedVehicle = listVehicle.get(view.getVehicle_Table().getSelectedRow());
-            if( selectedVehicle instanceof Car){
-            
-            }else if(selectedVehicle instanceof Truck){
-            
-            }
+            view.cardLayout.show(view.getContentPanel(), "VehicleFormPanel");
+            FillForm();
+             view.getVehicleForm_Button_add().setText("Update");
         }else if(e.getSource() == view.getDeleteVehicleButton()){
             DeleteVehicle();
+            RefreshModel();
+            VehicleList(view.getVehicle_Table());
         }
     }
     
@@ -128,16 +130,39 @@ public class VehicleController implements ActionListener, MouseListener{
     }
     
     public void ResetForm(){
+        view.getVehicleForm_TextInput_registerNumber().setText("");
         view.getVehicleForm_TextInput_name().setText("");
         view.getVehicleForm_TextInput_brand().setText("");
         view.getVehicleForm_TextInput_color().setText("");
+        view.getVehicleForm_Spinner_price().setValue(0);
+        view.getVehicleForm_TextInput_transmition().setText("");
         view.getVehicleForm_Spinner_numWheels().setValue(0);
         view.getVehicleForm_Spinner_numDoors().setValue(0);
         view.getVehicleForm_Spinner_weight().setValue(0);
         view.getVehicleForm_Spinner_horsePower().setValue(0);
         view.getVehicleForm_Spinner_truckloadcapacity().setValue(0);
         view.getVehicleForm_ComboBox_fueltype().setSelectedIndex(0);
-        view.getVehicleForm_ComboBox_fueltype().setSelectedIndex(0);
+    }
+    
+    public void FillForm(){
+        view.getVehicleForm_TextInput_registerNumber().setText(selectedVehicle.getRegistrationNumber());
+        view.getVehicleForm_TextInput_name().setText(selectedVehicle.getName());
+        view.getVehicleForm_TextInput_brand().setText(selectedVehicle.getBrand());
+        view.getVehicleForm_TextInput_color().setText(selectedVehicle.getColor());
+        view.getVehicleForm_Spinner_numWheels().setValue(selectedVehicle.getNumWheel());
+        view.getVehicleForm_Spinner_numDoors().setValue(selectedVehicle.getNumDoors());
+        view.getVehicleForm_TextInput_transmition().setText(selectedVehicle.getTransmission());
+        view.getVehicleForm_Spinner_price().setValue(selectedVehicle.getPrice());
+        view.getVehicleForm_Spinner_weight().setValue(selectedVehicle.getWeight());
+        view.getVehicleForm_Spinner_horsePower().setValue(selectedVehicle.getHorsePower());
+        if(selectedVehicle instanceof Car){
+            view.getVehicleForm_ComboBox_fueltype().setSelectedItem(selectedVehicle.getFuelType());
+            view.getVehicleForm_ComboBox_carmodel().setSelectedItem(((Car)selectedVehicle).getCarModel());
+            view.getVehicleForm_ComboBox_carmodel().setEnabled(true);
+        }else {
+            view.getVehicleForm_Spinner_truckloadcapacity().setValue(((Truck)selectedVehicle).getLoadCapacity());
+        }
+        
     }
     
     public void InsertVehicle(){
@@ -153,6 +178,7 @@ public class VehicleController implements ActionListener, MouseListener{
                                       (Integer) view.getVehicleForm_Spinner_price().getValue(),
                                       view.getVehicleForm_ComboBox_fueltype().getSelectedItem().toString(),
                                       (Integer) view.getVehicleForm_Spinner_horsePower().getValue(),
+                                      "Ready",
                                       (Double) view.getVehicleForm_Spinner_truckloadcapacity().getValue()
             ));
         }else{
@@ -167,6 +193,7 @@ public class VehicleController implements ActionListener, MouseListener{
                                     (Integer) view.getVehicleForm_Spinner_price().getValue(),
                                     view.getVehicleForm_ComboBox_fueltype().getSelectedItem().toString(),
                                     (Integer) view.getVehicleForm_Spinner_horsePower().getValue(),
+                                    "Ready",
                                     CarModel.valueOf(view.getVehicleForm_ComboBox_carmodel().getSelectedItem().toString())
             ));
         }
@@ -178,7 +205,7 @@ public class VehicleController implements ActionListener, MouseListener{
         selectedVehicle.setBrand(view.getVehicleForm_TextInput_brand().getText());
         selectedVehicle.setColor(view.getVehicleForm_TextInput_color().getText());
         selectedVehicle.setNumWheel((Integer)view.getVehicleForm_Spinner_numWheels().getValue());
-        selectedVehicle.setWeight((Integer)view.getVehicleForm_Spinner_weight().getValue());
+        selectedVehicle.setWeight((Double)view.getVehicleForm_Spinner_weight().getValue());
         selectedVehicle.setNumDoors((Integer)view.getVehicleForm_Spinner_numDoors().getValue());
         selectedVehicle.setTransmission(view.getVehicleForm_TextInput_transmition().getText());
         selectedVehicle.setPrice((Integer) view.getVehicleForm_Spinner_price().getValue());
@@ -204,6 +231,12 @@ public class VehicleController implements ActionListener, MouseListener{
             RefreshModel();
         }
     }   
+    
+    
+    public List EligibleVehicle(){
+        List<Vehicle> eligibleVehicle = listVehicle.stream().filter(vehicle -> "Ready".equals(vehicle.getStatus())).collect(Collectors.toList());
+        return eligibleVehicle;
+    }
     
     @Override
     public void mouseClicked(MouseEvent e) {

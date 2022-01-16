@@ -12,11 +12,12 @@ package automobiledealer.Model.Vehicle;
 public class Truck extends Vehicle{
     private double loadCapacity;
 
-    public Truck(String _registrationNumber, String _name, String _brand, String _color, int _numWheel, double _weight, int _numDoors, String _transmission, int _price, String _fuelType, int _horsePower,double _loadCapacity) {
-        super(_registrationNumber, _name, _brand, _color, _numWheel, _weight, _numDoors, _transmission, _price, _fuelType, _horsePower);
+    public Truck(String _registrationNumber, String _name, String _brand, String _color, int _numWheel, double _weight, int _numDoors, String _transmission, int _price, String _fuelType, int _horsePower, String _status, double _loadCapacity) {
+        super(_registrationNumber, _name, _brand, _color, _numWheel, _weight, _numDoors, _transmission, _price, _fuelType, _horsePower, _status);
         this.loadCapacity = _loadCapacity;
     }
-    
+
+
     public void setLoadCapacity(double loadCapacity){
         this.loadCapacity = loadCapacity;
     }

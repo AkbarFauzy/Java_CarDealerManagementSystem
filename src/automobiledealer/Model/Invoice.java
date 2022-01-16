@@ -13,26 +13,68 @@ import java.util.Date;
  * @author AkbarFauzy
  */
 public class Invoice {
-    private String invoiceID;
+    private int invoiceID;
     private Customer customer;
-    private Employee employee;
     private Vehicle vehicle;
     private Payments paymentType;
     private String description;
     private Date date;
     
-    public Invoice(String _invoiceID, Customer _customer, Employee _employee, Vehicle _vehicle, Payments _payment, String _description){
+    public Invoice(int _invoiceID, Customer _customer, Vehicle _vehicle, Payments _payment, String _description, Date _date){
         this.invoiceID = _invoiceID;
         this.customer = _customer;
-        this.employee = _employee;
-        this.vehicle = this.vehicle;
+        this.vehicle = _vehicle;
         this.paymentType = _payment;
         this.description = _description;
-        this.date = new Date();
+        this.date = _date;
     }
-    
-    
-    
-    
-    
+
+    public int getInvoiceID() {
+        return invoiceID;
+    }
+
+    public void setInvoiceID(int invoiceID) {
+        this.invoiceID = invoiceID;
+    }
+
+    public Customer getCustomer() {
+        return customer;
+    }
+
+    public void setCustomer(Customer customer) {
+        this.customer = customer;
+    }
+
+    public Vehicle getVehicle() {
+        return vehicle;
+    }
+
+    public void setVehicle(Vehicle vehicle) {
+        this.vehicle = vehicle;
+    }
+
+    public Payments getPaymentType() {
+        return paymentType;
+    }
+
+    public void setPaymentType(Payments paymentType) {
+        this.paymentType = paymentType;
+    }
+
+    public String getDescription() {
+        return description;
+    }
+
+    public void setDescription(String description) {
+        this.description = description;
+    }
+
+    public Date getDate() {
+        return date;
+    }
+
+    public void setDate(Date date) {
+        this.date = date;
+    }
+   
 }

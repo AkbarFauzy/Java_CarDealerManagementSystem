@@ -5,10 +5,17 @@
  */
 package automobiledealer.DAO;
 
+import automobiledealer.Model.Parts.Parts;
+import java.util.List;
+
 /**
  *
  * @author AkbarFauzy
  */
-public class SalesDAO {
+public interface ManageParts {
+    public List list();
+    public void addPart(Parts P);
+    public void editPart(Parts P);
+    public void deletePart(String partNumber);
     
 }

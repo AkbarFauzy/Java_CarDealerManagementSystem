@@ -22,13 +22,14 @@ import javax.swing.JOptionPane;
  *
  * @author AkbarFauzy
  */
-public class VehicleDAO {
+public class VehicleDAO implements ManageVehicle{
     Connection conn;
     
     public VehicleDAO(){
         conn = connection();
     }
     
+    @Override
     public List list(){
         List<Vehicle> vehicle = new ArrayList<>();
         try{
@@ -48,6 +49,7 @@ public class VehicleDAO {
                             rs.getInt("price"),
                             rs.getString("fuel_type"),
                             rs.getInt("horse_power"),
+                            rs.getString("status"),
                             CarModel.valueOf(rs.getString("model"))
                     );
                 }
@@ -63,6 +65,7 @@ public class VehicleDAO {
                             rs.getInt("price"),
                             rs.getString("fuel_type"),
                             rs.getInt("horse_power"),
+                            rs.getString("status"),
                             rs.getInt("load_capacity")
                     );
                 }
@@ -77,22 +80,24 @@ public class VehicleDAO {
         return vehicle;
     }
     
+    @Override
     public void addVehicle(Car V){
         try{
             PreparedStatement stmt = conn.prepareStatement("INSERT INTO "
-                    + "vehicle(name, brand, color, number_wheel, weight, number_doors, transmission, price, fuel_type, horse_power, model) "
-                    + "VALUES(?,?,?,?,?,?,?,?,?,?,?)");
-            stmt.setString(1, V.getName());
-            stmt.setString(2, V.getBrand());
-            stmt.setString(3, V.getColor());
-            stmt.setInt(4, V.getNumWheel());
-            stmt.setDouble(5,V.getWeight());
-            stmt.setInt(6, V.getNumDoors());
-            stmt.setString(7, V.getTransmission());
-            stmt.setInt(8, V.getPrice());
-            stmt.setString(9, V.getFuelType());
-            stmt.setInt(10, V.getHorsePower());
-            stmt.setString(11, V.getCarModel().toString());
+                    + "vehicle(register_number,name, brand, color, number_wheel, weight, number_doors, transmission, price, fuel_type, horse_power, model) "
+                    + "VALUES(?,?,?,?,?,?,?,?,?,?,?,?)");
+            stmt.setString(1, V.getRegistrationNumber());
+            stmt.setString(2, V.getName());
+            stmt.setString(3, V.getBrand());
+            stmt.setString(4, V.getColor());
+            stmt.setInt(5, V.getNumWheel());
+            stmt.setDouble(6,V.getWeight());
+            stmt.setInt(7, V.getNumDoors());
+            stmt.setString(8, V.getTransmission());
+            stmt.setInt(9, V.getPrice());
+            stmt.setString(10, V.getFuelType());
+            stmt.setInt(11, V.getHorsePower());
+            stmt.setString(12, V.getCarModel().toString());
             stmt.executeUpdate();
             stmt.close();
             JOptionPane.showMessageDialog(null, "Vehicle Berhasil di Tambahkan");
@@ -101,22 +106,24 @@ public class VehicleDAO {
         }
     }
     
+    @Override
     public void addVehicle(Truck V){
         try{
             PreparedStatement stmt = conn.prepareStatement("INSERT INTO "
-                    + "vehicle(name, brand, color, number_wheel, weight,number_doors, transmission, price, fuel_type, horse_power, load_capacity) "
-                    + "VALUES(?,?,?,?,?,?,?,?,?,?)");
-            stmt.setString(1, V.getName());
-            stmt.setString(2, V.getBrand());
-            stmt.setString(3, V.getColor());
-            stmt.setInt(4, V.getNumWheel());
-            stmt.setDouble(5, V.getWeight());
-            stmt.setInt(6, V.getNumDoors());
-            stmt.setString(7, V.getTransmission());
-            stmt.setInt(8, V.getPrice());
-            stmt.setString(9, V.getFuelType());
-            stmt.setInt(10, V.getHorsePower());
-            stmt.setDouble(11, V.getLoadCapacity());
+                    + "vehicle(regsiter_number,name, brand, color, number_wheel, weight,number_doors, transmission, price, fuel_type, horse_power, load_capacity) "
+                    + "VALUES(?,?,?,?,?,?,?,?,?,?,?)");
+            stmt.setString(1, V.getRegistrationNumber());
+            stmt.setString(2, V.getName());
+            stmt.setString(3, V.getBrand());
+            stmt.setString(4, V.getColor());
+            stmt.setInt(5, V.getNumWheel());
+            stmt.setDouble(6, V.getWeight());
+            stmt.setInt(7, V.getNumDoors());
+            stmt.setString(8, V.getTransmission());
+            stmt.setInt(9, V.getPrice());
+            stmt.setString(10, V.getFuelType());
+            stmt.setInt(11, V.getHorsePower());
+            stmt.setDouble(12, V.getLoadCapacity());
             stmt.executeUpdate();
             stmt.close();
         }catch(SQLException e){
@@ -127,20 +134,21 @@ public class VehicleDAO {
     public void editVehicle(Car V){
         try{
             PreparedStatement stmt = conn.prepareStatement("UPDATE vehicle SET "
-                    + "name=?, brand=?, color=?, number_wheel=?, weight=?,number_doors=?, transmission=?, price=?, fuel_type=?, horse_power=?, model=? "
-                    + "WHERE vehicle.registered_number=?");
-            stmt.setString(1, V.getName());
-            stmt.setString(2, V.getBrand());
-            stmt.setString(3, V.getColor());
-            stmt.setInt(4, V.getNumWheel());
-            stmt.setDouble(5, V.getWeight());
-            stmt.setInt(6, V.getNumDoors());
-            stmt.setString(7, V.getTransmission());
-            stmt.setInt(8, V.getPrice());
-            stmt.setString(9, V.getFuelType());
-            stmt.setInt(10, V.getHorsePower());
-            stmt.setString(11, V.getCarModel().toString());
-            stmt.setString(12, V.getRegistrationNumber());
+                    + "regsiter_number=?, name=?, brand=?, color=?, number_wheel=?, weight=?,number_doors=?, transmission=?, price=?, fuel_type=?, horse_power=?, model=? "
+                    + "WHERE vehicle.register_number=?");
+            stmt.setString(1, V.getRegistrationNumber());
+            stmt.setString(2, V.getName());
+            stmt.setString(3, V.getBrand());
+            stmt.setString(4, V.getColor());
+            stmt.setInt(5, V.getNumWheel());
+            stmt.setDouble(6, V.getWeight());
+            stmt.setInt(7, V.getNumDoors());
+            stmt.setString(8, V.getTransmission());
+            stmt.setInt(9, V.getPrice());
+            stmt.setString(10, V.getFuelType());
+            stmt.setInt(11, V.getHorsePower());
+            stmt.setString(12, V.getCarModel().toString());
+            stmt.setString(13, V.getRegistrationNumber());
             stmt.executeUpdate();
             stmt.close();
         }catch(SQLException e){
@@ -148,23 +156,25 @@ public class VehicleDAO {
         }
     }
     
+    @Override
     public void editVehicle(Truck V){
         try{
             PreparedStatement stmt = conn.prepareStatement("UPDATE vehicle SET "
-                    + "name=?, brand=?, color=?, number_wheel=?, weight=?,number_doors=?, transmission=?, price=?, fuel_type=?, horse_power=?, load_capacity=? "
-                    + "WHERE vehicle.registered_number=?");
-            stmt.setString(1, V.getName());
-            stmt.setString(2, V.getBrand());
-            stmt.setString(3, V.getColor());
-            stmt.setInt(4, V.getNumWheel());
-            stmt.setDouble(5, V.getWeight());
-            stmt.setInt(6, V.getNumDoors());
-            stmt.setString(7, V.getTransmission());
-            stmt.setInt(8, V.getPrice());
-            stmt.setString(9, V.getFuelType());
-            stmt.setInt(10, V.getHorsePower());
-            stmt.setDouble(11, V.getLoadCapacity());
-            stmt.setString(12, V.getRegistrationNumber());
+                    + "regsiter_number =?, name=?, brand=?, color=?, number_wheel=?, weight=?,number_doors=?, transmission=?, price=?, fuel_type=?, horse_power=?, load_capacity=? "
+                    + "WHERE vehicle.register_number=?");
+            stmt.setString(1, V.getRegistrationNumber());
+            stmt.setString(2, V.getName());
+            stmt.setString(3, V.getBrand());
+            stmt.setString(4, V.getColor());
+            stmt.setInt(5, V.getNumWheel());
+            stmt.setDouble(6, V.getWeight());
+            stmt.setInt(7, V.getNumDoors());
+            stmt.setString(8, V.getTransmission());
+            stmt.setInt(9, V.getPrice());
+            stmt.setString(10, V.getFuelType());
+            stmt.setInt(11, V.getHorsePower());
+            stmt.setDouble(12, V.getLoadCapacity());
+            stmt.setString(13, V.getRegistrationNumber());
             stmt.executeUpdate();
             stmt.close();
         }catch(SQLException e){
@@ -172,6 +182,7 @@ public class VehicleDAO {
         }
     }
     
+    @Override
     public void deleteVehicle(String index){
         try{
             PreparedStatement stmt = conn.prepareStatement("DELETE FROM vehicle WHERE vehicle.register_number=?");

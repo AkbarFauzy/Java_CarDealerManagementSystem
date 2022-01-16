@@ -67,16 +67,16 @@ public class CustomerDAO {
         PreparedStatement stmt;
         
         try{
-            stmt = conn.prepareStatement("UPDATE customer SET name=?, address=?,phone_number=?,gender=? WHERE customder.NIK=?");
+            stmt = conn.prepareStatement("UPDATE customer SET name=?, address=?,phone_number=?,gender=? WHERE customer.id=?");
             stmt.setString(1, _customer.getName());
             stmt.setString(2, _customer.getAddress());
             stmt.setString(3, _customer.getPhoneNumber());
             stmt.setString(4, _customer.getGender());
-            //stmt.setString(5, );
+            stmt.setString(5, _customer.getNIK());
             stmt.executeUpdate();
             stmt.close();
             
-            JOptionPane.showMessageDialog(null, "Customer Berhasil di Tambahkan");
+            JOptionPane.showMessageDialog(null, "Customer Berhasil di Update");
             
         }catch(HeadlessException | SQLException e){
             JOptionPane.showMessageDialog(null, e, "Dialog", JOptionPane.ERROR_MESSAGE);

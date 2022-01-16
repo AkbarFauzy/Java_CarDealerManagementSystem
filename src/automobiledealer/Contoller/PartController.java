@@ -13,8 +13,11 @@ import automobiledealer.Model.Parts.Rims;
 import automobiledealer.Model.Parts.Tire;
 import automobiledealer.UI.MainFrame;
 import automobiledealer.UI.ViewPartDetail;
+import java.awt.Color;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.event.ItemEvent;
+import java.awt.event.ItemListener;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
 import java.util.List;
@@ -27,18 +30,17 @@ import javax.swing.table.DefaultTableModel;
  *
  * @author AkbarFauzy
  */
-public class PartController implements ActionListener, MouseListener{
-    Parts p;
+public class PartController implements ActionListener, MouseListener, ItemListener{
     PartDAO partDAO;
-    
-    List<Parts> listPart;
     MainFrame view;
+    List<Parts> listPart;
     DefaultTableModel tb;
     
     Parts selectedPart; 
     
     public PartController(JFrame view){
         partDAO = new PartDAO();
+        
         listPart = partDAO.list();
         
         this.view = (MainFrame)view;
@@ -50,15 +52,22 @@ public class PartController implements ActionListener, MouseListener{
         
         this.view.getPart_Table().addMouseListener(this);
     
+        this.view.getPartForm_ComboBox_partType().addItemListener(this);
     }
     
     @Override
     public void actionPerformed(ActionEvent e) {
         if(e.getSource() == view.getParts_PanelButton()){
            view.getCardLayout().show(view.getContentPanel(), "PartPageContentPanel");
+           view.prevMenuButton.setBackground(new Color(255,255,255));
+           view.prevMenuButton.setForeground(Color.BLACK);
+           view.getParts_PanelButton().setBackground(new Color(0,90,192));
+           view.getParts_PanelButton().setForeground(Color.WHITE);
            view.prevMenuButton = view.getParts_PanelButton();
            RefreshModel();
-           PartList(view.getCustomer_Table());
+           PartList(view.getPart_Table());
+           view.getEditPartButton().setEnabled(false);
+           view.getDeletePartButton().setEnabled(false);
         }else if(e.getSource() == view.getPartForm_Button_add()){
             if(view.getPartForm_TextInput_partNumber().getText().trim().isEmpty()){
                 
@@ -68,6 +77,8 @@ public class PartController implements ActionListener, MouseListener{
                 }else if("Update".equals(view.getPartForm_Button_add().getText())){
                     EditPart();
                 }
+                RefreshModel();
+                PartList(view.getPart_Table());
             }
         }else if(e.getSource() == view.getAddPartButton()){
            view.getCardLayout().show(view.getContentPanel(), "PartFormPanel");
@@ -80,6 +91,8 @@ public class PartController implements ActionListener, MouseListener{
            view.getPartForm_Button_add().setText("Update");
         }else if(e.getSource() == view.getDeletePartButton()){
            DeletePart();
+           RefreshModel();
+           PartList(view.getPart_Table());
         }
       
     }
@@ -114,6 +127,11 @@ public class PartController implements ActionListener, MouseListener{
         view.getPartForm_Spinner_cylinder().setValue(0);
         view.getPartForm_TextInput_type().setText("");
         
+        view.getPartForm_Spinner_capacity().setEnabled(false);
+        view.getPartForm_Spinner_cylinder().setEnabled(false);
+        view.getPartForm_TextInput_type().setEnabled(false);
+        view.getPartForm_Spinner_width().setEnabled(false);
+        
     }
     
     public void FillForm(){
@@ -144,6 +162,7 @@ public class PartController implements ActionListener, MouseListener{
                                         view.getPartForm_TextInput_name().getText(),
                                         view.getPartForm_TextInput_brand().getText(),
                                         (Integer)view.getPartForm_Spinner_Price().getValue(),
+                                        "Ready",
                                         (Integer)view.getPartForm_Spinner_diameter().getValue()
                                 ));
                 break;
@@ -152,6 +171,7 @@ public class PartController implements ActionListener, MouseListener{
                                                     view.getPartForm_TextInput_name().getText(),
                                                     view.getPartForm_TextInput_brand().getText(),
                                                    (Integer)view.getPartForm_Spinner_Price().getValue(),
+                                                    "Ready",
                                                     view.getPartForm_TextInput_type().getText()
                                 ));
                 break;
@@ -160,6 +180,7 @@ public class PartController implements ActionListener, MouseListener{
                                             view.getPartForm_TextInput_name().getText(),
                                             view.getPartForm_TextInput_brand().getText(),
                                             (Integer)view.getPartForm_Spinner_Price().getValue(),
+                                            "Ready",
                                             (Integer)view.getPartForm_Spinner_capacity().getValue(),
                                             (Integer)view.getPartForm_Spinner_cylinder().getValue()     
                                 ));
@@ -169,6 +190,7 @@ public class PartController implements ActionListener, MouseListener{
                                         view.getPartForm_TextInput_name().getText(),
                                         view.getPartForm_TextInput_brand().getText(),
                                         (Integer)view.getPartForm_Spinner_Price().getValue(),
+                                        "Ready",
                                         (Integer)view.getPartForm_Spinner_diameter().getValue(),
                                         (Integer)view.getPartForm_Spinner_width().getValue(),
                                         view.getPartForm_TextInput_type().getText()
@@ -242,6 +264,37 @@ public class PartController implements ActionListener, MouseListener{
     @Override
     public void mouseExited(MouseEvent e) {
 
+    }
+
+    @Override
+    public void itemStateChanged(ItemEvent e) {
+        if(e.getSource()==view.getPartForm_ComboBox_partType() && e.getStateChange() == ItemEvent.SELECTED){
+            view.getPartForm_Spinner_diameter().setEnabled(false);
+            view.getPartForm_Spinner_capacity().setEnabled(false);
+            view.getPartForm_Spinner_cylinder().setEnabled(false);
+            view.getPartForm_TextInput_type().setEnabled(false);
+            view.getPartForm_Spinner_width().setEnabled(false);
+            switch(view.getPartForm_ComboBox_partType().getSelectedItem().toString()){       
+                case "Rims":
+                    view.getPartForm_Spinner_diameter().setEnabled(true);
+                    break;
+                case "Rearview Mirror":
+                    view.getPartForm_TextInput_type().setEnabled(true);
+                    System.out.print("0");
+                    break;
+                    
+                case "Engine":
+                    view.getPartForm_Spinner_capacity().setEnabled(true);
+                    view.getPartForm_Spinner_cylinder().setEnabled(true);
+                    break;
+                case "Tire":
+                    view.getPartForm_Spinner_diameter().setEnabled(true);
+                    view.getPartForm_Spinner_width().setEnabled(true);
+                    view.getPartForm_TextInput_type().setEnabled(true);                    
+                    break;
+            
+            }
+        }
     }
     
     

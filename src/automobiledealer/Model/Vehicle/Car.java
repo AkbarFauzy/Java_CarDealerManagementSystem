@@ -12,11 +12,11 @@ package automobiledealer.Model.Vehicle;
 public class Car extends Vehicle{
     private CarModel model;
 
-    public Car(String _registrationNumber, String _name, String _brand, String _color, int _numWheel, double _weight, int _numDoors, String _transmission, int _price, String _fuelType, int _horsePower, CarModel _model) {
-        super(_registrationNumber, _name, _brand, _color, _numWheel, _weight, _numDoors, _transmission, _price, _fuelType, _horsePower);
+    public Car(String _registrationNumber, String _name, String _brand, String _color, int _numWheel, double _weight, int _numDoors, String _transmission, int _price, String _fuelType, int _horsePower, String _status, CarModel _model) {
+        super(_registrationNumber, _name, _brand, _color, _numWheel, _weight, _numDoors, _transmission, _price, _fuelType, _horsePower, _status);
         this.model = _model;
     }
-    
+
     public void setCarModel(CarModel model){
         this.model = model;
     }

@@ -9,6 +9,7 @@ import automobiledealer.DAO.CustomerDAO;
 import automobiledealer.UI.MainFrame;
 import automobiledealer.UI.ViewCustomerDetail;
 import automobiledealer.Model.Customer;
+import java.awt.Color;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.MouseEvent;
@@ -47,25 +48,34 @@ public class CustomerController implements ActionListener, MouseListener{
     @Override
     public void actionPerformed(ActionEvent e) {
         if(e.getSource() == view.getCustomer_PanelButton()){
-            view.cardLayout.show(view.getContentPanel(), "CustomerPageContentPanel");
-//            view.Customer_PanelButton1.setBackground(new Color(0,90,192));
-//            view.Customer_PanelButton1.getComponent(0).setForeground(Color.WHITE);
-//            view.prevMenuButton.setBackground(new Color(255,255,255));
-//            view.prevMenuButton.getComponent(0).setForeground(Color.BLACK);
+            view.getCardLayout().show(view.getContentPanel(), "CustomerPageContentPanel");
+            view.prevMenuButton.setBackground(new Color(255,255,255));
+            view.prevMenuButton.setForeground(Color.BLACK);
+            view.getCustomer_PanelButton().setBackground(new Color(0,90,192));
+            view.getCustomer_PanelButton().setForeground(Color.WHITE);
             view.prevMenuButton = view.getCustomer_PanelButton();
             RefreshModel();
             CustomerList(view.getCustomer_Table());
+            view.getEditCustomerButton().setEnabled(false);
+            view.getDeleteCustomerButton().setEnabled(false);
+            
         }else if(e.getSource() == view.getAddCustomerButton()){
             view.getCardLayout().show(view.getContentPanel(), "CustomerFormPanel");
             ResetForm();
             view.getCustomerForm_Button_add().setText("Add"); 
         }else if(e.getSource() == view.getCustomerForm_Button_add()){   
             if("Add".equals(view.getCustomerForm_Button_add().getText())){
-                InsertCustomer();
+                if(view.prevMenuButton == view.getInvoices_PanelButton()){
+                    view.cardLayout.show(view.getContentPanel(), "InvoiceFormPanel");
+                }else{
+                    InsertCustomer();
+                    view.cardLayout.show(view.getContentPanel(), "CustomerPageContentPanel");
+                }
             }else if("Update".equals(view.getCustomerForm_Button_add().getText())){
                 EditCustomer();
             }
             RefreshModel();
+            CustomerList(view.getCustomer_Table());
         }else if(e.getSource() == view.getEditCustomerButton()){ //Edit Customer Button
             selectedCustomer = (Customer)listCustomer.get(view.getCustomer_Table().convertRowIndexToModel(view.getCustomer_Table().getSelectedRow()));
             view.getCardLayout().show(view.getContentPanel(), "CustomerFormPanel");
@@ -73,6 +83,8 @@ public class CustomerController implements ActionListener, MouseListener{
             view.getCustomerForm_Button_add().setText("Update");
         }else if(e.getSource() == view.getDeleteCustomerButton()){ //Delete Customer Button
             DeleteCustomer();
+            RefreshModel();
+            CustomerList(view.getCustomer_Table());
         }
     }
 

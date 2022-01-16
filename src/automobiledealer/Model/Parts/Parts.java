@@ -14,12 +14,14 @@ public class Parts {
     private String name;
     private String brand;
     private int price;
+    private String status;
     
-    public Parts(String _partsNumber, String _name, String _brand, int _price){
+    public Parts(String _partsNumber, String _name, String _brand, int _price, String _status){
         this.partsNumber = _partsNumber;
         this.name = _name;
         this.brand = _brand;
         this.price = _price;
+        this.status = _status;
     }
     
     public void setPartsNumber(String partsNumber){
@@ -38,6 +40,10 @@ public class Parts {
         this.price = price;
     }
     
+    public void setStatus(String status){
+        this.status = status;
+    }
+    
     public String getPartsNumber(){
         return this.partsNumber;
     }
@@ -52,5 +58,9 @@ public class Parts {
     
     public int getPrice(){
         return this.price;
+    }
+
+    public String getStatus(){
+        return this.status;
     }
 }

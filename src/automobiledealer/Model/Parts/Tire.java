@@ -14,8 +14,8 @@ public class Tire extends Parts{
     private int width;
     private String type;
 
-    public Tire(String _partsNumber, String _name, String _brand, int _price, int _diameter, int _width, String _type) {
-        super(_partsNumber, _name, _brand, _price);
+    public Tire(String _partsNumber, String _name, String _brand, int _price, String _status, int _diameter, int _width, String _type) {
+        super(_partsNumber, _name, _brand, _price, _status);
         this.diameter = _diameter;
         this.width = _width;
         this.type = _type;

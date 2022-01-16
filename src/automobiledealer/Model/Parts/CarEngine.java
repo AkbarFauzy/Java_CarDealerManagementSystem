@@ -13,8 +13,8 @@ public class CarEngine extends Parts{
     private int capacity;
     private int numCylinder;
     
-    public CarEngine(String _partsNumber, String _name, String _brand, int _price, int _capacity, int _numCylinder){
-        super(_partsNumber, _name, _brand, _price);
+    public CarEngine(String _partsNumber, String _name, String _brand, int _price, String _status, int _capacity, int _numCylinder){
+        super(_partsNumber, _name, _brand, _price, _status);
         this.capacity = _capacity;
         this.numCylinder = _numCylinder;
     }
