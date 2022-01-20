@@ -5,18 +5,10 @@
  */
 package automobiledealer.UI;
 
-import automobiledealer.Contoller.CustomerController;
-import automobiledealer.Contoller.EmployeeController;
-import automobiledealer.Contoller.InvoiceController;
-import automobiledealer.Contoller.PartController;
-import automobiledealer.Contoller.VehicleController;
+import automobiledealer.Contoller.DashboardController;
 import java.awt.CardLayout;
 
-import automobiledealer.Model.Admin;
 import automobiledealer.Model.Employee;
-import automobiledealer.Model.Manager;
-import automobiledealer.Model.Sales;
-import automobiledealer.Model.Technician;
 import automobiledealer.Model.Vehicle.CarModel;
 import java.awt.Color;
 import java.awt.Component;
@@ -47,50 +39,24 @@ public class MainFrame extends javax.swing.JFrame {
      * Creates new form HomePage
      */
 
-    public CardLayout cardLayout;
-    public JButton prevMenuButton;
+    CardLayout cardLayout;
+    DashboardController DC;
     
+    public JButton prevMenuButton;   
     public Employee loggedUser;
     
     public MainFrame(Employee User) {
         initComponents();
         loggedUser = User;
+        this.DC = new DashboardController(this);
         cardLayout = (CardLayout)(ContentPanel.getLayout());
         prevMenuButton = Home_PanelButton;
-        loggedUserLabel.setText("Hi, " + loggedUser.getName());
-       
-        Menu(); 
-        
+        loggedUserLabel.setText("Hi, ("+loggedUser.getClass().getSimpleName() +") "+ loggedUser.getName());
         Home_PanelButton.setBackground(new Color(0,90,192));
         Home_PanelButton.setForeground(Color.WHITE);
         prevMenuButton = Home_PanelButton;
         
     }
-    
-    private void Menu(){
-        jPanel2.removeAll();
-        jPanel2.add(Home_PanelButton);
-        if(loggedUser instanceof Manager){
-            jPanel2.add(Employee_PanelButton);
-            EmployeeController EC = new EmployeeController(this);
-            jPanel2.add(Customer_PanelButton);
-            CustomerController CC = new CustomerController(this);
-            jPanel2.add(Vehicle_PanelButton);
-            VehicleController VC = new VehicleController(this);
-            jPanel2.add(Parts_PanelButton);
-            PartController PC = new PartController(this);
-            jPanel2.add(Invoices_PanelButton);       
-            InvoiceController IC = new InvoiceController(this, CC, EC, PC, VC);
-        }else if(loggedUser instanceof Admin){
-            jPanel2.add(Employee_PanelButton);
-            jPanel2.add(Invoices_PanelButton); 
-        }else if(loggedUser instanceof Sales){
-        
-        }else if(loggedUser instanceof Technician){
-        
-        }
-    }
-
     /**
      * This method is called from within the constructor to initialize the form.
      * WARNING: Do NOT modify this code. The content of this method is always
@@ -104,7 +70,7 @@ public class MainFrame extends javax.swing.JFrame {
         CustomerGender = new javax.swing.ButtonGroup();
         EmployeeGender = new javax.swing.ButtonGroup();
         EmployeePosition = new javax.swing.ButtonGroup();
-        jPanel2 = new javax.swing.JPanel();
+        SideBar = new javax.swing.JPanel();
         Home_PanelButton = new javax.swing.JButton();
         Employee_PanelButton = new javax.swing.JButton();
         Customer_PanelButton = new javax.swing.JButton();
@@ -113,13 +79,20 @@ public class MainFrame extends javax.swing.JFrame {
         Invoices_PanelButton = new javax.swing.JButton();
         ContentPanel = new javax.swing.JLayeredPane();
         HomePageContentPanel = new javax.swing.JPanel();
-        jLabel7 = new javax.swing.JLabel();
+        jPanel2 = new javax.swing.JPanel();
+        jPanel17 = new javax.swing.JPanel();
+        Home_Label_count1 = new javax.swing.JLabel();
+        Home_Label_name1 = new javax.swing.JLabel();
         jPanel1 = new javax.swing.JPanel();
-        jLabel5 = new javax.swing.JLabel();
-        jPanel4 = new javax.swing.JPanel();
-        jLabel18 = new javax.swing.JLabel();
+        Home_Label_count2 = new javax.swing.JLabel();
+        Home_Label_name2 = new javax.swing.JLabel();
         jPanel5 = new javax.swing.JPanel();
-        jLabel17 = new javax.swing.JLabel();
+        Home_Label_count3 = new javax.swing.JLabel();
+        Home_Label_name3 = new javax.swing.JLabel();
+        jPanel4 = new javax.swing.JPanel();
+        Home_Label_count4 = new javax.swing.JLabel();
+        Home_Label_name4 = new javax.swing.JLabel();
+        jLabel7 = new javax.swing.JLabel();
         InvoiceButton = new javax.swing.JButton();
         EmployeePageContentPanel = new javax.swing.JPanel();
         jPanel6 = new javax.swing.JPanel();
@@ -264,7 +237,7 @@ public class MainFrame extends javax.swing.JFrame {
         jLabel3 = new javax.swing.JLabel();
         jLabel4 = new javax.swing.JLabel();
         jLabel13 = new javax.swing.JLabel();
-        jButton2 = new javax.swing.JButton();
+        InvoiceForm_Button_deleteItem = new javax.swing.JButton();
         jLabel20 = new javax.swing.JLabel();
         InvoiceDetail = new javax.swing.JPanel();
         jPanel13 = new javax.swing.JPanel();
@@ -275,8 +248,21 @@ public class MainFrame extends javax.swing.JFrame {
         jLabel23 = new javax.swing.JLabel();
         InvoiceDetail_Label_date = new javax.swing.JLabel();
         jScrollPane9 = new javax.swing.JScrollPane();
-        jTextArea1 = new javax.swing.JTextArea();
+        InvoiceDetail_TextArea_description = new javax.swing.JTextArea();
         jSeparator1 = new javax.swing.JSeparator();
+        jLabel2 = new javax.swing.JLabel();
+        InvoiceDetail_Label_total = new javax.swing.JLabel();
+        InvoiceDetail_Label_customerName = new javax.swing.JLabel();
+        jLabel24 = new javax.swing.JLabel();
+        jLabel25 = new javax.swing.JLabel();
+        jLabel26 = new javax.swing.JLabel();
+        jSeparator2 = new javax.swing.JSeparator();
+        jLabel27 = new javax.swing.JLabel();
+        jLabel28 = new javax.swing.JLabel();
+        jLabel29 = new javax.swing.JLabel();
+        InvoiceDetail_Label_employeeName = new javax.swing.JLabel();
+        InvoiceDetail_Label_customerTelpon = new javax.swing.JLabel();
+        InvoiceDetail_Label_customerAddress = new javax.swing.JLabel();
         jPanel3 = new javax.swing.JPanel();
         jLabel1 = new javax.swing.JLabel();
         loggedUserLabel = new javax.swing.JLabel();
@@ -297,43 +283,43 @@ public class MainFrame extends javax.swing.JFrame {
         setBackground(new java.awt.Color(246, 249, 255));
         setResizable(false);
 
-        jPanel2.setBackground(new java.awt.Color(255, 255, 255));
-        jPanel2.setLayout(new java.awt.GridLayout(11, 1));
+        SideBar.setBackground(new java.awt.Color(255, 255, 255));
+        SideBar.setLayout(new java.awt.GridLayout(11, 1));
 
         Home_PanelButton.setBackground(new java.awt.Color(255, 255, 255));
         Home_PanelButton.setFont(new java.awt.Font("Tahoma", 1, 14)); // NOI18N
         Home_PanelButton.setText("Home");
         Home_PanelButton.setBorder(null);
         Home_PanelButton.setBorderPainted(false);
-        jPanel2.add(Home_PanelButton);
+        SideBar.add(Home_PanelButton);
 
         Employee_PanelButton.setBackground(new java.awt.Color(255, 255, 255));
         Employee_PanelButton.setFont(new java.awt.Font("Tahoma", 1, 14)); // NOI18N
         Employee_PanelButton.setText("Employee");
         Employee_PanelButton.setBorder(null);
         Employee_PanelButton.setBorderPainted(false);
-        jPanel2.add(Employee_PanelButton);
+        SideBar.add(Employee_PanelButton);
 
         Customer_PanelButton.setBackground(new java.awt.Color(255, 255, 255));
         Customer_PanelButton.setFont(new java.awt.Font("Tahoma", 1, 14)); // NOI18N
         Customer_PanelButton.setText("Customer");
         Customer_PanelButton.setBorder(null);
         Customer_PanelButton.setBorderPainted(false);
-        jPanel2.add(Customer_PanelButton);
+        SideBar.add(Customer_PanelButton);
 
         Vehicle_PanelButton.setBackground(new java.awt.Color(255, 255, 255));
         Vehicle_PanelButton.setFont(new java.awt.Font("Tahoma", 1, 14)); // NOI18N
         Vehicle_PanelButton.setText("Vehicle");
         Vehicle_PanelButton.setBorder(null);
         Vehicle_PanelButton.setBorderPainted(false);
-        jPanel2.add(Vehicle_PanelButton);
+        SideBar.add(Vehicle_PanelButton);
 
         Parts_PanelButton.setBackground(new java.awt.Color(255, 255, 255));
         Parts_PanelButton.setFont(new java.awt.Font("Tahoma", 1, 14)); // NOI18N
         Parts_PanelButton.setText("Parts");
         Parts_PanelButton.setBorder(null);
         Parts_PanelButton.setBorderPainted(false);
-        jPanel2.add(Parts_PanelButton);
+        SideBar.add(Parts_PanelButton);
 
         Invoices_PanelButton.setBackground(new java.awt.Color(255, 255, 255));
         Invoices_PanelButton.setFont(new java.awt.Font("Tahoma", 1, 14)); // NOI18N
@@ -341,7 +327,7 @@ public class MainFrame extends javax.swing.JFrame {
         Invoices_PanelButton.setToolTipText("");
         Invoices_PanelButton.setBorder(null);
         Invoices_PanelButton.setBorderPainted(false);
-        jPanel2.add(Invoices_PanelButton);
+        SideBar.add(Invoices_PanelButton);
 
         ContentPanel.setBackground(new java.awt.Color(246, 249, 255));
         ContentPanel.setCursor(new java.awt.Cursor(java.awt.Cursor.DEFAULT_CURSOR));
@@ -350,73 +336,145 @@ public class MainFrame extends javax.swing.JFrame {
         HomePageContentPanel.setBackground(new java.awt.Color(246, 249, 255));
         HomePageContentPanel.setToolTipText("");
 
-        jLabel7.setBackground(new java.awt.Color(0, 90, 192));
-        jLabel7.setFont(new java.awt.Font("Tahoma", 1, 24)); // NOI18N
-        jLabel7.setForeground(new java.awt.Color(0, 90, 192));
-        jLabel7.setText("HOME");
+        jPanel2.setBackground(new java.awt.Color(246, 249, 255));
+        jPanel2.setLayout(new java.awt.GridLayout(2, 2, 24, 24));
 
-        jLabel5.setFont(new java.awt.Font("Tahoma", 1, 48)); // NOI18N
-        jLabel5.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
-        jLabel5.setText("00");
+        Home_Label_count1.setFont(new java.awt.Font("Tahoma", 1, 48)); // NOI18N
+        Home_Label_count1.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
+        Home_Label_count1.setText("00");
+
+        Home_Label_name1.setFont(new java.awt.Font("Tahoma", 1, 24)); // NOI18N
+        Home_Label_name1.setHorizontalAlignment(javax.swing.SwingConstants.LEFT);
+        Home_Label_name1.setText("00");
+
+        javax.swing.GroupLayout jPanel17Layout = new javax.swing.GroupLayout(jPanel17);
+        jPanel17.setLayout(jPanel17Layout);
+        jPanel17Layout.setHorizontalGroup(
+            jPanel17Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel17Layout.createSequentialGroup()
+                .addContainerGap(263, Short.MAX_VALUE)
+                .addComponent(Home_Label_count1, javax.swing.GroupLayout.PREFERRED_SIZE, 81, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(36, 36, 36))
+            .addGroup(jPanel17Layout.createSequentialGroup()
+                .addContainerGap()
+                .addComponent(Home_Label_name1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addContainerGap())
+        );
+        jPanel17Layout.setVerticalGroup(
+            jPanel17Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(jPanel17Layout.createSequentialGroup()
+                .addContainerGap()
+                .addComponent(Home_Label_name1, javax.swing.GroupLayout.PREFERRED_SIZE, 48, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(Home_Label_count1, javax.swing.GroupLayout.PREFERRED_SIZE, 48, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addContainerGap(61, Short.MAX_VALUE))
+        );
+
+        jPanel2.add(jPanel17);
+
+        Home_Label_count2.setFont(new java.awt.Font("Tahoma", 1, 48)); // NOI18N
+        Home_Label_count2.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
+        Home_Label_count2.setText("00");
+
+        Home_Label_name2.setFont(new java.awt.Font("Tahoma", 1, 24)); // NOI18N
+        Home_Label_name2.setHorizontalAlignment(javax.swing.SwingConstants.LEFT);
+        Home_Label_name2.setText("00");
 
         javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
         jPanel1.setLayout(jPanel1Layout);
         jPanel1Layout.setHorizontalGroup(
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel1Layout.createSequentialGroup()
-                .addContainerGap(155, Short.MAX_VALUE)
-                .addComponent(jLabel5, javax.swing.GroupLayout.PREFERRED_SIZE, 81, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(36, 36, 36))
+                .addContainerGap(260, Short.MAX_VALUE)
+                .addComponent(Home_Label_count2, javax.swing.GroupLayout.PREFERRED_SIZE, 81, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(39, 39, 39))
+            .addGroup(jPanel1Layout.createSequentialGroup()
+                .addContainerGap()
+                .addComponent(Home_Label_name2, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addContainerGap())
         );
         jPanel1Layout.setVerticalGroup(
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel1Layout.createSequentialGroup()
-                .addGap(49, 49, 49)
-                .addComponent(jLabel5, javax.swing.GroupLayout.PREFERRED_SIZE, 48, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(51, Short.MAX_VALUE))
+                .addContainerGap()
+                .addComponent(Home_Label_name2, javax.swing.GroupLayout.PREFERRED_SIZE, 48, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(Home_Label_count2, javax.swing.GroupLayout.PREFERRED_SIZE, 48, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addContainerGap(61, Short.MAX_VALUE))
         );
 
-        jLabel18.setFont(new java.awt.Font("Tahoma", 1, 48)); // NOI18N
-        jLabel18.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
-        jLabel18.setText("00");
+        jPanel2.add(jPanel1);
 
-        javax.swing.GroupLayout jPanel4Layout = new javax.swing.GroupLayout(jPanel4);
-        jPanel4.setLayout(jPanel4Layout);
-        jPanel4Layout.setHorizontalGroup(
-            jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel4Layout.createSequentialGroup()
-                .addContainerGap(158, Short.MAX_VALUE)
-                .addComponent(jLabel18, javax.swing.GroupLayout.PREFERRED_SIZE, 81, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(33, 33, 33))
-        );
-        jPanel4Layout.setVerticalGroup(
-            jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(jPanel4Layout.createSequentialGroup()
-                .addGap(56, 56, 56)
-                .addComponent(jLabel18, javax.swing.GroupLayout.PREFERRED_SIZE, 48, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(58, Short.MAX_VALUE))
-        );
+        Home_Label_count3.setFont(new java.awt.Font("Tahoma", 1, 48)); // NOI18N
+        Home_Label_count3.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
+        Home_Label_count3.setText("00");
 
-        jLabel17.setFont(new java.awt.Font("Tahoma", 1, 48)); // NOI18N
-        jLabel17.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
-        jLabel17.setText("00");
+        Home_Label_name3.setFont(new java.awt.Font("Tahoma", 1, 24)); // NOI18N
+        Home_Label_name3.setHorizontalAlignment(javax.swing.SwingConstants.LEFT);
+        Home_Label_name3.setText("00");
 
         javax.swing.GroupLayout jPanel5Layout = new javax.swing.GroupLayout(jPanel5);
         jPanel5.setLayout(jPanel5Layout);
         jPanel5Layout.setHorizontalGroup(
             jPanel5Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel5Layout.createSequentialGroup()
-                .addContainerGap(162, Short.MAX_VALUE)
-                .addComponent(jLabel17, javax.swing.GroupLayout.PREFERRED_SIZE, 81, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(29, 29, 29))
+                .addContainerGap(263, Short.MAX_VALUE)
+                .addComponent(Home_Label_count3, javax.swing.GroupLayout.PREFERRED_SIZE, 81, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(36, 36, 36))
+            .addGroup(jPanel5Layout.createSequentialGroup()
+                .addContainerGap()
+                .addComponent(Home_Label_name3, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addContainerGap())
         );
         jPanel5Layout.setVerticalGroup(
             jPanel5Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel5Layout.createSequentialGroup()
-                .addContainerGap(51, Short.MAX_VALUE)
-                .addComponent(jLabel17, javax.swing.GroupLayout.PREFERRED_SIZE, 48, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(41, 41, 41))
+            .addGroup(jPanel5Layout.createSequentialGroup()
+                .addContainerGap()
+                .addComponent(Home_Label_name3, javax.swing.GroupLayout.PREFERRED_SIZE, 48, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(3, 3, 3)
+                .addComponent(Home_Label_count3, javax.swing.GroupLayout.PREFERRED_SIZE, 48, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addContainerGap(64, Short.MAX_VALUE))
         );
+
+        jPanel2.add(jPanel5);
+
+        Home_Label_count4.setFont(new java.awt.Font("Tahoma", 1, 48)); // NOI18N
+        Home_Label_count4.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
+        Home_Label_count4.setText("00");
+
+        Home_Label_name4.setFont(new java.awt.Font("Tahoma", 1, 24)); // NOI18N
+        Home_Label_name4.setHorizontalAlignment(javax.swing.SwingConstants.LEFT);
+        Home_Label_name4.setText("00");
+
+        javax.swing.GroupLayout jPanel4Layout = new javax.swing.GroupLayout(jPanel4);
+        jPanel4.setLayout(jPanel4Layout);
+        jPanel4Layout.setHorizontalGroup(
+            jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel4Layout.createSequentialGroup()
+                .addContainerGap(271, Short.MAX_VALUE)
+                .addComponent(Home_Label_count4, javax.swing.GroupLayout.PREFERRED_SIZE, 81, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(28, 28, 28))
+            .addGroup(jPanel4Layout.createSequentialGroup()
+                .addContainerGap()
+                .addComponent(Home_Label_name4, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addContainerGap())
+        );
+        jPanel4Layout.setVerticalGroup(
+            jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(jPanel4Layout.createSequentialGroup()
+                .addContainerGap()
+                .addComponent(Home_Label_name4, javax.swing.GroupLayout.PREFERRED_SIZE, 48, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(2, 2, 2)
+                .addComponent(Home_Label_count4, javax.swing.GroupLayout.PREFERRED_SIZE, 48, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addContainerGap(65, Short.MAX_VALUE))
+        );
+
+        jPanel2.add(jPanel4);
+
+        jLabel7.setBackground(new java.awt.Color(0, 90, 192));
+        jLabel7.setFont(new java.awt.Font("Tahoma", 1, 24)); // NOI18N
+        jLabel7.setForeground(new java.awt.Color(0, 90, 192));
+        jLabel7.setText("HOME");
 
         InvoiceButton.setText("INVOICE");
 
@@ -424,35 +482,30 @@ public class MainFrame extends javax.swing.JFrame {
         HomePageContentPanel.setLayout(HomePageContentPanelLayout);
         HomePageContentPanelLayout.setHorizontalGroup(
             HomePageContentPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(HomePageContentPanelLayout.createSequentialGroup()
-                .addGap(53, 53, 53)
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, HomePageContentPanelLayout.createSequentialGroup()
                 .addGroup(HomePageContentPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, HomePageContentPanelLayout.createSequentialGroup()
+                        .addContainerGap()
+                        .addComponent(jPanel2, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
                     .addGroup(HomePageContentPanelLayout.createSequentialGroup()
-                        .addGroup(HomePageContentPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(jPanel5, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(jPanel4, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                        .addContainerGap(500, Short.MAX_VALUE))
-                    .addGroup(HomePageContentPanelLayout.createSequentialGroup()
+                        .addGap(51, 51, 51)
                         .addComponent(jLabel7)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                        .addComponent(InvoiceButton, javax.swing.GroupLayout.PREFERRED_SIZE, 148, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addGap(31, 31, 31))))
+                        .addComponent(InvoiceButton, javax.swing.GroupLayout.PREFERRED_SIZE, 148, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                .addGap(31, 31, 31))
         );
         HomePageContentPanelLayout.setVerticalGroup(
             HomePageContentPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(HomePageContentPanelLayout.createSequentialGroup()
                 .addGap(35, 35, 35)
-                .addGroup(HomePageContentPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(jLabel7)
-                    .addComponent(InvoiceButton, javax.swing.GroupLayout.PREFERRED_SIZE, 63, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(18, 18, 18)
-                .addComponent(jPanel4, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(29, 29, 29)
-                .addComponent(jPanel5, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                .addGroup(HomePageContentPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(InvoiceButton, javax.swing.GroupLayout.PREFERRED_SIZE, 63, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addGroup(HomePageContentPanelLayout.createSequentialGroup()
+                        .addGap(25, 25, 25)
+                        .addComponent(jLabel7)))
+                .addGap(52, 52, 52)
+                .addComponent(jPanel2, javax.swing.GroupLayout.PREFERRED_SIZE, 373, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addContainerGap(88, Short.MAX_VALUE))
         );
 
         ContentPanel.add(HomePageContentPanel, "HomePageContentPanel");
@@ -1030,6 +1083,7 @@ public class MainFrame extends javax.swing.JFrame {
         ContentPanel.add(CustomerFormPanel, "CustomerFormPanel");
 
         VehiclePageContentPanel.setBackground(new java.awt.Color(246, 249, 255));
+        VehiclePageContentPanel.setForeground(new java.awt.Color(0, 90, 192));
 
         jPanel14.setBackground(new java.awt.Color(255, 255, 255));
 
@@ -1046,17 +1100,17 @@ public class MainFrame extends javax.swing.JFrame {
         Vehicle_Table.setFont(new java.awt.Font("Tahoma", 0, 12)); // NOI18N
         Vehicle_Table.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
-                {null, null, null, null},
-                {null, null, null, null},
-                {null, null, null, null},
-                {null, null, null, null}
+                {null, null, null, null, null},
+                {null, null, null, null, null},
+                {null, null, null, null, null},
+                {null, null, null, null, null}
             },
             new String [] {
-                "Vehicle Name", "Brand", "Color", "Price"
+                "Vehicle Name", "Brand", "Color", "Price", "Status"
             }
         ) {
             boolean[] canEdit = new boolean [] {
-                false, false, false, false
+                false, false, false, false, false
             };
 
             public boolean isCellEditable(int rowIndex, int columnIndex) {
@@ -1192,7 +1246,7 @@ public class MainFrame extends javax.swing.JFrame {
         VehicleForm_Spinner_numDoors.setModel(new javax.swing.SpinnerNumberModel(0, 0, null, 1));
 
         VehicleForm_Spinner_weight.setFont(new java.awt.Font("Tahoma", 0, 12)); // NOI18N
-        VehicleForm_Spinner_weight.setModel(new javax.swing.SpinnerNumberModel(0, 0, null, 1));
+        VehicleForm_Spinner_weight.setModel(new javax.swing.SpinnerNumberModel(0.0d, 0.0d, null, 1.0d));
 
         VehicleForm_TextInput_transmition.setToolTipText("");
 
@@ -1217,7 +1271,7 @@ public class MainFrame extends javax.swing.JFrame {
         VehicleForm_Spinner_price.setModel(new javax.swing.SpinnerNumberModel(0, 0, null, 1));
 
         VehicleForm_Spinner_truckloadcapacity.setFont(new java.awt.Font("Tahoma", 0, 12)); // NOI18N
-        VehicleForm_Spinner_truckloadcapacity.setModel(new javax.swing.SpinnerNumberModel(0, 0, null, 1));
+        VehicleForm_Spinner_truckloadcapacity.setModel(new javax.swing.SpinnerNumberModel(0.0d, 0.0d, null, 1.0d));
         VehicleForm_Spinner_truckloadcapacity.setEnabled(false);
 
         VehicleForm_ComboBox_carmodel.setEnabled(false);
@@ -1385,19 +1439,21 @@ public class MainFrame extends javax.swing.JFrame {
 
         jPanel15.setBackground(new java.awt.Color(255, 255, 255));
 
+        Part_Table.setFont(new java.awt.Font("Tahoma", 0, 12)); // NOI18N
+        Part_Table.setForeground(new java.awt.Color(0, 90, 192));
         Part_Table.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
-                {null, null, null, null},
-                {null, null, null, null},
-                {null, null, null, null},
-                {null, null, null, null}
+                {null, null, null, null, null},
+                {null, null, null, null, null},
+                {null, null, null, null, null},
+                {null, null, null, null, null}
             },
             new String [] {
-                "Register Number", "Part Name", "Part Brand", "Price"
+                "Register Number", "Part Name", "Part Brand", "Price", "Status"
             }
         ) {
             boolean[] canEdit = new boolean [] {
-                false, false, false, false
+                false, false, false, false, false
             };
 
             public boolean isCellEditable(int rowIndex, int columnIndex) {
@@ -1407,6 +1463,11 @@ public class MainFrame extends javax.swing.JFrame {
         Part_Table.setRowHeight(48);
         Part_Table.setShowHorizontalLines(false);
         Part_Table.setShowVerticalLines(false);
+        Part_Table.addFocusListener(new java.awt.event.FocusAdapter() {
+            public void focusGained(java.awt.event.FocusEvent evt) {
+                Part_TableFocusGained(evt);
+            }
+        });
         jScrollPane4.setViewportView(Part_Table);
         Part_Table.setDefaultRenderer(Object.class, new TableCellRenderer(){
             private DefaultTableCellRenderer DEFAULT_RENDERER =  new DefaultTableCellRenderer();
@@ -1787,8 +1848,9 @@ public class MainFrame extends javax.swing.JFrame {
 
         InvoiceForm_TextInput_customer.setText("jTextField1");
 
-        InvoiceForm_Button_addItem.setText("jButton1");
+        InvoiceForm_Button_addItem.setText("Add Item");
 
+        InvoiceForm_Table_Item.setFont(new java.awt.Font("Tahoma", 0, 12)); // NOI18N
         InvoiceForm_Table_Item.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
                 {null, null},
@@ -1808,7 +1870,30 @@ public class MainFrame extends javax.swing.JFrame {
                 return canEdit [columnIndex];
             }
         });
+        InvoiceForm_Table_Item.setRowHeight(48);
+        InvoiceForm_Table_Item.setShowHorizontalLines(false);
+        InvoiceForm_Table_Item.setShowVerticalLines(false);
+        InvoiceForm_Table_Item.addFocusListener(new java.awt.event.FocusAdapter() {
+            public void focusGained(java.awt.event.FocusEvent evt) {
+                InvoiceForm_Table_ItemFocusGained(evt);
+            }
+        });
         jScrollPane6.setViewportView(InvoiceForm_Table_Item);
+
+        InvoiceForm_Table_Item.setDefaultRenderer(Object.class, new TableCellRenderer(){
+            private DefaultTableCellRenderer DEFAULT_RENDERER =  new DefaultTableCellRenderer();
+            @Override
+            public Component getTableCellRendererComponent(JTable table, Object value, boolean isSelected, boolean hasFocus, int row, int column) {
+                Component c = DEFAULT_RENDERER.getTableCellRendererComponent(table, value, isSelected, hasFocus, row, column);
+                if (row%2 == 0){
+                    c.setBackground(Color.WHITE);
+                }
+                else {
+                    c.setBackground(new Color(227,237,255));
+                }                        
+                return c;
+            }
+        });
 
         InvoiceForm_ComboBox_paymentType.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Item 1", "Item 2", "Item 3", "Item 4" }));
 
@@ -1825,7 +1910,8 @@ public class MainFrame extends javax.swing.JFrame {
         jLabel13.setFont(new java.awt.Font("Tahoma", 0, 12)); // NOI18N
         jLabel13.setText("Customer");
 
-        jButton2.setText("jButton2");
+        InvoiceForm_Button_deleteItem.setText("Delete Item");
+        InvoiceForm_Button_deleteItem.setEnabled(false);
 
         jLabel20.setBackground(new java.awt.Color(0, 90, 192));
         jLabel20.setFont(new java.awt.Font("Tahoma", 1, 24)); // NOI18N
@@ -1861,7 +1947,7 @@ public class MainFrame extends javax.swing.JFrame {
                             .addComponent(InvoiceForm_Button_add, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.PREFERRED_SIZE, 138, javax.swing.GroupLayout.PREFERRED_SIZE)
                             .addComponent(jScrollPane6, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.PREFERRED_SIZE, 340, javax.swing.GroupLayout.PREFERRED_SIZE)
                             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel10Layout.createSequentialGroup()
-                                .addComponent(jButton2)
+                                .addComponent(InvoiceForm_Button_deleteItem)
                                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                                 .addComponent(InvoiceForm_Button_addItem)))
                         .addGap(24, 24, 24))))
@@ -1875,7 +1961,7 @@ public class MainFrame extends javax.swing.JFrame {
                         .addGroup(jPanel10Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                             .addComponent(jButton1, javax.swing.GroupLayout.PREFERRED_SIZE, 37, javax.swing.GroupLayout.PREFERRED_SIZE)
                             .addComponent(InvoiceForm_Button_addItem, javax.swing.GroupLayout.PREFERRED_SIZE, 37, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(jButton2, javax.swing.GroupLayout.PREFERRED_SIZE, 38, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                            .addComponent(InvoiceForm_Button_deleteItem, javax.swing.GroupLayout.PREFERRED_SIZE, 38, javax.swing.GroupLayout.PREFERRED_SIZE)))
                     .addGroup(jPanel10Layout.createSequentialGroup()
                         .addGap(25, 25, 25)
                         .addComponent(jLabel20)
@@ -1922,26 +2008,44 @@ public class MainFrame extends javax.swing.JFrame {
 
         jPanel13.setBackground(new java.awt.Color(255, 255, 255));
 
+        InvoiceDetail_Table_item.setFont(new java.awt.Font("Tahoma", 0, 12)); // NOI18N
         InvoiceDetail_Table_item.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
-                {null, null, null, null},
-                {null, null, null, null},
-                {null, null, null, null},
-                {null, null, null, null}
+                {null, null, null},
+                {null, null, null},
+                {null, null, null},
+                {null, null, null}
             },
             new String [] {
-                "Title 1", "Title 2", "Title 3", "Title 4"
+                "Register Number", "Item Name", "Price"
             }
         ) {
             boolean[] canEdit = new boolean [] {
-                false, false, false, false
+                false, false, false
             };
 
             public boolean isCellEditable(int rowIndex, int columnIndex) {
                 return canEdit [columnIndex];
             }
         });
+        InvoiceDetail_Table_item.setRowHeight(48);
+        InvoiceDetail_Table_item.setShowHorizontalLines(false);
+        InvoiceDetail_Table_item.setShowVerticalLines(false);
         jScrollPane8.setViewportView(InvoiceDetail_Table_item);
+        InvoiceDetail_Table_item.setDefaultRenderer(Object.class, new TableCellRenderer(){
+            private DefaultTableCellRenderer DEFAULT_RENDERER =  new DefaultTableCellRenderer();
+            @Override
+            public Component getTableCellRendererComponent(JTable table, Object value, boolean isSelected, boolean hasFocus, int row, int column) {
+                Component c = DEFAULT_RENDERER.getTableCellRendererComponent(table, value, isSelected, hasFocus, row, column);
+                if (row%2 == 0){
+                    c.setBackground(Color.WHITE);
+                }
+                else {
+                    c.setBackground(new Color(227,237,255));
+                }                        
+                return c;
+            }
+        });
 
         jLabel21.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
         jLabel21.setText("Invoice #");
@@ -1954,69 +2058,161 @@ public class MainFrame extends javax.swing.JFrame {
 
         InvoiceDetail_Label_date.setText("jLabel24");
 
-        jTextArea1.setColumns(20);
-        jTextArea1.setRows(5);
-        jScrollPane9.setViewportView(jTextArea1);
+        InvoiceDetail_TextArea_description.setColumns(20);
+        InvoiceDetail_TextArea_description.setRows(3);
+        InvoiceDetail_TextArea_description.setBorder(javax.swing.BorderFactory.createEmptyBorder(24, 24, 24, 24));
+        InvoiceDetail_TextArea_description.setFocusable(false);
+        jScrollPane9.setViewportView(InvoiceDetail_TextArea_description);
+
+        jLabel2.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
+        jLabel2.setText("Total :");
+
+        InvoiceDetail_Label_total.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
+        InvoiceDetail_Label_total.setText("Rp. 000000000");
+
+        InvoiceDetail_Label_customerName.setFont(new java.awt.Font("Tahoma", 0, 12)); // NOI18N
+        InvoiceDetail_Label_customerName.setText("jLabel25");
+
+        jLabel24.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
+        jLabel24.setText("Nama :");
+
+        jLabel25.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
+        jLabel25.setText("No. Telepon :");
+
+        jLabel26.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
+        jLabel26.setText("Alamat :");
+
+        jLabel27.setFont(new java.awt.Font("Tahoma", 1, 36)); // NOI18N
+        jLabel27.setText("CarDealer");
+
+        jLabel28.setFont(new java.awt.Font("Tahoma", 1, 36)); // NOI18N
+        jLabel28.setText("INVOICE");
+
+        jLabel29.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
+        jLabel29.setText("Employee :");
+
+        InvoiceDetail_Label_employeeName.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
+        InvoiceDetail_Label_employeeName.setText("jLabel22");
+
+        InvoiceDetail_Label_customerTelpon.setFont(new java.awt.Font("Tahoma", 0, 12)); // NOI18N
+        InvoiceDetail_Label_customerTelpon.setText("jLabel25");
+
+        InvoiceDetail_Label_customerAddress.setFont(new java.awt.Font("Tahoma", 0, 12)); // NOI18N
+        InvoiceDetail_Label_customerAddress.setText("jLabel25");
 
         javax.swing.GroupLayout jPanel13Layout = new javax.swing.GroupLayout(jPanel13);
         jPanel13.setLayout(jPanel13Layout);
         jPanel13Layout.setHorizontalGroup(
             jPanel13Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel13Layout.createSequentialGroup()
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addComponent(jLabel2)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addComponent(InvoiceDetail_Label_total)
+                .addGap(89, 89, 89))
             .addGroup(jPanel13Layout.createSequentialGroup()
-                .addContainerGap(41, Short.MAX_VALUE)
-                .addGroup(jPanel13Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                .addGap(36, 36, 36)
+                .addGroup(jPanel13Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(jPanel13Layout.createSequentialGroup()
-                        .addComponent(jLabel23)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(InvoiceDetail_Label_date))
+                        .addComponent(jLabel27)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                        .addComponent(jLabel28)
+                        .addGap(59, 59, 59))
                     .addGroup(jPanel13Layout.createSequentialGroup()
-                        .addComponent(jLabel21)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(InvoiceDetail_Label_id))
-                    .addComponent(jScrollPane8, javax.swing.GroupLayout.DEFAULT_SIZE, 710, Short.MAX_VALUE)
-                    .addComponent(jScrollPane9)
-                    .addComponent(jSeparator1))
-                .addContainerGap(41, Short.MAX_VALUE))
+                        .addGroup(jPanel13Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addGroup(jPanel13Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                                .addComponent(jSeparator2, javax.swing.GroupLayout.PREFERRED_SIZE, 696, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addGroup(javax.swing.GroupLayout.Alignment.LEADING, jPanel13Layout.createSequentialGroup()
+                                    .addGap(6, 6, 6)
+                                    .addGroup(jPanel13Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                        .addGroup(jPanel13Layout.createSequentialGroup()
+                                            .addComponent(jLabel24)
+                                            .addGap(18, 18, 18)
+                                            .addComponent(InvoiceDetail_Label_customerName))
+                                        .addGroup(jPanel13Layout.createSequentialGroup()
+                                            .addComponent(jLabel26)
+                                            .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                            .addComponent(InvoiceDetail_Label_customerAddress))
+                                        .addGroup(jPanel13Layout.createSequentialGroup()
+                                            .addComponent(jLabel25)
+                                            .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                            .addComponent(InvoiceDetail_Label_customerTelpon)))
+                                    .addGap(249, 249, 249)
+                                    .addGroup(jPanel13Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                        .addGroup(jPanel13Layout.createSequentialGroup()
+                                            .addComponent(jLabel21)
+                                            .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                            .addComponent(InvoiceDetail_Label_id)
+                                            .addGap(18, 18, 18)
+                                            .addComponent(jLabel23)
+                                            .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                            .addComponent(InvoiceDetail_Label_date))
+                                        .addGroup(jPanel13Layout.createSequentialGroup()
+                                            .addComponent(jLabel29)
+                                            .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                            .addComponent(InvoiceDetail_Label_employeeName)))))
+                            .addGroup(jPanel13Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                                .addComponent(jSeparator1, javax.swing.GroupLayout.PREFERRED_SIZE, 677, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addGroup(jPanel13Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
+                                    .addComponent(jScrollPane8, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, 677, Short.MAX_VALUE)
+                                    .addComponent(jScrollPane9, javax.swing.GroupLayout.Alignment.LEADING))))
+                        .addContainerGap(20, Short.MAX_VALUE))))
         );
         jPanel13Layout.setVerticalGroup(
             jPanel13Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel13Layout.createSequentialGroup()
-                .addGap(40, 40, 40)
+                .addGap(32, 32, 32)
                 .addGroup(jPanel13Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(jLabel27)
+                    .addComponent(jLabel28))
+                .addGap(18, 18, 18)
+                .addComponent(jSeparator2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addGroup(jPanel13Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(InvoiceDetail_Label_id)
                     .addComponent(jLabel21)
-                    .addComponent(InvoiceDetail_Label_id))
-                .addGap(2, 2, 2)
-                .addGroup(jPanel13Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(jLabel24)
+                    .addComponent(InvoiceDetail_Label_customerName)
                     .addComponent(jLabel23)
                     .addComponent(InvoiceDetail_Label_date))
-                .addGap(14, 14, 14)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addGroup(jPanel13Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(jLabel25)
+                    .addComponent(jLabel29)
+                    .addComponent(InvoiceDetail_Label_employeeName)
+                    .addComponent(InvoiceDetail_Label_customerTelpon))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addGroup(jPanel13Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(jLabel26)
+                    .addComponent(InvoiceDetail_Label_customerAddress))
+                .addGap(18, 18, 18)
                 .addComponent(jScrollPane9, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(jScrollPane8, javax.swing.GroupLayout.PREFERRED_SIZE, 262, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(jScrollPane8, javax.swing.GroupLayout.PREFERRED_SIZE, 224, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addComponent(jSeparator1, javax.swing.GroupLayout.PREFERRED_SIZE, 10, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(111, Short.MAX_VALUE))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addGroup(jPanel13Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(jLabel2)
+                    .addComponent(InvoiceDetail_Label_total))
+                .addContainerGap(30, Short.MAX_VALUE))
         );
 
         javax.swing.GroupLayout InvoiceDetailLayout = new javax.swing.GroupLayout(InvoiceDetail);
         InvoiceDetail.setLayout(InvoiceDetailLayout);
         InvoiceDetailLayout.setHorizontalGroup(
             InvoiceDetailLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 825, Short.MAX_VALUE)
-            .addGroup(InvoiceDetailLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                .addGroup(InvoiceDetailLayout.createSequentialGroup()
-                    .addGap(16, 16, 16)
-                    .addComponent(jPanel13, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addContainerGap(17, Short.MAX_VALUE)))
+            .addGroup(InvoiceDetailLayout.createSequentialGroup()
+                .addGap(33, 33, 33)
+                .addComponent(jPanel13, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(72, 72, 72))
         );
         InvoiceDetailLayout.setVerticalGroup(
             InvoiceDetailLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 611, Short.MAX_VALUE)
-            .addGroup(InvoiceDetailLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                .addGroup(InvoiceDetailLayout.createSequentialGroup()
-                    .addGap(32, 32, 32)
-                    .addComponent(jPanel13, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addContainerGap(35, Short.MAX_VALUE)))
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, InvoiceDetailLayout.createSequentialGroup()
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addComponent(jPanel13, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addContainerGap())
         );
 
         ContentPanel.add(InvoiceDetail, "InvoiceDetail");
@@ -2067,7 +2263,7 @@ public class MainFrame extends javax.swing.JFrame {
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
-                .addComponent(jPanel2, javax.swing.GroupLayout.PREFERRED_SIZE, 273, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addComponent(SideBar, javax.swing.GroupLayout.PREFERRED_SIZE, 273, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(ContentPanel, javax.swing.GroupLayout.PREFERRED_SIZE, 825, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addContainerGap())
@@ -2080,10 +2276,10 @@ public class MainFrame extends javax.swing.JFrame {
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
                     .addComponent(ContentPanel, javax.swing.GroupLayout.PREFERRED_SIZE, 611, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(jPanel2, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)))
+                    .addComponent(SideBar, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)))
         );
 
-        jPanel2.getAccessibleContext().setAccessibleName("");
+        SideBar.getAccessibleContext().setAccessibleName("");
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
@@ -2141,6 +2337,15 @@ public class MainFrame extends javax.swing.JFrame {
         DeleteVehicleButton.setEnabled(true);
     }//GEN-LAST:event_Vehicle_TableFocusGained
 
+    private void Part_TableFocusGained(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_Part_TableFocusGained
+        EditPartButton.setEnabled(true);
+        DeletePartButton.setEnabled(true);
+    }//GEN-LAST:event_Part_TableFocusGained
+
+    private void InvoiceForm_Table_ItemFocusGained(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_InvoiceForm_Table_ItemFocusGained
+        InvoiceForm_Button_deleteItem.setEnabled(true);
+    }//GEN-LAST:event_InvoiceForm_Table_ItemFocusGained
+
     private void ChangeDDto31(){
         DefaultComboBoxModel CB = new DefaultComboBoxModel();
         for(int i=1;i<=31;i++){
@@ -2157,6 +2362,48 @@ public class MainFrame extends javax.swing.JFrame {
         EmployeeForm_ComboBox_dd.setModel(CB);
     }
 
+    public JLabel getHome_Label_count1() {
+        return Home_Label_count1;
+    }
+
+    public JLabel getHome_Label_count2() {
+        return Home_Label_count2;
+    }
+
+    public JLabel getHome_Label_count3() {
+        return Home_Label_count3;
+    }
+
+    public JLabel getHome_Label_count4() {
+        return Home_Label_count4;
+    }
+
+    public JLabel getHome_Label_name1() {
+        return Home_Label_name1;
+    }
+
+    public JLabel getHome_Label_name2() {
+        return Home_Label_name2;
+    }
+
+    public JLabel getHome_Label_name3() {
+        return Home_Label_name3;
+    }
+
+    public JLabel getHome_Label_name4() {
+        return Home_Label_name4;
+    }
+    
+    
+
+    public JPanel getSidebar() {
+        return SideBar;
+    }
+
+    public JButton getHome_PanelButton() {
+        return Home_PanelButton;
+    }
+    
     public CardLayout getCardLayout() {
         return cardLayout;
     }
@@ -2485,8 +2732,39 @@ public class MainFrame extends javax.swing.JFrame {
     public JButton getInvoiceForm_Button_addItem() {
         return InvoiceForm_Button_addItem;
     }
-    
 
+    public JButton getInvoiceForm_Button_deleteItem() {
+        return InvoiceForm_Button_deleteItem;
+    }
+
+    public JTextArea getInvoiceDetail_TextArea_description() {
+        return InvoiceDetail_TextArea_description;
+    }
+
+    public JLabel getInvoiceDetail_Label_customerName() {
+        return InvoiceDetail_Label_customerName;
+    }
+
+    public JLabel getInvoiceDetail_Label_total() {
+        return InvoiceDetail_Label_total;
+    }
+
+    public JLabel getInvoiceDetail_Label_customerAddress() {
+        return InvoiceDetail_Label_customerAddress;
+    }
+
+    public JLabel getInvoiceDetail_Label_customerTelpon() {
+        return InvoiceDetail_Label_customerTelpon;
+    }
+
+    public JLabel getInvoiceDetail_Label_employeeName() {
+        return InvoiceDetail_Label_employeeName;
+    }
+    
+    
+    
+    
+ 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton AddCustomerButton;
     private javax.swing.JButton AddEmployeeButton;
@@ -2544,14 +2822,29 @@ public class MainFrame extends javax.swing.JFrame {
     private javax.swing.JButton Employee_PanelButton;
     private javax.swing.JTable Employee_Table;
     private javax.swing.JPanel HomePageContentPanel;
+    private javax.swing.JLabel Home_Label_count1;
+    private javax.swing.JLabel Home_Label_count2;
+    private javax.swing.JLabel Home_Label_count3;
+    private javax.swing.JLabel Home_Label_count4;
+    private javax.swing.JLabel Home_Label_name1;
+    private javax.swing.JLabel Home_Label_name2;
+    private javax.swing.JLabel Home_Label_name3;
+    private javax.swing.JLabel Home_Label_name4;
     private javax.swing.JButton Home_PanelButton;
     private javax.swing.JButton InvoiceButton;
     private javax.swing.JPanel InvoiceDetail;
+    private javax.swing.JLabel InvoiceDetail_Label_customerAddress;
+    private javax.swing.JLabel InvoiceDetail_Label_customerName;
+    private javax.swing.JLabel InvoiceDetail_Label_customerTelpon;
     private javax.swing.JLabel InvoiceDetail_Label_date;
+    private javax.swing.JLabel InvoiceDetail_Label_employeeName;
     private javax.swing.JLabel InvoiceDetail_Label_id;
+    private javax.swing.JLabel InvoiceDetail_Label_total;
     private javax.swing.JTable InvoiceDetail_Table_item;
+    private javax.swing.JTextArea InvoiceDetail_TextArea_description;
     private javax.swing.JButton InvoiceForm_Button_add;
     private javax.swing.JButton InvoiceForm_Button_addItem;
+    private javax.swing.JButton InvoiceForm_Button_deleteItem;
     private javax.swing.JComboBox<String> InvoiceForm_ComboBox_paymentType;
     private javax.swing.JTable InvoiceForm_Table_Item;
     private javax.swing.JTextArea InvoiceForm_TextArea_description;
@@ -2585,6 +2878,7 @@ public class MainFrame extends javax.swing.JFrame {
     private javax.swing.JPanel PartPageContentPanel;
     private javax.swing.JTable Part_Table;
     private javax.swing.JButton Parts_PanelButton;
+    private javax.swing.JPanel SideBar;
     private javax.swing.JPanel VehicleFormPanel;
     private javax.swing.JButton VehicleForm_Button_add;
     private javax.swing.JComboBox<CarModel> VehicleForm_ComboBox_carmodel;
@@ -2617,7 +2911,6 @@ public class MainFrame extends javax.swing.JFrame {
     private javax.swing.JButton Vehicle_PanelButton;
     private javax.swing.JTable Vehicle_Table;
     private javax.swing.JButton jButton1;
-    private javax.swing.JButton jButton2;
     private javax.swing.JDialog jDialog1;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel10;
@@ -2627,16 +2920,20 @@ public class MainFrame extends javax.swing.JFrame {
     private javax.swing.JLabel jLabel14;
     private javax.swing.JLabel jLabel15;
     private javax.swing.JLabel jLabel16;
-    private javax.swing.JLabel jLabel17;
-    private javax.swing.JLabel jLabel18;
     private javax.swing.JLabel jLabel19;
+    private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel20;
     private javax.swing.JLabel jLabel21;
     private javax.swing.JLabel jLabel22;
     private javax.swing.JLabel jLabel23;
+    private javax.swing.JLabel jLabel24;
+    private javax.swing.JLabel jLabel25;
+    private javax.swing.JLabel jLabel26;
+    private javax.swing.JLabel jLabel27;
+    private javax.swing.JLabel jLabel28;
+    private javax.swing.JLabel jLabel29;
     private javax.swing.JLabel jLabel3;
     private javax.swing.JLabel jLabel4;
-    private javax.swing.JLabel jLabel5;
     private javax.swing.JLabel jLabel6;
     private javax.swing.JLabel jLabel7;
     private javax.swing.JLabel jLabel8;
@@ -2649,6 +2946,7 @@ public class MainFrame extends javax.swing.JFrame {
     private javax.swing.JPanel jPanel14;
     private javax.swing.JPanel jPanel15;
     private javax.swing.JPanel jPanel16;
+    private javax.swing.JPanel jPanel17;
     private javax.swing.JPanel jPanel2;
     private javax.swing.JPanel jPanel3;
     private javax.swing.JPanel jPanel4;
@@ -2667,7 +2965,7 @@ public class MainFrame extends javax.swing.JFrame {
     private javax.swing.JScrollPane jScrollPane8;
     private javax.swing.JScrollPane jScrollPane9;
     private javax.swing.JSeparator jSeparator1;
-    private javax.swing.JTextArea jTextArea1;
+    private javax.swing.JSeparator jSeparator2;
     private javax.swing.JLabel loggedUserLabel;
     // End of variables declaration//GEN-END:variables
 }

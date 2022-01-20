@@ -35,24 +35,21 @@ public class PartDAO implements ManageParts{
         List<Parts> part = new ArrayList<>();
         try{
             PreparedStatement stmt = conn.prepareStatement("SELECT * FROM `spare_part` main "
-                    + "LEFT JOIN `rims` r on r.FK_partNumber = main.partNumber "
-                    + "LEFT JOIN `rearview_mirror` m on m.FK_partNumber = main.partNumber "
-                    + "LEFT JOIN `engine` e on e.FK_partNumber= main.partNumber "
-                    + "LEFT JOIN `tire` t on t.FK_partNumber = main.partNumber;");
+                    + "LEFT JOIN `rims` r on r.FK_partNumber = main.part_number "
+                    + "LEFT JOIN `rearview_mirror` m on m.FK_partNumber = main.part_number "
+                    + "LEFT JOIN `engine` e on e.FK_partNumber= main.part_number "
+                    + "LEFT JOIN `tire` t on t.FK_partNumber = main.part_number;");
             ResultSet rs = stmt.executeQuery();
-            while(rs.next()){
-                
+            while(rs.next()){  
                 Parts P = null;
                 if(rs.getString("rims_diameter")!=null){
-                    P = new Rims(rs.getString("partNumber"),rs.getString("name"),rs.getString("brand"),rs.getInt("price"),rs.getString("status"),rs.getInt("rims_diameter"));
+                    P = new Rims(rs.getString("part_number"),rs.getString("name"),rs.getString("brand"),rs.getInt("price"),rs.getString("status"),rs.getInt("rims_diameter"));
                 }else if(rs.getString("mirror_type")!=null){
-                    P = new RearviewMirror(rs.getString("partNumber"),rs.getString("name"),rs.getString("brand"),rs.getInt("price"), rs.getString("status"),rs.getString("mirror_type"));                    
+                    P = new RearviewMirror(rs.getString("part_number"),rs.getString("name"),rs.getString("brand"),rs.getInt("price"), rs.getString("status"),rs.getString("mirror_type"));                    
                 }else if(rs.getString("capacity")!=null){
-                    P = new CarEngine(rs.getString("partNumber"),rs.getString("name"),rs.getString("brand"),rs.getInt("price"), rs.getString("status"), rs.getInt("capacity"),rs.getInt("number_cylinder"));              
+                    P = new CarEngine(rs.getString("part_number"),rs.getString("name"),rs.getString("brand"),rs.getInt("price"), rs.getString("status"), rs.getInt("capacity"),rs.getInt("number_cylinder"));              
                 }else if(rs.getString("tire_diameter")!=null){
-                    P = new Tire(rs.getString("partNumber"),rs.getString("name"),rs.getString("brand"),rs.getInt("price"), rs.getString("status"), rs.getInt("tire_diameter"),rs.getInt("width"),rs.getString("tire_type"));              
-                }else{
-                
+                    P = new Tire(rs.getString("part_number"),rs.getString("name"),rs.getString("brand"),rs.getInt("price"), rs.getString("status"), rs.getInt("tire_diameter"),rs.getInt("width"),rs.getString("tire_type"));              
                 }
                 part.add(P);
             }
@@ -64,7 +61,7 @@ public class PartDAO implements ManageParts{
     
     public void addPart(Parts P){
         try{
-            try (PreparedStatement stmt = conn.prepareStatement("INSERT INTO spare_part(partNumber, name, brand, price) VALUES(?,?,?,?)")) {
+            try (PreparedStatement stmt = conn.prepareStatement("INSERT INTO spare_part(part_number, name, brand, price) VALUES(?,?,?,?)")) {
                 stmt.setString(1, P.getPartsNumber());
                 stmt.setString(2, P.getName());
                 stmt.setString(3, P.getBrand());
@@ -75,7 +72,7 @@ public class PartDAO implements ManageParts{
             }
             
             if(P instanceof Rims){
-                try (PreparedStatement stmt2 = conn.prepareStatement("INSERT INTO rim(FK_partNumber,rim_diameter) VALUES(?,?)")) {
+                try (PreparedStatement stmt2 = conn.prepareStatement("INSERT INTO rims(FK_part_number,rims_diameter) VALUES(?,?)")) {
                     stmt2.setString(1,P.getPartsNumber());
                     stmt2.setInt(2, ((Rims)P).getDiameter());
                     
@@ -109,7 +106,8 @@ public class PartDAO implements ManageParts{
                     stmt2.executeUpdate();
                     stmt2.close();
                 }
-            }    
+            }
+            JOptionPane.showMessageDialog(null, "Parts Berhasil Ditambahkan", "Dialog", JOptionPane.INFORMATION_MESSAGE);
         }catch(SQLException e){
             JOptionPane.showMessageDialog(null, e, "Dialog", JOptionPane.ERROR_MESSAGE);
         }
@@ -117,7 +115,7 @@ public class PartDAO implements ManageParts{
     
     public void editPart(Parts P){
         try{
-            try (PreparedStatement stmt = conn.prepareStatement("UPDATE spare_part SET partNumber=?, name=?, brand=?, price=? WHERE part_number=?")) {
+            try (PreparedStatement stmt = conn.prepareStatement("UPDATE spare_part SET part_number=?, name=?, brand=?, price=? WHERE part_number=?")) {
                 stmt.setString(1, P.getPartsNumber());
                 stmt.setString(2, P.getName());
                 stmt.setString(3, P.getBrand());
@@ -129,7 +127,7 @@ public class PartDAO implements ManageParts{
             }
             
             if(P instanceof Rims){
-                try (PreparedStatement stmt2 = conn.prepareStatement("UPDATE rim SET FK_partNumber=?, rim_diameter=? WHERE part_number=?")) {
+                try (PreparedStatement stmt2 = conn.prepareStatement("UPDATE rims SET FK_partNumber=?, rims_diameter=? WHERE FK_partNumber=?")) {
                     stmt2.setString(1,P.getPartsNumber());
                     stmt2.setInt(2, ((Rims)P).getDiameter());
                     stmt2.setString(3, P.getPartsNumber());
@@ -137,7 +135,7 @@ public class PartDAO implements ManageParts{
                     stmt2.executeUpdate();
                 }
             }else if(P instanceof RearviewMirror){
-                try (PreparedStatement stmt2 = conn.prepareStatement("UPDATE rearview_mirror SET FK_partNumber=?, type=? WHERE part_number=?")) {
+                try (PreparedStatement stmt2 = conn.prepareStatement("UPDATE rearview_mirror SET FK_partNumber=?, type=? WHERE FK_partNumber=?")) {
                     stmt2.setString(1,P.getPartsNumber());
                     stmt2.setString(2, ((RearviewMirror)P).getType());
                     stmt2.setString(3, P.getPartsNumber());
@@ -145,7 +143,7 @@ public class PartDAO implements ManageParts{
                     stmt2.executeUpdate();
                 }
             }else if(P instanceof CarEngine){
-                try (PreparedStatement stmt2 = conn.prepareStatement("UPDATE engine SET FK_partNumber=?, capacity=?, number_cylinder=? WHERE part_number=?")) {
+                try (PreparedStatement stmt2 = conn.prepareStatement("UPDATE engine SET FK_partNumber=?, capacity=?, number_cylinder=? WHERE FK_partNumber=?")) {
                     stmt2.setString(1,P.getPartsNumber());
                     stmt2.setInt(2, ((CarEngine)P).getCapacity());
                     stmt2.setInt(3, ((CarEngine)P).getNumCylinder());
@@ -154,7 +152,7 @@ public class PartDAO implements ManageParts{
                     stmt2.executeUpdate();
                 }
             }else if(P instanceof Tire){
-                try (PreparedStatement stmt2 = conn.prepareStatement("UPDATE tire SET FK_partNumber=?, tire_diameter=?,width=?, tire_type=? WHERE part_number=?")) {
+                try (PreparedStatement stmt2 = conn.prepareStatement("UPDATE tire SET FK_partNumber=?, tire_diameter=?,width=?, tire_type=? WHERE FK_partNumber=?")) {
                     stmt2.setString(1,P.getPartsNumber());
                     stmt2.setInt(2, ((Tire)P).getDiameter());
                     stmt2.setInt(3, ((Tire)P).getWidth());
@@ -165,15 +163,16 @@ public class PartDAO implements ManageParts{
                     stmt2.executeUpdate();
                 }
             }
-                   
+            JOptionPane.showMessageDialog(null, "Parts Berhasil Diupdate", "Dialog", JOptionPane.INFORMATION_MESSAGE);
         }catch(SQLException e){
             JOptionPane.showMessageDialog(null, e, "Dialog", JOptionPane.ERROR_MESSAGE);
+            e.printStackTrace();
         }
     }
     
     public void deletePart(String partNumber){
         try{
-            PreparedStatement stmt = conn.prepareStatement("DELETE FROM spare_part WHERE spare_part.partNumber=?");
+            PreparedStatement stmt = conn.prepareStatement("DELETE FROM spare_part WHERE spare_part.part_number=?");
             stmt.setString(1, partNumber);
             stmt.executeUpdate();
         }catch(SQLException e){
@@ -181,4 +180,118 @@ public class PartDAO implements ManageParts{
         }
     }
     
+    public void editStatus(Parts P){
+        try{
+            PreparedStatement stmt = conn.prepareStatement("UPDATE spare_part SET status=? WHERE spare_part.part_number=?");
+            stmt.setString(1, P.getStatus());
+            stmt.setString(2, P.getPartsNumber());
+            stmt.executeUpdate();
+            stmt.close();
+        }catch(SQLException e){
+            JOptionPane.showMessageDialog(null, e, "Dialog", JOptionPane.ERROR_MESSAGE);
+        }
+    }
+    
+    public List<Parts> searchPartByName(String name){
+        List<Parts> part = new ArrayList<>();
+        try{
+            PreparedStatement stmt = conn.prepareStatement("SELECT * FROM `spare_part` main "
+                    + "LEFT JOIN `rims` r on r.FK_part_number = main.part_number "
+                    + "LEFT JOIN `rearview_mirror` m on m.FK_partNumber = main.part_number "
+                    + "LEFT JOIN `engine` e on e.FK_partNumber= main.part_number "
+                    + "LEFT JOIN `tire` t on t.FK_partNumber = main.part_number WHERE main.name LIKE '%" + name + "%'");
+            ResultSet rs= stmt.executeQuery();
+            while(rs.next()){
+                Parts P = null;
+                if(rs.getString("rims_diameter")!=null){
+                    P = new Rims(rs.getString("part_number"),rs.getString("name"),rs.getString("brand"),rs.getInt("price"),rs.getString("status"),rs.getInt("rims_diameter"));
+                }else if(rs.getString("mirror_type")!=null){
+                    P = new RearviewMirror(rs.getString("part_number"),rs.getString("name"),rs.getString("brand"),rs.getInt("price"), rs.getString("status"),rs.getString("mirror_type"));                    
+                }else if(rs.getString("capacity")!=null){
+                    P = new CarEngine(rs.getString("part_number"),rs.getString("name"),rs.getString("brand"),rs.getInt("price"), rs.getString("status"), rs.getInt("capacity"),rs.getInt("number_cylinder"));              
+                }else if(rs.getString("tire_diameter")!=null){
+                    P = new Tire(rs.getString("part_number"),rs.getString("name"),rs.getString("brand"),rs.getInt("price"), rs.getString("status"), rs.getInt("tire_diameter"),rs.getInt("width"),rs.getString("tire_type"));              
+                }
+                part.add(P);
+            }
+        }catch(SQLException e){
+    
+        }
+        return part;
+    }
+    
+    public int countAllPart(){
+        int count = 0;
+        try{
+            PreparedStatement stmt = conn.prepareStatement("SELECT count(*) AS total FROM spare_part");
+            ResultSet rs = stmt.executeQuery();
+            while(rs.next()){
+                count = rs.getInt("total");
+            }
+        }catch(SQLException e){
+            JOptionPane.showMessageDialog(null, e, "Dialog", JOptionPane.ERROR_MESSAGE);
+        }finally{
+                return count;
+        }
+    }
+    
+    public int countTire(){
+        int count = 0;
+        try{
+            PreparedStatement stmt = conn.prepareStatement("SELECT count(*) AS total FROM spare_part LEFT JOIN tire on tire.FK_partNumber = spare_part.part_number");
+            ResultSet rs = stmt.executeQuery();
+            while(rs.next()){
+                count = rs.getInt("total");
+            }
+        }catch(SQLException e){
+            JOptionPane.showMessageDialog(null, e, "Dialog", JOptionPane.ERROR_MESSAGE);
+        }finally{
+                return count;
+        }
+    }
+    
+    public int countEngine(){
+        int count = 0;
+        try{
+            PreparedStatement stmt = conn.prepareStatement("SELECT count(*) AS total FROM spare_part LEFT JOIN 'engine' on engine.FK_partNumber = spare_part.part_number");
+            ResultSet rs = stmt.executeQuery();
+            while(rs.next()){
+                count = rs.getInt("total");
+            }
+        }catch(SQLException e){
+            JOptionPane.showMessageDialog(null, e, "Dialog", JOptionPane.ERROR_MESSAGE);
+        }finally{
+                return count;
+        }
+    }
+    
+     public int countRims(){
+        int count = 0;
+        try{
+            PreparedStatement stmt = conn.prepareStatement("SELECT count(*) AS total FROM spare_part LEFT JOIN rims on rims.FK_partNumber = spare_part.part_number");
+            ResultSet rs = stmt.executeQuery();
+            while(rs.next()){
+                count = rs.getInt("total");
+            }
+        }catch(SQLException e){
+            JOptionPane.showMessageDialog(null, e, "Dialog", JOptionPane.ERROR_MESSAGE);
+        }finally{
+                return count;
+        }
+    }
+    
+    public int countMirror(){
+        int count = 0;
+        try{
+            PreparedStatement stmt = conn.prepareStatement("SELECT count(*) AS total FROM spare_part LEFT JOIN rearview_mirror on rearview_mirror.FK_partNumber = spare_part.part_number");
+            ResultSet rs = stmt.executeQuery();
+            while(rs.next()){
+                count = rs.getInt("total");
+            }
+        }catch(SQLException e){
+            JOptionPane.showMessageDialog(null, e, "Dialog", JOptionPane.ERROR_MESSAGE);
+        }finally{
+                return count;
+        }
+    }
 }

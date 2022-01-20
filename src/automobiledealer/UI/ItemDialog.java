@@ -6,6 +6,8 @@
 package automobiledealer.UI;
 
 import automobiledealer.Contoller.ItemController;
+import automobiledealer.Contoller.PartController;
+import automobiledealer.Contoller.VehicleController;
 import javax.swing.JButton;
 import javax.swing.JTable;
 import javax.swing.JTextField;
@@ -17,6 +19,9 @@ import javax.swing.JTextField;
 public class ItemDialog extends java.awt.Dialog {
  
     ItemController IC;
+    VehicleController VC;
+    PartController PC;
+    
     int selectedItem;
     /**
      * Creates new form ItemDialog
@@ -162,6 +167,21 @@ public class ItemDialog extends java.awt.Dialog {
         return this.selectedItem;
     }
 
+    public void setVehicleController(VehicleController VC){
+        this.VC = VC;
+    }
+    
+    public VehicleController getVC(){
+        return this.VC;
+    }
+    
+    public void setPartController(PartController PC){
+        this.PC = PC;
+    }
+    
+    public PartController getPC(){
+        return this.PC;
+    }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton ItemDialog_Button_add;

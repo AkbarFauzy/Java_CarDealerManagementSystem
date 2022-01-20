@@ -17,6 +17,7 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
+import java.text.NumberFormat;
 import java.util.List;
 import java.util.stream.Collectors;
 import javax.swing.DefaultComboBoxModel;
@@ -36,7 +37,7 @@ public class VehicleController implements ActionListener, MouseListener{
     MainFrame view;
     List<Vehicle> listVehicle;
     
-    Vehicle selectedVehicle;
+//    Vehicle selectedVehicle;
     
     public VehicleController(JFrame _view){
         vDao = new VehicleDAO();
@@ -96,16 +97,15 @@ public class VehicleController implements ActionListener, MouseListener{
                     InsertVehicle();
                     view.getCardLayout().show(view.getContentPanel(), "VehiclePageContentPanel");
                 }else if("Update".equals(view.getVehicleForm_Button_add().getText())){
-                    EditVehicle();
+                    EditVehicle(listVehicle.get(view.getVehicle_Table().getSelectedRow()));
                     view.getCardLayout().show(view.getContentPanel(), "VehiclePageContentPanel");
                 }
                 RefreshModel();
                 VehicleList(view.getVehicle_Table());
             }
         }else if(e.getSource() == view.getEditVehicleButton()){
-            selectedVehicle = listVehicle.get(view.getVehicle_Table().getSelectedRow());
-            view.cardLayout.show(view.getContentPanel(), "VehicleFormPanel");
-            FillForm();
+            view.getCardLayout().show(view.getContentPanel(), "VehicleFormPanel");
+            FillForm(listVehicle.get(view.getVehicle_Table().getSelectedRow()));
              view.getVehicleForm_Button_add().setText("Update");
         }else if(e.getSource() == view.getDeleteVehicleButton()){
             DeleteVehicle();
@@ -119,7 +119,12 @@ public class VehicleController implements ActionListener, MouseListener{
         tb.setRowCount(0);  
 
         for(int i=0;i<listVehicle.size();i++){
-            Object[] data = {listVehicle.get(i).getName(),listVehicle.get(i).getBrand(),listVehicle.get(i).getColor(), listVehicle.get(i).getPrice()};
+            Object[] data = {listVehicle.get(i).getName(),
+                listVehicle.get(i).getBrand(),
+                listVehicle.get(i).getColor(),
+                "Rp. " +  NumberFormat.getIntegerInstance().format(listVehicle.get(i).getPrice()),
+                listVehicle.get(i).getStatus()
+            };
             tb.addRow(data);
         }
         table.setModel(tb);
@@ -144,7 +149,7 @@ public class VehicleController implements ActionListener, MouseListener{
         view.getVehicleForm_ComboBox_fueltype().setSelectedIndex(0);
     }
     
-    public void FillForm(){
+    public void FillForm(Vehicle selectedVehicle){
         view.getVehicleForm_TextInput_registerNumber().setText(selectedVehicle.getRegistrationNumber());
         view.getVehicleForm_TextInput_name().setText(selectedVehicle.getName());
         view.getVehicleForm_TextInput_brand().setText(selectedVehicle.getBrand());
@@ -166,20 +171,20 @@ public class VehicleController implements ActionListener, MouseListener{
     }
     
     public void InsertVehicle(){
-        if((Integer) view.getVehicleForm_Spinner_truckloadcapacity().getValue() != 0 && !view.getVehicleForm_ComboBox_carmodel().isEnabled()){
+        if((double) view.getVehicleForm_Spinner_truckloadcapacity().getValue() != 0 && !view.getVehicleForm_ComboBox_carmodel().isEnabled()){
             vDao.addVehicle(new Truck(view.getVehicleForm_TextInput_registerNumber().getText(),
                                       view.getVehicleForm_TextInput_name().getText(),
                                       view.getVehicleForm_TextInput_brand().getText(),
                                       view.getVehicleForm_TextInput_color().getText(),
                                       (Integer) view.getVehicleForm_Spinner_numWheels().getValue(),
-                                      (Integer) view.getVehicleForm_Spinner_weight().getValue(),
+                                      (double) view.getVehicleForm_Spinner_weight().getValue(),
                                       (Integer) view.getVehicleForm_Spinner_numDoors().getValue(),
                                       view.getVehicleForm_TextInput_transmition().getText(),
                                       (Integer) view.getVehicleForm_Spinner_price().getValue(),
                                       view.getVehicleForm_ComboBox_fueltype().getSelectedItem().toString(),
                                       (Integer) view.getVehicleForm_Spinner_horsePower().getValue(),
                                       "Ready",
-                                      (Double) view.getVehicleForm_Spinner_truckloadcapacity().getValue()
+                                      (double) view.getVehicleForm_Spinner_truckloadcapacity().getValue()
             ));
         }else{
             vDao.addVehicle(new Car(view.getVehicleForm_TextInput_registerNumber().getText(),
@@ -187,7 +192,7 @@ public class VehicleController implements ActionListener, MouseListener{
                                     view.getVehicleForm_TextInput_brand().getText(),
                                     view.getVehicleForm_TextInput_color().getText(),
                                     (Integer) view.getVehicleForm_Spinner_numWheels().getValue(),
-                                    (Integer) view.getVehicleForm_Spinner_weight().getValue(),
+                                    (double) view.getVehicleForm_Spinner_weight().getValue(),
                                     (Integer) view.getVehicleForm_Spinner_numDoors().getValue(),
                                     view.getVehicleForm_TextInput_transmition().getText(),
                                     (Integer) view.getVehicleForm_Spinner_price().getValue(),
@@ -199,13 +204,13 @@ public class VehicleController implements ActionListener, MouseListener{
         }
     }
     
-    public void EditVehicle(){
+    public void EditVehicle(Vehicle selectedVehicle){
         selectedVehicle.setRegistrationNumber(view.getVehicleForm_TextInput_registerNumber().getText());
         selectedVehicle.setName(view.getVehicleForm_TextInput_name().getText());
         selectedVehicle.setBrand(view.getVehicleForm_TextInput_brand().getText());
         selectedVehicle.setColor(view.getVehicleForm_TextInput_color().getText());
         selectedVehicle.setNumWheel((Integer)view.getVehicleForm_Spinner_numWheels().getValue());
-        selectedVehicle.setWeight((Double)view.getVehicleForm_Spinner_weight().getValue());
+        selectedVehicle.setWeight((double)view.getVehicleForm_Spinner_weight().getValue());
         selectedVehicle.setNumDoors((Integer)view.getVehicleForm_Spinner_numDoors().getValue());
         selectedVehicle.setTransmission(view.getVehicleForm_TextInput_transmition().getText());
         selectedVehicle.setPrice((Integer) view.getVehicleForm_Spinner_price().getValue());
@@ -222,20 +227,43 @@ public class VehicleController implements ActionListener, MouseListener{
     }
     
     public void DeleteVehicle(){
-        String msg = "Are you sure want to Delete " + listVehicle.get(view.getVehicle_Table().getSelectedRow()).getName()+
-                    " with NIK : "+ listVehicle.get(view.getVehicle_Table().getSelectedRow()).getRegistrationNumber()+" ?";
+        String msg = "Apakah anda yakin ingin menghapus " + listVehicle.get(view.getVehicle_Table().getSelectedRow()).getName()+
+                    " dengan Register Number : "+ listVehicle.get(view.getVehicle_Table().getSelectedRow()).getRegistrationNumber()+" ?";
         Object[] options ={"Yes", "Cancel"};
         int option = JOptionPane.showOptionDialog(null, msg, "",JOptionPane.OK_CANCEL_OPTION, JOptionPane.PLAIN_MESSAGE,null,options,options[0]);
         if(option == JOptionPane.OK_OPTION){     
-            vDao.deleteVehicle(listVehicle.get(view.getVehicle_Table().getSelectedRow()).getRegistrationNumber());
-            RefreshModel();
+            if("Sold".equals(listVehicle.get(view.getVehicle_Table().getSelectedRow()).getStatus())){
+                JOptionPane.showMessageDialog(null, "Tidak bisa menghapus Kendaraan, Kendaraan sudah terjual", "Dialog", JOptionPane.ERROR_MESSAGE);
+            }else{
+                vDao.deleteVehicle(listVehicle.get(view.getVehicle_Table().getSelectedRow()).getRegistrationNumber());
+                RefreshModel();
+            }
         }
-    }   
+    }
     
+    public void SearchVehicle(String name){
+        this.listVehicle = vDao.serachByName(name);
+    }
     
-    public List EligibleVehicle(){
-        List<Vehicle> eligibleVehicle = listVehicle.stream().filter(vehicle -> "Ready".equals(vehicle.getStatus())).collect(Collectors.toList());
-        return eligibleVehicle;
+    public void EditStatus(Vehicle V){
+        vDao.editStatus(V);
+    }
+    
+    public void EligibleVehicle(){
+        this.listVehicle = this.listVehicle.stream().filter(vehicle -> "Ready".equals(vehicle.getStatus())).collect(Collectors.toList());
+    }
+    
+    public int getCount(int x){
+        switch(x){
+            case 0:
+                return vDao.countAllVehicle();
+            case 1:
+                return vDao.countCar();
+            case 2:
+                return vDao.countTruck();
+            default:
+                return 0;
+        }
     }
     
     @Override
@@ -253,24 +281,16 @@ public class VehicleController implements ActionListener, MouseListener{
     }
 
     @Override
-    public void mousePressed(MouseEvent e) {
-
-    }
+    public void mousePressed(MouseEvent e) {}
 
     @Override
-    public void mouseReleased(MouseEvent e) {
-
-    }
+    public void mouseReleased(MouseEvent e) {}
 
     @Override
-    public void mouseEntered(MouseEvent e) {
-
-    }
+    public void mouseEntered(MouseEvent e) {}
 
     @Override
-    public void mouseExited(MouseEvent e) {
-        
-    }
+    public void mouseExited(MouseEvent e) {}
     
     
     

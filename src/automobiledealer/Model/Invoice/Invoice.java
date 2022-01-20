@@ -3,9 +3,10 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package automobiledealer.Model;
+package automobiledealer.Model.Invoice;
 
-import automobiledealer.Model.Vehicle.Vehicle;
+import automobiledealer.Model.Customer;
+import automobiledealer.Model.Payments;
 import java.util.Date;
 
 /**
@@ -15,15 +16,13 @@ import java.util.Date;
 public class Invoice {
     private int invoiceID;
     private Customer customer;
-    private Vehicle vehicle;
     private Payments paymentType;
     private String description;
     private Date date;
     
-    public Invoice(int _invoiceID, Customer _customer, Vehicle _vehicle, Payments _payment, String _description, Date _date){
+    public Invoice(int _invoiceID, Customer _customer, Payments _payment, String _description, Date _date){
         this.invoiceID = _invoiceID;
         this.customer = _customer;
-        this.vehicle = _vehicle;
         this.paymentType = _payment;
         this.description = _description;
         this.date = _date;
@@ -43,14 +42,6 @@ public class Invoice {
 
     public void setCustomer(Customer customer) {
         this.customer = customer;
-    }
-
-    public Vehicle getVehicle() {
-        return vehicle;
-    }
-
-    public void setVehicle(Vehicle vehicle) {
-        this.vehicle = vehicle;
     }
 
     public Payments getPaymentType() {

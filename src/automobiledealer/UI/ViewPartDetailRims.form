@@ -78,7 +78,7 @@
                                   <EmptySpace min="-2" pref="46" max="-2" attributes="0"/>
                                   <Component id="jLabel13" min="-2" max="-2" attributes="0"/>
                                   <EmptySpace max="-2" attributes="0"/>
-                                  <Component id="CustomerDetail_Label_gender" min="-2" max="-2" attributes="0"/>
+                                  <Component id="PartDetail_Label_diameter" min="-2" max="-2" attributes="0"/>
                               </Group>
                           </Group>
                       </Group>
@@ -140,7 +140,7 @@
               <Group type="103" groupAlignment="3" attributes="0">
                   <Component id="jLabel7" alignment="3" min="-2" pref="14" max="-2" attributes="0"/>
                   <Component id="jLabel13" alignment="3" min="-2" max="-2" attributes="0"/>
-                  <Component id="CustomerDetail_Label_gender" alignment="3" min="-2" max="-2" attributes="0"/>
+                  <Component id="PartDetail_Label_diameter" alignment="3" min="-2" max="-2" attributes="0"/>
               </Group>
               <EmptySpace type="unrelated" max="-2" attributes="0"/>
               <Component id="jSeparator6" min="-2" pref="6" max="-2" attributes="0"/>
@@ -193,7 +193,7 @@
         <Property name="text" type="java.lang.String" value="Part Name"/>
       </Properties>
     </Component>
-    <Component class="javax.swing.JLabel" name="CustomerDetail_Label_gender">
+    <Component class="javax.swing.JLabel" name="PartDetail_Label_diameter">
       <Properties>
         <Property name="text" type="java.lang.String" value="jLabel14"/>
       </Properties>

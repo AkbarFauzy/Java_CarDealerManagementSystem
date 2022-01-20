@@ -83,7 +83,7 @@ public class Vehicle {
         this.horsePower = horsePower;
     }
     
-    public void setStattus(String status){
+    public void setStatus(String status){
         this.status = status;
     }
     

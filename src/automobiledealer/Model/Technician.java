@@ -13,7 +13,7 @@ import java.util.Date;
  */
 public class Technician extends Employee{   
  
-    public Technician(String _ID, String _username,String _password, String _name, Date _dateOfBirth, String _gender) {
+    public Technician(int _ID, String _username,String _password, String _name, Date _dateOfBirth, String _gender) {
         super(_ID, _username, _password,_name, _dateOfBirth, _gender);
     } 
 }

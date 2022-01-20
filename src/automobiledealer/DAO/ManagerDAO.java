@@ -70,7 +70,7 @@ public class ManagerDAO implements ManageEmployee{
             };
             stmt.setDate(5, sqlDate);
             stmt.setString(6, e.getGender());
-            stmt.setString(7, e.getEmployeeID());
+            stmt.setInt(7, e.getEmployeeID());
             stmt.execute();
             stmt.close();
             JOptionPane.showMessageDialog(null, "Employee Berhasil Diupdate", "Dialog", JOptionPane.INFORMATION_MESSAGE);
@@ -85,7 +85,7 @@ public class ManagerDAO implements ManageEmployee{
         String query = "DELETE FROM employee WHERE employee.id=?";
         try{
             stmt = conn.prepareStatement(query);
-            stmt.setString(1, e.getEmployeeID());
+            stmt.setInt(1, e.getEmployeeID());
             stmt.execute();              
             stmt.close();
         }catch(SQLException ex){

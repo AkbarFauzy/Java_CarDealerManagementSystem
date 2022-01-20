@@ -5,20 +5,25 @@
  */
 package automobiledealer.UI;
 
-import automobiledealer.Model.Parts.Parts;
+import automobiledealer.Model.Parts.Rims;
 
 /**
  *
  * @author AkbarFauzy
  */
-public class ViewPartDetail extends java.awt.Dialog {
+public class ViewPartDetailRims extends java.awt.Dialog {
 
     /**
      * Creates new form ViewPartDetail
      */
-    public ViewPartDetail(java.awt.Frame parent, boolean modal, Parts P) {
+    public ViewPartDetailRims(java.awt.Frame parent, boolean modal, Rims P) {
         super(parent, modal);
         initComponents();
+        PartDetail_Label_registerNumber.setText(P.getPartsNumber());
+        PartDetail_Label_name.setText(P.getName());
+        PartDetail_Label_brand.setText(P.getBrand());
+        PartDetail_Label_price.setText(P.getPrice()+"");
+        PartDetail_Label_diameter.setText(P.getDiameter()+"");
     }
 
     /**
@@ -36,7 +41,7 @@ public class ViewPartDetail extends java.awt.Dialog {
         PartDetail_Label_price = new javax.swing.JLabel();
         jLabel2 = new javax.swing.JLabel();
         jLabel3 = new javax.swing.JLabel();
-        CustomerDetail_Label_gender = new javax.swing.JLabel();
+        PartDetail_Label_diameter = new javax.swing.JLabel();
         jlabel = new javax.swing.JLabel();
         jButton1 = new javax.swing.JButton();
         jLabel5 = new javax.swing.JLabel();
@@ -76,7 +81,7 @@ public class ViewPartDetail extends java.awt.Dialog {
         jLabel3.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
         jLabel3.setText("Part Name");
 
-        CustomerDetail_Label_gender.setText("jLabel14");
+        PartDetail_Label_diameter.setText("jLabel14");
 
         jlabel.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
         jlabel.setText("Brand");
@@ -160,7 +165,7 @@ public class ViewPartDetail extends java.awt.Dialog {
                                     .addGap(46, 46, 46)
                                     .addComponent(jLabel13)
                                     .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                    .addComponent(CustomerDetail_Label_gender))))))
+                                    .addComponent(PartDetail_Label_diameter))))))
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
         layout.setVerticalGroup(
@@ -208,7 +213,7 @@ public class ViewPartDetail extends java.awt.Dialog {
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jLabel7, javax.swing.GroupLayout.PREFERRED_SIZE, 14, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(jLabel13)
-                    .addComponent(CustomerDetail_Label_gender))
+                    .addComponent(PartDetail_Label_diameter))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addComponent(jSeparator6, javax.swing.GroupLayout.PREFERRED_SIZE, 6, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(18, 18, 18)
@@ -233,7 +238,7 @@ public class ViewPartDetail extends java.awt.Dialog {
     public static void main(String args[]) {
         java.awt.EventQueue.invokeLater(new Runnable() {
             public void run() {
-                ViewPartDetail dialog = new ViewPartDetail(new java.awt.Frame(), true, null);
+                ViewPartDetailRims dialog = new ViewPartDetailRims(new java.awt.Frame(), true, null);
                 dialog.addWindowListener(new java.awt.event.WindowAdapter() {
                     public void windowClosing(java.awt.event.WindowEvent e) {
                         System.exit(0);
@@ -246,8 +251,8 @@ public class ViewPartDetail extends java.awt.Dialog {
 
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
-    private javax.swing.JLabel CustomerDetail_Label_gender;
     private javax.swing.JLabel PartDetail_Label_brand;
+    private javax.swing.JLabel PartDetail_Label_diameter;
     private javax.swing.JLabel PartDetail_Label_name;
     private javax.swing.JLabel PartDetail_Label_price;
     private javax.swing.JLabel PartDetail_Label_registerNumber;

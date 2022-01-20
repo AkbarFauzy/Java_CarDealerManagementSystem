@@ -39,16 +39,16 @@ public class EmployeeDAO {
                 Employee E = null;
                 switch(rs.getString("position")){
                     case "Manager":
-                        E = new Manager(rs.getString("id"),rs.getString("username"),rs.getString("password"), rs.getString("name"), rs.getDate("birth_date"), rs.getString("gender")); 
+                        E = new Manager(rs.getInt("id"),rs.getString("username"),rs.getString("password"), rs.getString("name"), rs.getDate("birth_date"), rs.getString("gender")); 
                         break;
                     case "Sales":
-                        E = new Sales(rs.getString("id"),rs.getString("username"), rs.getString("password"), rs.getString("name"), rs.getDate("birth_date"), rs.getString("gender"));
+                        E = new Sales(rs.getInt("id"),rs.getString("username"), rs.getString("password"), rs.getString("name"), rs.getDate("birth_date"), rs.getString("gender"));
                         break;
                     case "Technician":
-                        E = new Technician(rs.getString("id"),rs.getString("username"), rs.getString("password"), rs.getString("name"), rs.getDate("birth_date"), rs.getString("gender"));
+                        E = new Technician(rs.getInt("id"),rs.getString("username"), rs.getString("password"), rs.getString("name"), rs.getDate("birth_date"), rs.getString("gender"));
                         break;
                     case "Admin":
-                        E = new Employee(rs.getString("id"),rs.getString("username"),rs.getString("password"), rs.getString("name"), rs.getDate("birth_date"), rs.getString("gender"));
+                        E = new Employee(rs.getInt("id"),rs.getString("username"),rs.getString("password"), rs.getString("name"), rs.getDate("birth_date"), rs.getString("gender"));
                         break;
                 }
                 employee.add(E);
@@ -61,4 +61,35 @@ public class EmployeeDAO {
         
         return employee;
     }
+    
+    public int salesCount(){
+        int count = 0;
+        try{
+            PreparedStatement stmt = conn.prepareStatement("SELECT count(*) AS total FROM employee WHERE employee.position='Sales'");
+            ResultSet rs = stmt.executeQuery();
+            while(rs.next()){
+                count = rs.getInt("total");
+            }
+        }catch(SQLException e){
+            JOptionPane.showMessageDialog(null, e, "Dialog", JOptionPane.ERROR_MESSAGE);
+        }finally{
+            return count;
+        }
+    }
+    
+    public int technicianCount(){
+        int count = 0;
+        try{
+            PreparedStatement stmt = conn.prepareStatement("SELECT count(*) AS total FROM employee WHERE employee.position='Technician'");
+            ResultSet rs = stmt.executeQuery();
+            while(rs.next()){
+                count = rs.getInt("total");
+            }
+        }catch(SQLException e){
+            JOptionPane.showMessageDialog(null, e, "Dialog", JOptionPane.ERROR_MESSAGE);
+        }finally{
+            return count;
+        }
+    }
+    
 }

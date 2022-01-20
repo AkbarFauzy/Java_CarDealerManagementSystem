@@ -34,7 +34,7 @@ public class CustomerDAO {
             stmt = conn.prepareStatement("SELECT * FROM customer");
             ResultSet rs = stmt.executeQuery();
             while(rs.next()){
-                Customer C = new Customer(rs.getString("id"), rs.getString("name"), rs.getString("address"), rs.getString("phone_number"), rs.getString("Gender"));
+                Customer C = new Customer(rs.getInt("id"), rs.getString("name"), rs.getString("address"), rs.getString("phone_number"), rs.getString("Gender"));
                 customer.add(C);
             }
             
@@ -72,7 +72,7 @@ public class CustomerDAO {
             stmt.setString(2, _customer.getAddress());
             stmt.setString(3, _customer.getPhoneNumber());
             stmt.setString(4, _customer.getGender());
-            stmt.setString(5, _customer.getNIK());
+            stmt.setInt(5, _customer.getId());
             stmt.executeUpdate();
             stmt.close();
             
@@ -86,7 +86,7 @@ public class CustomerDAO {
     public void deleteCustomer(Customer C){
         try{
             PreparedStatement stmt = conn.prepareStatement("DELETE FROM customer WHERE customer.id=?");
-            stmt.setString(1, C.getNIK());
+            stmt.setInt(1, C.getId());
             stmt.executeUpdate();
         }catch(SQLException e){
             JOptionPane.showMessageDialog(null, e, "Dialog", JOptionPane.ERROR_MESSAGE);

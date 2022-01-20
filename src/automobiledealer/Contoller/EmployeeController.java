@@ -62,7 +62,7 @@ public class EmployeeController implements ActionListener, MouseListener{
     @Override
     public void actionPerformed(ActionEvent e) {  
         if(e.getSource()==view.getEmployee_PanelButton()){
-            view.cardLayout.show(view.getContentPanel(), "EmployeePageContentPanel");
+            view.getCardLayout().show(view.getContentPanel(), "EmployeePageContentPanel");
             view.prevMenuButton.setBackground(new Color(255,255,255));
             view.prevMenuButton.setForeground(Color.BLACK);    
             view.getEmployee_PanelButton().setBackground(new Color(0,90,192));
@@ -106,7 +106,7 @@ public class EmployeeController implements ActionListener, MouseListener{
     
         }else if(e.getSource() == view.getEditEmployeeButton()){
            selectedEmployee = (Employee) listEmployee.get(view.getEmployee_Table().convertRowIndexToModel(view.getEmployee_Table().getSelectedRow()));
-           view.cardLayout.show(view.getContentPanel(), "EmployeeFormPanel");
+           view.getCardLayout().show(view.getContentPanel(), "EmployeeFormPanel");
            
            fillForm();
            view.getEmployeeForm_Button_add().setText("Update");
@@ -159,21 +159,21 @@ public class EmployeeController implements ActionListener, MouseListener{
 
         switch(view.getEmployeePosition().getSelection().getActionCommand()){
             case "Manager":
-                mDAO.addEmployee(new Manager("", view.getEmployeeForm_TextInput_username().getText(),
+                mDAO.addEmployee(new Manager(0, view.getEmployeeForm_TextInput_username().getText(),
                                                                    view.getEmployeeForm_TextInput_password().getText(),
                                                                    view.getEmployeeForm_TextInput_name().getText(),
                                                                    date,
                                                                    view.getEmployeeGender().getSelection().getActionCommand()));
                 break;
             case "Sales":
-                mDAO.addEmployee(new Sales("", view.getEmployeeForm_TextInput_username().getText(),
+                mDAO.addEmployee(new Sales(0, view.getEmployeeForm_TextInput_username().getText(),
                                                                    view.getEmployeeForm_TextInput_password().getText(),
                                                                    view.getEmployeeForm_TextInput_name().getText(),
                                                                    date,
                                                                    view.getEmployeeGender().getSelection().getActionCommand()));
                 break;
             case "Technician":
-                mDAO.addEmployee(new Technician("", view.getEmployeeForm_TextInput_username().getText(),
+                mDAO.addEmployee(new Technician(0, view.getEmployeeForm_TextInput_username().getText(),
                                                                    view.getEmployeeForm_TextInput_password().getText(),
                                                                    view.getEmployeeForm_TextInput_name().getText(),
                                                                    date,
@@ -248,6 +248,15 @@ public class EmployeeController implements ActionListener, MouseListener{
     
     public void RefreshModel(){
         this.listEmployee = employeeDAO.list();
+    }
+    
+    public int getEmployeeCount(int x){
+        if(x == 0){
+            return employeeDAO.salesCount();
+        }else if(x == 1){
+            return employeeDAO.technicianCount();
+        }
+        return 0;
     }
 
     @Override

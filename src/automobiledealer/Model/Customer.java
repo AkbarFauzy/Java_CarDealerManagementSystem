@@ -10,22 +10,22 @@ package automobiledealer.Model;
  * @author AkbarFauzy
  */
 public class Customer {
-    private String NIK;
+    private int id;
     private String name;
     private String address;
     private String phoneNumber;
     private String gender;
     
-    public Customer(String _NIK, String _name, String _address, String _phoneNumber, String _gender){
-        this.NIK = _NIK;
+    public Customer(int _id, String _name, String _address, String _phoneNumber, String _gender){
+        this.id = _id;
         this.name = _name;
         this.address = _address;
         this.phoneNumber = _phoneNumber;
         this.gender = _gender;
     }
 
-    public void setNIK(String NIK) {
-        this.NIK = NIK;
+    public void setId(int id) {
+        this.id = id;
     }
 
     public void setName(String name) {
@@ -44,8 +44,8 @@ public class Customer {
         this.gender = gender;
     }
 
-    public String getNIK() {
-        return NIK;
+    public int getId() {
+        return id;
     }
 
     public String getName() {

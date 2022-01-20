@@ -66,13 +66,14 @@ public class CustomerController implements ActionListener, MouseListener{
         }else if(e.getSource() == view.getCustomerForm_Button_add()){   
             if("Add".equals(view.getCustomerForm_Button_add().getText())){
                 if(view.prevMenuButton == view.getInvoices_PanelButton()){
-                    view.cardLayout.show(view.getContentPanel(), "InvoiceFormPanel");
+                    view.getCardLayout().show(view.getContentPanel(), "InvoiceFormPanel");
                 }else{
                     InsertCustomer();
-                    view.cardLayout.show(view.getContentPanel(), "CustomerPageContentPanel");
+                    view.getCardLayout().show(view.getContentPanel(), "CustomerPageContentPanel");
                 }
             }else if("Update".equals(view.getCustomerForm_Button_add().getText())){
                 EditCustomer();
+                view.getCardLayout().show(view.getContentPanel(), "CustomerPageContentPanel");
             }
             RefreshModel();
             CustomerList(view.getCustomer_Table());
@@ -125,12 +126,11 @@ public class CustomerController implements ActionListener, MouseListener{
    
     public void InsertCustomer(){
         if(view.getCustomerForm_TextInput_name().getText().trim().isEmpty()){
-                JOptionPane.showMessageDialog(view, "Nama Tidak Boleh Kosong", "Dialog", JOptionPane.ERROR_MESSAGE);
+            JOptionPane.showMessageDialog(view, "Nama Tidak Boleh Kosong", "Dialog", JOptionPane.ERROR_MESSAGE);
         }else if(view.getCustomerForm_TextInput_address().getText().trim().isEmpty()){
-                JOptionPane.showMessageDialog(view, "Address Tidak Boleh Kosong", "Dialog", JOptionPane.ERROR_MESSAGE);
+            JOptionPane.showMessageDialog(view, "Address Tidak Boleh Kosong", "Dialog", JOptionPane.ERROR_MESSAGE);
         }else{
-           System.out.print(view.getCustomerForm_RB_Male().getActionCommand());
-           cDAO.addCustomer(new Customer("",view.getCustomerForm_TextInput_name().getText(),
+           cDAO.addCustomer(new Customer(0,view.getCustomerForm_TextInput_name().getText(),
                                            view.getCustomerForm_TextInput_address().getText(),
                                            view.getCustomerForm_TextInput_phoneNumber().getText(),
                                            view.getCustomerGender().getSelection().getActionCommand()
@@ -140,9 +140,9 @@ public class CustomerController implements ActionListener, MouseListener{
     
     public void EditCustomer(){
         if(view.getCustomerForm_TextInput_name().getText().trim().isEmpty()){
-                JOptionPane.showMessageDialog(view, "Nama Tidak Boleh Kosong", "Dialog", JOptionPane.ERROR_MESSAGE);
+            JOptionPane.showMessageDialog(view, "Nama Tidak Boleh Kosong", "Dialog", JOptionPane.ERROR_MESSAGE);
         }else if(view.getCustomerForm_TextInput_address().getText().trim().isEmpty()){
-                JOptionPane.showMessageDialog(view, "Address Tidak Boleh Kosong", "Dialog", JOptionPane.ERROR_MESSAGE);
+            JOptionPane.showMessageDialog(view, "Address Tidak Boleh Kosong", "Dialog", JOptionPane.ERROR_MESSAGE);
         }else{
             selectedCustomer.setName(view.getCustomerForm_TextInput_name().getText());
             selectedCustomer.setAddress(view.getCustomerForm_TextInput_address().getText());
@@ -153,8 +153,8 @@ public class CustomerController implements ActionListener, MouseListener{
     }
     
     public void DeleteCustomer(){
-        String msg = "Are you sure want to Delete " + listCustomer.get(view.getCustomer_Table().getSelectedRow()).getName()+
-                    " with NIK : "+ listCustomer.get(view.getCustomer_Table().getSelectedRow()).getNIK()+" ?";
+        String msg = "Apakah anda yakin ingin menghapus " + listCustomer.get(view.getCustomer_Table().getSelectedRow()).getName()+
+                    " dengan ID : "+ listCustomer.get(view.getCustomer_Table().getSelectedRow()).getId()+" ?";
             Object[] options ={"Yes", "Cancel"};
             int option = JOptionPane.showOptionDialog(null, msg, "",JOptionPane.OK_CANCEL_OPTION, JOptionPane.PLAIN_MESSAGE,null,options,options[0]);
             if(option == JOptionPane.OK_OPTION){     

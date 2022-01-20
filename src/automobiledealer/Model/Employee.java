@@ -12,14 +12,14 @@ import java.util.Date;
  * @author AkbarFauzy
  */
 public class Employee{
-    private String employeeID;
+    private int employeeID;
     private String username;
     private String password;
     private String name;
     private Date dateOfBirth;
     private String gender;
     
-    public Employee(String _ID, String _username, String _password,String _name, Date _dateOfBirth, String _gender){
+    public Employee(int _ID, String _username, String _password,String _name, Date _dateOfBirth, String _gender){
         this.employeeID = _ID;
         this.username = _username;
         this.password = _password;
@@ -48,7 +48,7 @@ public class Employee{
         this.gender = gender;
     }
     
-    public String getEmployeeID(){
+    public int getEmployeeID(){
         return this.employeeID;
     }
     

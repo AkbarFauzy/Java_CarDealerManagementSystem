@@ -236,16 +236,13 @@ public class Login extends javax.swing.JFrame {
             if(rs.next() != false){
                 switch(rs.getString("position")){
                     case "Manager":
-                        User = new Manager(rs.getString("id"),rs.getString("username"),rs.getString("password"), rs.getString("name"), rs.getDate("birth_date"), rs.getString("gender"));                
+                        User = new Manager(rs.getInt("id"),rs.getString("username"),rs.getString("password"), rs.getString("name"), rs.getDate("birth_date"), rs.getString("gender"));                
                         break;
                     case "Sales":
-                        User = new Sales(rs.getString("id"),rs.getString("username"),rs.getString("password"),rs.getString("name"), rs.getDate("birth_date"), rs.getString("gender"));
+                        User = new Sales(rs.getInt("id"),rs.getString("username"),rs.getString("password"),rs.getString("name"), rs.getDate("birth_date"), rs.getString("gender"));
                         break;
-                    case "Tech":
-                        User = new Technician(rs.getString("id"),rs.getString("username"), rs.getString("password"), rs.getString("name"), rs.getDate("birth_date"), rs.getString("gender"));
-                        break;
-                    case "Admin":
-                        User = new Admin(rs.getString("id"),rs.getString("username"),rs.getString("password"), rs.getString("name"), rs.getDate("birth_date"), rs.getString("gender"));
+                    case "Technician":
+                        User = new Technician(rs.getInt("id"),rs.getString("username"), rs.getString("password"), rs.getString("name"), rs.getDate("birth_date"), rs.getString("gender"));
                         break;
                 }
                 stmt.close();

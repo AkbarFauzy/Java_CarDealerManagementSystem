@@ -3,20 +3,19 @@
     <editor-bookmarks xmlns="http://www.netbeans.org/ns/editor-bookmarks/2" lastBookmarkId="0"/>
     <open-files xmlns="http://www.netbeans.org/ns/projectui-open-files/2">
         <group>
-            <file>file:/C:/Users/Lenovo/Documents/NetBeansProjects/AutoMobileDealer/src/automobiledealer/Model/Parts/CarEngine.java</file>
-            <file>file:/C:/Users/Lenovo/Documents/NetBeansProjects/AutoMobileDealer/src/automobiledealer/Model/Vehicle/Truck.java</file>
-            <file>file:/C:/Users/Lenovo/Documents/NetBeansProjects/AutoMobileDealer/src/automobiledealer/Model/Parts/Rims.java</file>
-            <file>file:/C:/Users/Lenovo/Documents/NetBeansProjects/AutoMobileDealer/src/automobiledealer/Model/Parts/Tire.java</file>
+            <file>file:/C:/Users/Lenovo/Documents/NetBeansProjects/AutoMobileDealer/src/automobiledealer/Contoller/EmployeeController.java</file>
+            <file>file:/C:/Users/Lenovo/Documents/NetBeansProjects/AutoMobileDealer/src/automobiledealer/Contoller/InvoiceController.java</file>
+            <file>file:/C:/Users/Lenovo/Documents/NetBeansProjects/AutoMobileDealer/src/automobiledealer/DAO/PartDAO.java</file>
+            <file>file:/C:/Users/Lenovo/Documents/NetBeansProjects/AutoMobileDealer/src/automobiledealer/DAO/InvoiceDAO.java</file>
             <file>file:/C:/Users/Lenovo/Documents/NetBeansProjects/AutoMobileDealer/src/automobiledealer/Contoller/VehicleController.java</file>
-            <file>file:/C:/Users/Lenovo/Documents/NetBeansProjects/AutoMobileDealer/src/automobiledealer/Model/Parts/RearviewMirror.java</file>
-            <file>file:/C:/Users/Lenovo/Documents/NetBeansProjects/AutoMobileDealer/src/automobiledealer/Model/Vehicle/Car.java</file>
             <file>file:/C:/Users/Lenovo/Documents/NetBeansProjects/AutoMobileDealer/src/automobiledealer/DAO/VehicleDAO.java</file>
-            <file>file:/C:/Users/Lenovo/Documents/NetBeansProjects/AutoMobileDealer/src/automobiledealer/UI/Login.java</file>
             <file>file:/C:/Users/Lenovo/Documents/NetBeansProjects/AutoMobileDealer/src/automobiledealer/Contoller/ItemController.java</file>
-            <file>file:/C:/Users/Lenovo/Documents/NetBeansProjects/AutoMobileDealer/src/automobiledealer/DAO/ManageVehicle.java</file>
-            <file>file:/C:/Users/Lenovo/Documents/NetBeansProjects/AutoMobileDealer/src/automobiledealer/Model/Parts/Parts.java</file>
             <file>file:/C:/Users/Lenovo/Documents/NetBeansProjects/AutoMobileDealer/src/automobiledealer/UI/MainFrame.java</file>
-            <file>file:/C:/Users/Lenovo/Documents/NetBeansProjects/AutoMobileDealer/src/automobiledealer/Model/Vehicle/Vehicle.java</file>
+            <file>file:/C:/Users/Lenovo/Documents/NetBeansProjects/AutoMobileDealer/src/automobiledealer/Model/Invoice/SalesInvoice.java</file>
+            <file>file:/C:/Users/Lenovo/Documents/NetBeansProjects/AutoMobileDealer/src/automobiledealer/Model/Invoice/Invoice.java</file>
+            <file>file:/C:/Users/Lenovo/Documents/NetBeansProjects/AutoMobileDealer/src/automobiledealer/UI/ItemDialog.java</file>
+            <file>file:/C:/Users/Lenovo/Documents/NetBeansProjects/AutoMobileDealer/src/automobiledealer/Model/Invoice/ServiceInvoice.java</file>
+            <file>file:/C:/Users/Lenovo/Documents/NetBeansProjects/AutoMobileDealer/src/automobiledealer/Contoller/PartController.java</file>
         </group>
     </open-files>
 </project-private>

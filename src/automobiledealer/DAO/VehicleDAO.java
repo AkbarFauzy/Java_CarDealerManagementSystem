@@ -110,8 +110,8 @@ public class VehicleDAO implements ManageVehicle{
     public void addVehicle(Truck V){
         try{
             PreparedStatement stmt = conn.prepareStatement("INSERT INTO "
-                    + "vehicle(regsiter_number,name, brand, color, number_wheel, weight,number_doors, transmission, price, fuel_type, horse_power, load_capacity) "
-                    + "VALUES(?,?,?,?,?,?,?,?,?,?,?)");
+                    + "vehicle(register_number,name, brand, color, number_wheel, weight,number_doors, transmission, price, fuel_type, horse_power, load_capacity) "
+                    + "VALUES(?,?,?,?,?,?,?,?,?,?,?,?)");
             stmt.setString(1, V.getRegistrationNumber());
             stmt.setString(2, V.getName());
             stmt.setString(3, V.getBrand());
@@ -126,6 +126,7 @@ public class VehicleDAO implements ManageVehicle{
             stmt.setDouble(12, V.getLoadCapacity());
             stmt.executeUpdate();
             stmt.close();
+            JOptionPane.showMessageDialog(null, "Vehicle Berhasil di Tambahkan");
         }catch(SQLException e){
             JOptionPane.showMessageDialog(null, e, "Dialog", JOptionPane.ERROR_MESSAGE);
         }
@@ -134,7 +135,7 @@ public class VehicleDAO implements ManageVehicle{
     public void editVehicle(Car V){
         try{
             PreparedStatement stmt = conn.prepareStatement("UPDATE vehicle SET "
-                    + "regsiter_number=?, name=?, brand=?, color=?, number_wheel=?, weight=?,number_doors=?, transmission=?, price=?, fuel_type=?, horse_power=?, model=? "
+                    + "register_number=?, name=?, brand=?, color=?, number_wheel=?, weight=?,number_doors=?, transmission=?, price=?, fuel_type=?, horse_power=?,status=?, model=? "
                     + "WHERE vehicle.register_number=?");
             stmt.setString(1, V.getRegistrationNumber());
             stmt.setString(2, V.getName());
@@ -147,10 +148,12 @@ public class VehicleDAO implements ManageVehicle{
             stmt.setInt(9, V.getPrice());
             stmt.setString(10, V.getFuelType());
             stmt.setInt(11, V.getHorsePower());
-            stmt.setString(12, V.getCarModel().toString());
-            stmt.setString(13, V.getRegistrationNumber());
+            stmt.setString(12,V.getStatus());
+            stmt.setString(13, V.getCarModel().toString());
+            stmt.setString(14, V.getRegistrationNumber());
             stmt.executeUpdate();
             stmt.close();
+            System.out.print(V.getRegistrationNumber());
         }catch(SQLException e){
             JOptionPane.showMessageDialog(null, e, "Dialog", JOptionPane.ERROR_MESSAGE);
         }
@@ -160,7 +163,7 @@ public class VehicleDAO implements ManageVehicle{
     public void editVehicle(Truck V){
         try{
             PreparedStatement stmt = conn.prepareStatement("UPDATE vehicle SET "
-                    + "regsiter_number =?, name=?, brand=?, color=?, number_wheel=?, weight=?,number_doors=?, transmission=?, price=?, fuel_type=?, horse_power=?, load_capacity=? "
+                    + "register_number =?, name=?, brand=?, color=?, number_wheel=?, weight=?,number_doors=?, transmission=?, price=?, fuel_type=?, horse_power=?,status=?, load_capacity=? "
                     + "WHERE vehicle.register_number=?");
             stmt.setString(1, V.getRegistrationNumber());
             stmt.setString(2, V.getName());
@@ -173,14 +176,16 @@ public class VehicleDAO implements ManageVehicle{
             stmt.setInt(9, V.getPrice());
             stmt.setString(10, V.getFuelType());
             stmt.setInt(11, V.getHorsePower());
-            stmt.setDouble(12, V.getLoadCapacity());
-            stmt.setString(13, V.getRegistrationNumber());
+            stmt.setString(12, V.getStatus());
+            stmt.setDouble(13, V.getLoadCapacity());
+            stmt.setString(14, V.getRegistrationNumber());
             stmt.executeUpdate();
             stmt.close();
         }catch(SQLException e){
             JOptionPane.showMessageDialog(null, e, "Dialog", JOptionPane.ERROR_MESSAGE);
         }
     }
+    
     
     @Override
     public void deleteVehicle(String index){
@@ -192,9 +197,115 @@ public class VehicleDAO implements ManageVehicle{
         }catch(SQLException ex){
             System.err.println("Got an exception!");
             System.err.println(ex.getMessage()); 
-        }
+        }    
+    }
     
+    public void editStatus(Vehicle V){
+        try{
+            PreparedStatement stmt = conn.prepareStatement("UPDATE vehicle SET status=? WHERE vehicle.register_number=?");
+            stmt.setString(1, V.getStatus());
+            stmt.setString(2, V.getRegistrationNumber());
+            stmt.executeUpdate();
+            stmt.close();
+        }catch(SQLException e){
+            JOptionPane.showMessageDialog(null, e, "Dialog", JOptionPane.ERROR_MESSAGE);
+        }
+    }
+    
+    public List<Vehicle> serachByName(String name){
+        List<Vehicle> vehicle = new ArrayList<>();
+        try{
+            PreparedStatement stmt = conn.prepareStatement("SELECT * FROM vehicle WHERE vehicle.name LIKE '%" + name + "%'");
+            ResultSet rs= stmt.executeQuery();
+            while(rs.next()){
+            Vehicle V = null;
+                if(rs.getObject("load_capacity", int.class) == null){
+                    V = new Car(rs.getString("register_number"),
+                            rs.getString("name"), 
+                            rs.getString("brand"), 
+                            rs.getString("color"),
+                            rs.getInt("number_wheel"),
+                            rs.getDouble("weight"),
+                            rs.getInt("number_doors"),
+                            rs.getString("transmission"),
+                            rs.getInt("price"),
+                            rs.getString("fuel_type"),
+                            rs.getInt("horse_power"),
+                            rs.getString("status"),
+                            CarModel.valueOf(rs.getString("model"))
+                    );
+                }
+                else{
+                    V = new Truck(rs.getString("register_number"),
+                            rs.getString("name"), 
+                            rs.getString("brand"), 
+                            rs.getString("color"),
+                            rs.getInt("number_wheel"),
+                            rs.getDouble("weight"),
+                            rs.getInt("number_doors"),
+                            rs.getString("transmission"),
+                            rs.getInt("price"),
+                            rs.getString("fuel_type"),
+                            rs.getInt("horse_power"),
+                            rs.getString("status"),
+                            rs.getInt("load_capacity")
+                    );
+                }
+                vehicle.add(V);
+            }
+            stmt.close();
+            rs.close();
+        }catch(SQLException e){
+            JOptionPane.showMessageDialog(null, e, "Dialog", JOptionPane.ERROR_MESSAGE);
+        }
+        
+        return vehicle;
+    }
+    
+    public int countAllVehicle(){
+        int count = 0;
+        try{
+            PreparedStatement stmt = conn.prepareStatement("SELECT count(*) AS total FROM vehicle");
+            ResultSet rs = stmt.executeQuery();
+            while(rs.next()){
+                count = rs.getInt("total");
+            }
+        }catch(SQLException e){
+            JOptionPane.showMessageDialog(null, e, "Dialog", JOptionPane.ERROR_MESSAGE);
+        }finally{
+                return count;
+        }
+    }
+    
+    public int countCar(){
+        int count = 0;
+        try{
+            PreparedStatement stmt = conn.prepareStatement("SELECT count(*) AS total FROM vehicle WHERE load_capacity IS NULL");
+            ResultSet rs = stmt.executeQuery();
+            while(rs.next()){
+                count = rs.getInt("total");
+            }
+        }catch(SQLException e){
+            JOptionPane.showMessageDialog(null, e, "Dialog", JOptionPane.ERROR_MESSAGE);
+        }finally{
+            return count;
+        }
+    }
+    
+    public int countTruck(){
+        int count = 0;
+        try{
+            PreparedStatement stmt = conn.prepareStatement("SELECT count(*) AS total FROM vehicle WHERE load_capacity IS NOT NULL");
+            ResultSet rs = stmt.executeQuery();
+            while(rs.next()){
+                count = rs.getInt("total");
+            }
+        }catch(SQLException e){
+            JOptionPane.showMessageDialog(null, e, "Dialog", JOptionPane.ERROR_MESSAGE);
+        }finally{
+            return count;
+        }
     }
     
     
-}
+}   

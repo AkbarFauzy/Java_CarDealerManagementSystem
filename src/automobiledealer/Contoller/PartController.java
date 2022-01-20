@@ -12,7 +12,10 @@ import automobiledealer.Model.Parts.RearviewMirror;
 import automobiledealer.Model.Parts.Rims;
 import automobiledealer.Model.Parts.Tire;
 import automobiledealer.UI.MainFrame;
-import automobiledealer.UI.ViewPartDetail;
+import automobiledealer.UI.ViewPartDetailEngine;
+import automobiledealer.UI.ViewPartDetailMirror;
+import automobiledealer.UI.ViewPartDetailRims;
+import automobiledealer.UI.ViewPartDetailTire;
 import java.awt.Color;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -20,7 +23,9 @@ import java.awt.event.ItemEvent;
 import java.awt.event.ItemListener;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
+import java.text.NumberFormat;
 import java.util.List;
+import java.util.stream.Collectors;
 import javax.swing.JFrame;
 import javax.swing.JOptionPane;
 import javax.swing.JTable;
@@ -35,8 +40,6 @@ public class PartController implements ActionListener, MouseListener, ItemListen
     MainFrame view;
     List<Parts> listPart;
     DefaultTableModel tb;
-    
-    Parts selectedPart; 
     
     public PartController(JFrame view){
         partDAO = new PartDAO();
@@ -74,8 +77,10 @@ public class PartController implements ActionListener, MouseListener, ItemListen
             }else{
                 if("Add".equals(view.getPartForm_Button_add().getText())){
                     InsertPart();
+                    view.getCardLayout().show(view.getContentPanel(), "PartPageContentPanel");
                 }else if("Update".equals(view.getPartForm_Button_add().getText())){
-                    EditPart();
+                    EditPart((Parts)listPart.get(view.getPart_Table().convertRowIndexToModel(view.getPart_Table().getSelectedRow())));
+                    view.getCardLayout().show(view.getContentPanel(), "PartPageContentPanel");
                 }
                 RefreshModel();
                 PartList(view.getPart_Table());
@@ -85,10 +90,11 @@ public class PartController implements ActionListener, MouseListener, ItemListen
            ResetForm();
            view.getPartForm_Button_add().setText("Add");
         }else if(e.getSource() == view.getEditPartButton()){
-           selectedPart = (Parts)listPart.get(view.getPart_Table().convertRowIndexToModel(view.getPart_Table().getSelectedRow()));
            view.getCardLayout().show(view.getContentPanel(),"PartFormPanel");
-           FillForm();
+           ResetForm();
+           FillForm((Parts)listPart.get(view.getPart_Table().convertRowIndexToModel(view.getPart_Table().getSelectedRow())));
            view.getPartForm_Button_add().setText("Update");
+           view.getPartForm_ComboBox_partType().setEnabled(false);
         }else if(e.getSource() == view.getDeletePartButton()){
            DeletePart();
            RefreshModel();
@@ -107,7 +113,11 @@ public class PartController implements ActionListener, MouseListener, ItemListen
         tb.setRowCount(0);  
 
         for(int i=0;i<listPart.size();i++){
-            Object[] data = {listPart.get(i).getPartsNumber(),listPart.get(i).getName(),listPart.get(i).getBrand(), listPart.get(i).getPrice()};
+            Object[] data = {listPart.get(i).getPartsNumber(),
+                listPart.get(i).getName(),
+                listPart.get(i).getBrand(), 
+                "Rp. " +  NumberFormat.getIntegerInstance().format(listPart.get(i).getPrice()),
+                listPart.get(i).getStatus()};
             tb.addRow(data);
         }
         table.setModel(tb);
@@ -132,9 +142,29 @@ public class PartController implements ActionListener, MouseListener, ItemListen
         view.getPartForm_TextInput_type().setEnabled(false);
         view.getPartForm_Spinner_width().setEnabled(false);
         
+        switch(view.getPartForm_ComboBox_partType().getSelectedItem().toString()){       
+                case "Rims":
+                    view.getPartForm_Spinner_diameter().setEnabled(true);
+                    break;
+                case "Rearview Mirror":
+                    view.getPartForm_TextInput_type().setEnabled(true);
+                    System.out.print("0");
+                    break;
+                    
+                case "Engine":
+                    view.getPartForm_Spinner_capacity().setEnabled(true);
+                    view.getPartForm_Spinner_cylinder().setEnabled(true);
+                    break;
+                case "Tire":
+                    view.getPartForm_Spinner_diameter().setEnabled(true);
+                    view.getPartForm_Spinner_width().setEnabled(true);
+                    view.getPartForm_TextInput_type().setEnabled(true);                    
+                    break;
+            
+            }
     }
     
-    public void FillForm(){
+    public void FillForm(Parts selectedPart){
         view.getPartForm_ComboBox_partType().setSelectedIndex(0);
         view.getPartForm_TextInput_partNumber().setText(selectedPart.getPartsNumber());
         view.getPartForm_TextInput_name().setText(selectedPart.getName());
@@ -200,8 +230,7 @@ public class PartController implements ActionListener, MouseListener, ItemListen
         }
     }
     
-    public void EditPart(){
-        view.getPartForm_ComboBox_partType().setEnabled(false);
+    public void EditPart(Parts selectedPart){
         selectedPart.setPartsNumber(view.getPartForm_TextInput_partNumber().getText());
         selectedPart.setName(view.getPartForm_TextInput_name().getText());
         selectedPart.setBrand(view.getPartForm_TextInput_brand().getText());
@@ -218,12 +247,13 @@ public class PartController implements ActionListener, MouseListener, ItemListen
             ((Tire)selectedPart).setDiameter((Integer)view.getPartForm_Spinner_diameter().getValue());
             ((Tire)selectedPart).setWidth((Integer)view.getPartForm_Spinner_width().getValue());
             ((Tire)selectedPart).setType( view.getPartForm_TextInput_type().getText());
-        }   
+        }
+        partDAO.editPart(selectedPart);
     }
     
     public void DeletePart(){
         String msg = "Are you sure want to Delete " + listPart.get(view.getPart_Table().getSelectedRow()).getName()+
-                    " with NIK : "+ listPart.get(view.getCustomer_Table().getSelectedRow()).getPartsNumber()+" ?";
+                    " with Register Number : "+ listPart.get(view.getCustomer_Table().getSelectedRow()).getPartsNumber()+" ?";
             Object[] options ={"Yes", "Cancel"};
             int option = JOptionPane.showOptionDialog(null, msg, "",JOptionPane.OK_CANCEL_OPTION, JOptionPane.PLAIN_MESSAGE,null,options,options[0]);
             if(option == JOptionPane.OK_OPTION){     
@@ -231,39 +261,80 @@ public class PartController implements ActionListener, MouseListener, ItemListen
         }
     }
     
+    public void SearchPart(String name){
+        this.listPart = partDAO.searchPartByName(name);
+    }
+    
+    public void EditStatus(Parts P){
+        partDAO.editStatus(P);
+    }
+    
+    public void EligibleParts(){
+        this.listPart = listPart.stream().filter(part -> "Ready".equals(part.getStatus())).collect(Collectors.toList());
+    }
+    
+    public int getCount(int x){
+        switch(x){
+            case 0:
+                return partDAO.countAllPart();
+            case 1:
+                return partDAO.countRims();
+            case 2:
+                return partDAO.countTire();
+            case 3:
+                return partDAO.countEngine();
+            case 4:
+                return partDAO.countMirror();
+            default:
+                return 0;
+        }
+    }
+    
     @Override
     public void mouseClicked(MouseEvent e) {
         if(e.getClickCount() == 2 && e.getButton() == MouseEvent.BUTTON1 && e.getSource() == view.getPart_Table()){
-            ViewPartDetail F = new ViewPartDetail(view, true, listPart.get(view.getPart_Table().getSelectedRow()));
-            F.addWindowListener(new java.awt.event.WindowAdapter(){
-            @Override
-            public void windowClosing(java.awt.event.WindowEvent e){
-                F.dispose();
+            if(listPart.get(view.getPart_Table().getSelectedRow()) instanceof Rims){
+                ViewPartDetailRims F = new ViewPartDetailRims(view, true, (Rims)listPart.get(view.getPart_Table().getSelectedRow()));
+                F.addWindowListener(new java.awt.event.WindowAdapter(){
+                @Override
+                public void windowClosing(java.awt.event.WindowEvent e){
+                    F.dispose();
+                }
+
+                });
+                F.setVisible(true);
+            }else if(listPart.get(view.getPart_Table().getSelectedRow()) instanceof Tire){
+                ViewPartDetailTire F = new ViewPartDetailTire(view, true, (Tire)listPart.get(view.getPart_Table().getSelectedRow()));
+                F.addWindowListener(new java.awt.event.WindowAdapter(){
+                @Override
+                public void windowClosing(java.awt.event.WindowEvent e){
+                    F.dispose();
+                }
+
+                });
+                F.setVisible(true);
+            }else if(listPart.get(view.getPart_Table().getSelectedRow()) instanceof RearviewMirror){
+                ViewPartDetailMirror F = new ViewPartDetailMirror(view, true, (RearviewMirror)listPart.get(view.getPart_Table().getSelectedRow()));
+                F.addWindowListener(new java.awt.event.WindowAdapter(){
+                @Override
+                public void windowClosing(java.awt.event.WindowEvent e){
+                    F.dispose();
+                }
+
+                });
+                F.setVisible(true);
+            }else if(listPart.get(view.getPart_Table().getSelectedRow()) instanceof CarEngine){
+                ViewPartDetailEngine F = new ViewPartDetailEngine(view, true, (CarEngine)listPart.get(view.getPart_Table().getSelectedRow()));
+                F.addWindowListener(new java.awt.event.WindowAdapter(){
+                @Override
+                public void windowClosing(java.awt.event.WindowEvent e){
+                    F.dispose();
+                }
+
+                });
+                F.setVisible(true);
             }
-            
-            });
-            F.setVisible(true);
         }    
-    }
-
-    @Override
-    public void mousePressed(MouseEvent e) {
-
-    }
-
-    @Override
-    public void mouseReleased(MouseEvent e) {
-
-    }
-
-    @Override
-    public void mouseEntered(MouseEvent e) {
-      
-    }
-
-    @Override
-    public void mouseExited(MouseEvent e) {
-
     }
 
     @Override
@@ -297,5 +368,25 @@ public class PartController implements ActionListener, MouseListener, ItemListen
         }
     }
     
+    @Override
+    public void mousePressed(MouseEvent e) {
+
+    }
+
+    @Override
+    public void mouseReleased(MouseEvent e) {
+
+    }
+
+    @Override
+    public void mouseEntered(MouseEvent e) {
+      
+    }
+
+    @Override
+    public void mouseExited(MouseEvent e) {
+
+    }
+
     
 }

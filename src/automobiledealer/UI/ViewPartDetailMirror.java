@@ -5,37 +5,25 @@
  */
 package automobiledealer.UI;
 
-import automobiledealer.Model.Employee;
-import automobiledealer.Model.Manager;
-import automobiledealer.Model.Sales;
-import automobiledealer.Model.Technician;
+import automobiledealer.Model.Parts.RearviewMirror;
 
 /**
  *
  * @author AkbarFauzy
  */
-public class ViewEmployeeDetail extends java.awt.Dialog {
+public class ViewPartDetailMirror extends java.awt.Dialog {
+
     /**
-     * Creates new form ViewEmployeeForm
+     * Creates new form ViewPartDetail
      */
-    public ViewEmployeeDetail(java.awt.Frame parent, boolean modal, Employee E) {
+    public ViewPartDetailMirror(java.awt.Frame parent, boolean modal, RearviewMirror P) {
         super(parent, modal);
         initComponents();
-    
-        EmployeeDetail_Label_employeeID.setText(E.getEmployeeID()+"");
-        EmployeeDetail_Label_username.setText(E.getUsername());
-        EmployeeDetail_Label_fullname.setText(E.getName());
-        if(E instanceof Manager){
-            EmployeeDetail_Label_position.setText("Manager");
-        }else if(E instanceof Sales){
-            EmployeeDetail_Label_position.setText("Sales");
-        }else if(E instanceof Technician){
-            EmployeeDetail_Label_position.setText("Technician");
-        }else{
-            EmployeeDetail_Label_position.setText("Admin");
-        }
-        EmployeeDetail_Label_dateofbirth.setText(E.dateOfBirth().toString());
-        EmployeeDetail_Label_gender.setText(E.getGender());
+        PartDetail_Label_registerNumber.setText(P.getPartsNumber());
+        PartDetail_Label_name.setText(P.getName());
+        PartDetail_Label_brand.setText(P.getBrand());
+        PartDetail_Label_price.setText(P.getPrice()+"");
+        PartDetail_Label_mirrorType.setText(P.getType()+"");
     }
 
     /**
@@ -46,35 +34,31 @@ public class ViewEmployeeDetail extends java.awt.Dialog {
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
 
+        PartDetail_Label_name = new javax.swing.JLabel();
         jLabel1 = new javax.swing.JLabel();
+        PartDetail_Label_brand = new javax.swing.JLabel();
         jSeparator1 = new javax.swing.JSeparator();
+        PartDetail_Label_price = new javax.swing.JLabel();
         jLabel2 = new javax.swing.JLabel();
         jLabel3 = new javax.swing.JLabel();
-        jLabel4 = new javax.swing.JLabel();
+        PartDetail_Label_mirrorType = new javax.swing.JLabel();
+        jlabel = new javax.swing.JLabel();
+        jButton1 = new javax.swing.JButton();
         jLabel5 = new javax.swing.JLabel();
-        jLabel6 = new javax.swing.JLabel();
-        jLabel7 = new javax.swing.JLabel();
-        jSeparator2 = new javax.swing.JSeparator();
-        jSeparator3 = new javax.swing.JSeparator();
+        jButton2 = new javax.swing.JButton();
+        jButton3 = new javax.swing.JButton();
         jSeparator4 = new javax.swing.JSeparator();
+        jLabel7 = new javax.swing.JLabel();
         jSeparator5 = new javax.swing.JSeparator();
+        jSeparator2 = new javax.swing.JSeparator();
         jSeparator6 = new javax.swing.JSeparator();
-        jSeparator7 = new javax.swing.JSeparator();
+        jSeparator3 = new javax.swing.JSeparator();
         jLabel8 = new javax.swing.JLabel();
         jLabel9 = new javax.swing.JLabel();
         jLabel10 = new javax.swing.JLabel();
-        jLabel11 = new javax.swing.JLabel();
         jLabel12 = new javax.swing.JLabel();
         jLabel13 = new javax.swing.JLabel();
-        EmployeeDetail_Label_employeeID = new javax.swing.JLabel();
-        EmployeeDetail_Label_username = new javax.swing.JLabel();
-        EmployeeDetail_Label_fullname = new javax.swing.JLabel();
-        EmployeeDetail_Label_position = new javax.swing.JLabel();
-        EmployeeDetail_Label_dateofbirth = new javax.swing.JLabel();
-        EmployeeDetail_Label_gender = new javax.swing.JLabel();
-        jButton1 = new javax.swing.JButton();
-        jButton2 = new javax.swing.JButton();
-        jButton3 = new javax.swing.JButton();
+        PartDetail_Label_registerNumber = new javax.swing.JLabel();
 
         addWindowListener(new java.awt.event.WindowAdapter() {
             public void windowClosing(java.awt.event.WindowEvent evt) {
@@ -82,26 +66,38 @@ public class ViewEmployeeDetail extends java.awt.Dialog {
             }
         });
 
+        PartDetail_Label_name.setText("jLabel14");
+
         jLabel1.setFont(new java.awt.Font("Tahoma", 0, 36)); // NOI18N
-        jLabel1.setText("Employee");
+        jLabel1.setText("Spare Part");
+
+        PartDetail_Label_brand.setText("jLabel14");
+
+        PartDetail_Label_price.setText("jLabel14");
 
         jLabel2.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
-        jLabel2.setText("Employee ID");
+        jLabel2.setText("Register Number");
 
         jLabel3.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
-        jLabel3.setText("Username");
+        jLabel3.setText("Part Name");
 
-        jLabel4.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
-        jLabel4.setText("Full Name");
+        PartDetail_Label_mirrorType.setText("jLabel14");
+
+        jlabel.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
+        jlabel.setText("Brand");
+        jlabel.setToolTipText("");
+
+        jButton1.setText("Edit");
 
         jLabel5.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
-        jLabel5.setText("Position");
+        jLabel5.setText("Price");
 
-        jLabel6.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
-        jLabel6.setText("Date of Birth");
+        jButton2.setText("Delete");
+
+        jButton3.setText("Close");
 
         jLabel7.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
-        jLabel7.setText("Gender");
+        jLabel7.setText("Mirror Type");
 
         jLabel8.setText(":");
 
@@ -109,29 +105,11 @@ public class ViewEmployeeDetail extends java.awt.Dialog {
 
         jLabel10.setText(":");
 
-        jLabel11.setText(":");
-
         jLabel12.setText(":");
 
         jLabel13.setText(":");
 
-        EmployeeDetail_Label_employeeID.setText("jLabel14");
-
-        EmployeeDetail_Label_username.setText("jLabel14");
-
-        EmployeeDetail_Label_fullname.setText("jLabel14");
-
-        EmployeeDetail_Label_position.setText("jLabel14");
-
-        EmployeeDetail_Label_dateofbirth.setText("jLabel14");
-
-        EmployeeDetail_Label_gender.setText("jLabel14");
-
-        jButton1.setText("Edit");
-
-        jButton2.setText("Delete");
-
-        jButton3.setText("Close");
+        PartDetail_Label_registerNumber.setText("jLabel14");
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(this);
         this.setLayout(layout);
@@ -145,56 +123,49 @@ public class ViewEmployeeDetail extends java.awt.Dialog {
                         .addGap(9, 9, 9)
                         .addComponent(jLabel1, javax.swing.GroupLayout.PREFERRED_SIZE, 279, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(jButton2, javax.swing.GroupLayout.PREFERRED_SIZE, 73, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addComponent(jButton2, javax.swing.GroupLayout.PREFERRED_SIZE, 75, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addGap(18, 18, 18)
-                        .addComponent(jButton1, javax.swing.GroupLayout.PREFERRED_SIZE, 75, javax.swing.GroupLayout.PREFERRED_SIZE))
-                    .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                        .addComponent(jButton3, javax.swing.GroupLayout.PREFERRED_SIZE, 59, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addGroup(javax.swing.GroupLayout.Alignment.LEADING, layout.createSequentialGroup()
-                            .addGap(52, 52, 52)
+                        .addComponent(jButton1, javax.swing.GroupLayout.PREFERRED_SIZE, 67, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addGroup(layout.createSequentialGroup()
+                        .addGap(52, 52, 52)
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                            .addComponent(jButton3, javax.swing.GroupLayout.PREFERRED_SIZE, 78, javax.swing.GroupLayout.PREFERRED_SIZE)
                             .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                                 .addComponent(jSeparator2, javax.swing.GroupLayout.PREFERRED_SIZE, 394, javax.swing.GroupLayout.PREFERRED_SIZE)
                                 .addGroup(layout.createSequentialGroup()
                                     .addComponent(jLabel2)
-                                    .addGap(18, 18, 18)
+                                    .addGap(72, 72, 72)
                                     .addComponent(jLabel8)
                                     .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                                    .addComponent(EmployeeDetail_Label_employeeID))
+                                    .addComponent(PartDetail_Label_registerNumber))
                                 .addGroup(layout.createSequentialGroup()
                                     .addComponent(jLabel3)
                                     .addGap(34, 34, 34)
                                     .addComponent(jLabel9)
                                     .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                    .addComponent(EmployeeDetail_Label_username))
+                                    .addComponent(PartDetail_Label_name))
                                 .addComponent(jSeparator3, javax.swing.GroupLayout.PREFERRED_SIZE, 394, javax.swing.GroupLayout.PREFERRED_SIZE)
                                 .addGroup(layout.createSequentialGroup()
-                                    .addComponent(jLabel4)
-                                    .addGap(37, 37, 37)
+                                    .addComponent(jlabel)
+                                    .addGap(43, 43, 43)
                                     .addComponent(jLabel10)
                                     .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                    .addComponent(EmployeeDetail_Label_fullname))
+                                    .addComponent(PartDetail_Label_brand))
                                 .addComponent(jSeparator4, javax.swing.GroupLayout.PREFERRED_SIZE, 394, javax.swing.GroupLayout.PREFERRED_SIZE)
                                 .addGroup(layout.createSequentialGroup()
                                     .addComponent(jLabel5)
-                                    .addGap(45, 45, 45)
+                                    .addGap(18, 18, 18)
                                     .addComponent(jLabel12)
                                     .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                    .addComponent(EmployeeDetail_Label_position))
+                                    .addComponent(PartDetail_Label_price))
                                 .addComponent(jSeparator5, javax.swing.GroupLayout.PREFERRED_SIZE, 394, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                .addGroup(layout.createSequentialGroup()
-                                    .addComponent(jLabel6)
-                                    .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                                    .addComponent(jLabel11)
-                                    .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                                    .addComponent(EmployeeDetail_Label_dateofbirth))
                                 .addComponent(jSeparator6, javax.swing.GroupLayout.PREFERRED_SIZE, 394, javax.swing.GroupLayout.PREFERRED_SIZE)
                                 .addGroup(layout.createSequentialGroup()
                                     .addComponent(jLabel7)
                                     .addGap(46, 46, 46)
                                     .addComponent(jLabel13)
                                     .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                    .addComponent(EmployeeDetail_Label_gender))
-                                .addComponent(jSeparator7, javax.swing.GroupLayout.PREFERRED_SIZE, 394, javax.swing.GroupLayout.PREFERRED_SIZE)))))
+                                    .addComponent(PartDetail_Label_mirrorType))))))
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
         layout.setVerticalGroup(
@@ -214,47 +185,40 @@ public class ViewEmployeeDetail extends java.awt.Dialog {
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jLabel2)
                     .addComponent(jLabel8)
-                    .addComponent(EmployeeDetail_Label_employeeID))
+                    .addComponent(PartDetail_Label_registerNumber))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(jSeparator2, javax.swing.GroupLayout.PREFERRED_SIZE, 6, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jLabel3, javax.swing.GroupLayout.PREFERRED_SIZE, 14, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(jLabel9)
-                    .addComponent(EmployeeDetail_Label_username))
+                    .addComponent(PartDetail_Label_name))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addComponent(jSeparator3, javax.swing.GroupLayout.PREFERRED_SIZE, 6, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(jLabel4, javax.swing.GroupLayout.PREFERRED_SIZE, 14, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(jlabel, javax.swing.GroupLayout.PREFERRED_SIZE, 14, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(jLabel10)
-                    .addComponent(EmployeeDetail_Label_fullname))
+                    .addComponent(PartDetail_Label_brand))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addComponent(jSeparator4, javax.swing.GroupLayout.PREFERRED_SIZE, 6, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jLabel5, javax.swing.GroupLayout.PREFERRED_SIZE, 14, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(jLabel12)
-                    .addComponent(EmployeeDetail_Label_position))
+                    .addComponent(PartDetail_Label_price))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addComponent(jSeparator5, javax.swing.GroupLayout.PREFERRED_SIZE, 6, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(jLabel6, javax.swing.GroupLayout.PREFERRED_SIZE, 14, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(jLabel11)
-                    .addComponent(EmployeeDetail_Label_dateofbirth))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                .addComponent(jSeparator6, javax.swing.GroupLayout.PREFERRED_SIZE, 6, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addGap(9, 9, 9)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jLabel7, javax.swing.GroupLayout.PREFERRED_SIZE, 14, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(jLabel13)
-                    .addComponent(EmployeeDetail_Label_gender))
+                    .addComponent(PartDetail_Label_mirrorType))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                .addComponent(jSeparator7, javax.swing.GroupLayout.PREFERRED_SIZE, 6, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addComponent(jSeparator6, javax.swing.GroupLayout.PREFERRED_SIZE, 6, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(18, 18, 18)
-                .addComponent(jButton3, javax.swing.GroupLayout.DEFAULT_SIZE, 38, Short.MAX_VALUE)
-                .addGap(19, 19, 19))
+                .addComponent(jButton3, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addContainerGap())
         );
 
         pack();
@@ -274,7 +238,7 @@ public class ViewEmployeeDetail extends java.awt.Dialog {
     public static void main(String args[]) {
         java.awt.EventQueue.invokeLater(new Runnable() {
             public void run() {
-                ViewEmployeeDetail dialog = new ViewEmployeeDetail(new java.awt.Frame(), true, null);
+                ViewPartDetailMirror dialog = new ViewPartDetailMirror(new java.awt.Frame(), true, null);
                 dialog.addWindowListener(new java.awt.event.WindowAdapter() {
                     public void windowClosing(java.awt.event.WindowEvent e) {
                         System.exit(0);
@@ -287,25 +251,21 @@ public class ViewEmployeeDetail extends java.awt.Dialog {
 
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
-    private javax.swing.JLabel EmployeeDetail_Label_dateofbirth;
-    private javax.swing.JLabel EmployeeDetail_Label_employeeID;
-    private javax.swing.JLabel EmployeeDetail_Label_fullname;
-    private javax.swing.JLabel EmployeeDetail_Label_gender;
-    private javax.swing.JLabel EmployeeDetail_Label_position;
-    private javax.swing.JLabel EmployeeDetail_Label_username;
+    private javax.swing.JLabel PartDetail_Label_brand;
+    private javax.swing.JLabel PartDetail_Label_mirrorType;
+    private javax.swing.JLabel PartDetail_Label_name;
+    private javax.swing.JLabel PartDetail_Label_price;
+    private javax.swing.JLabel PartDetail_Label_registerNumber;
     private javax.swing.JButton jButton1;
     private javax.swing.JButton jButton2;
     private javax.swing.JButton jButton3;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel10;
-    private javax.swing.JLabel jLabel11;
     private javax.swing.JLabel jLabel12;
     private javax.swing.JLabel jLabel13;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel3;
-    private javax.swing.JLabel jLabel4;
     private javax.swing.JLabel jLabel5;
-    private javax.swing.JLabel jLabel6;
     private javax.swing.JLabel jLabel7;
     private javax.swing.JLabel jLabel8;
     private javax.swing.JLabel jLabel9;
@@ -315,6 +275,6 @@ public class ViewEmployeeDetail extends java.awt.Dialog {
     private javax.swing.JSeparator jSeparator4;
     private javax.swing.JSeparator jSeparator5;
     private javax.swing.JSeparator jSeparator6;
-    private javax.swing.JSeparator jSeparator7;
+    private javax.swing.JLabel jlabel;
     // End of variables declaration//GEN-END:variables
 }

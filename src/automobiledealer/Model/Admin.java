@@ -14,7 +14,7 @@ import java.util.Date;
  */
 public class Admin extends Employee{
     
-    public Admin(String _ID, String _username, String _password, String _name, Date _dateOfBirth, String _gender) {
+    public Admin(int _ID, String _username, String _password, String _name, Date _dateOfBirth, String _gender) {
         super(_ID, _username, _password, _name, _dateOfBirth, _gender);
     }
    
