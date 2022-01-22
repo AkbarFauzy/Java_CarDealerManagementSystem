@@ -72,7 +72,7 @@ public class PartDAO implements ManageParts{
             }
             
             if(P instanceof Rims){
-                try (PreparedStatement stmt2 = conn.prepareStatement("INSERT INTO rims(FK_part_number,rims_diameter) VALUES(?,?)")) {
+                try (PreparedStatement stmt2 = conn.prepareStatement("INSERT INTO rims(FK_partNumber,rims_diameter) VALUES(?,?)")) {
                     stmt2.setString(1,P.getPartsNumber());
                     stmt2.setInt(2, ((Rims)P).getDiameter());
                     
@@ -80,7 +80,7 @@ public class PartDAO implements ManageParts{
                     stmt2.close();
                 }
             }else if(P instanceof RearviewMirror){
-                try (PreparedStatement stmt2 = conn.prepareStatement("INSERT INTO rearview_mirror(FK_partNumber,type) VALUES(?,?)")) {
+                try (PreparedStatement stmt2 = conn.prepareStatement("INSERT INTO rearview_mirror(FK_partNumber,mirror_type) VALUES(?,?)")) {
                     stmt2.setString(1,P.getPartsNumber());
                     stmt2.setString(2, ((RearviewMirror)P).getType());
                     
@@ -196,7 +196,7 @@ public class PartDAO implements ManageParts{
         List<Parts> part = new ArrayList<>();
         try{
             PreparedStatement stmt = conn.prepareStatement("SELECT * FROM `spare_part` main "
-                    + "LEFT JOIN `rims` r on r.FK_part_number = main.part_number "
+                    + "LEFT JOIN `rims` r on r.FK_partNumber = main.part_number "
                     + "LEFT JOIN `rearview_mirror` m on m.FK_partNumber = main.part_number "
                     + "LEFT JOIN `engine` e on e.FK_partNumber= main.part_number "
                     + "LEFT JOIN `tire` t on t.FK_partNumber = main.part_number WHERE main.name LIKE '%" + name + "%'");
@@ -215,7 +215,7 @@ public class PartDAO implements ManageParts{
                 part.add(P);
             }
         }catch(SQLException e){
-    
+             JOptionPane.showMessageDialog(null, e, "Dialog", JOptionPane.ERROR_MESSAGE);
         }
         return part;
     }
@@ -223,7 +223,7 @@ public class PartDAO implements ManageParts{
     public int countAllPart(){
         int count = 0;
         try{
-            PreparedStatement stmt = conn.prepareStatement("SELECT count(*) AS total FROM spare_part");
+            PreparedStatement stmt = conn.prepareStatement("SELECT count(*) AS total FROM spare_part WHERE spare_part.status = 'Ready'");
             ResultSet rs = stmt.executeQuery();
             while(rs.next()){
                 count = rs.getInt("total");
@@ -238,7 +238,8 @@ public class PartDAO implements ManageParts{
     public int countTire(){
         int count = 0;
         try{
-            PreparedStatement stmt = conn.prepareStatement("SELECT count(*) AS total FROM spare_part LEFT JOIN tire on tire.FK_partNumber = spare_part.part_number");
+            PreparedStatement stmt = conn.prepareStatement("SELECT count(*) AS total FROM tire "
+                    + "LEFT JOIN spare_part on tire.FK_partNumber = spare_part.part_number WHERE spare_part.status = 'Ready'");
             ResultSet rs = stmt.executeQuery();
             while(rs.next()){
                 count = rs.getInt("total");
@@ -253,7 +254,8 @@ public class PartDAO implements ManageParts{
     public int countEngine(){
         int count = 0;
         try{
-            PreparedStatement stmt = conn.prepareStatement("SELECT count(*) AS total FROM spare_part LEFT JOIN 'engine' on engine.FK_partNumber = spare_part.part_number");
+            PreparedStatement stmt = conn.prepareStatement("SELECT count(*) AS total FROM engine e "
+                    + "LEFT JOIN spare_part on e.FK_partNumber = spare_part.part_number WHERE spare_part.status = 'Ready'");
             ResultSet rs = stmt.executeQuery();
             while(rs.next()){
                 count = rs.getInt("total");
@@ -268,7 +270,8 @@ public class PartDAO implements ManageParts{
      public int countRims(){
         int count = 0;
         try{
-            PreparedStatement stmt = conn.prepareStatement("SELECT count(*) AS total FROM spare_part LEFT JOIN rims on rims.FK_partNumber = spare_part.part_number");
+            PreparedStatement stmt = conn.prepareStatement("SELECT count(*) AS total FROM rims "
+                    + "LEFT JOIN spare_part on rims.FK_partNumber = spare_part.part_number  WHERE spare_part.status = 'Ready'");
             ResultSet rs = stmt.executeQuery();
             while(rs.next()){
                 count = rs.getInt("total");
@@ -283,7 +286,8 @@ public class PartDAO implements ManageParts{
     public int countMirror(){
         int count = 0;
         try{
-            PreparedStatement stmt = conn.prepareStatement("SELECT count(*) AS total FROM spare_part LEFT JOIN rearview_mirror on rearview_mirror.FK_partNumber = spare_part.part_number");
+            PreparedStatement stmt = conn.prepareStatement("SELECT count(*) AS total FROM rearview_mirror "
+                    + "LEFT JOIN spare_part on rearview_mirror.FK_partNumber = spare_part.part_number  WHERE spare_part.status = 'Ready'");
             ResultSet rs = stmt.executeQuery();
             while(rs.next()){
                 count = rs.getInt("total");

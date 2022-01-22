@@ -5,7 +5,7 @@
  */
 package automobiledealer.UI;
 
-import automobiledealer.Model.Employee;
+import automobiledealer.Model.Employee.Employee;
 import javax.swing.JPanel;
 
 /**

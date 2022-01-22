@@ -7,15 +7,16 @@
 package automobiledealer.DAO;
 
 import static Connection.Connection_to_db.connection;
-import automobiledealer.Model.Customer;
-import automobiledealer.Model.Employee;
+import automobiledealer.Model.Others.Customer;
+import automobiledealer.Model.Employee.Employee;
 import automobiledealer.Model.Invoice.Invoice;
 import automobiledealer.Model.Parts.Parts;
-import automobiledealer.Model.Payments;
-import automobiledealer.Model.Sales;
+import automobiledealer.Model.Others.Payments;
+import automobiledealer.Model.Employee.Sales;
 import automobiledealer.Model.Invoice.SalesInvoice;
 import automobiledealer.Model.Invoice.ServiceInvoice;
-import automobiledealer.Model.Technician;
+import automobiledealer.Model.Employee.Manager;
+import automobiledealer.Model.Employee.Technician;
 import automobiledealer.Model.Vehicle.Vehicle;
 import java.sql.Connection;
 import java.sql.Date;
@@ -62,6 +63,32 @@ public class InvoiceDAO {
         }catch(SQLException e){
             JOptionPane.showMessageDialog(null, e, "Dialog", JOptionPane.ERROR_MESSAGE);
         }
+        return invoice;
+    }
+    
+      public List list(List<Customer> C, List<Employee> E, List<Vehicle> V, List<Parts> P, Employee loggedUser){
+        List<Invoice> invoice = new ArrayList<>();
+        try{
+            ResultSet rs;
+            try (PreparedStatement stmt = conn.prepareStatement("SELECT * FROM invoice")) {
+                rs = stmt.executeQuery();
+                while(rs.next()){
+                    Customer customer = getCustomer(C, rs.getInt("customer_id"));
+                    Employee employee = getEmployee(E, rs.getInt("employee_id"));
+                    Invoice I = null;
+                    if(employee instanceof Sales && (loggedUser instanceof Sales || loggedUser instanceof Manager)){
+                        I = new SalesInvoice(rs.getInt("id"), customer, Payments.valueOf(rs.getString("payment_type")), rs.getString("description"),rs.getDate("created_at"), (Sales)employee, getVehicle(V, rs.getInt("id")));
+                        invoice.add(I);
+                    }else if(employee instanceof Technician && (loggedUser instanceof Technician || loggedUser instanceof Manager)){
+                        I = new ServiceInvoice(rs.getInt("id"), customer, Payments.valueOf(rs.getString("payment_type")), rs.getString("description"),rs.getDate("created_at"), (Technician)employee, getParts(P, rs.getInt("id")));
+                        invoice.add(I);
+                    }
+                }
+            }
+            rs.close();
+        }catch(SQLException e){
+            JOptionPane.showMessageDialog(null, e, "Dialog", JOptionPane.ERROR_MESSAGE);
+        }
         
         return invoice;
     }
@@ -80,7 +107,7 @@ public class InvoiceDAO {
                 ResultSet generatedId = stmt.getGeneratedKeys();
                 if(generatedId.next()){
                     for(Vehicle vehicle : ((SalesInvoice)I).getVehicles()){
-                        try(PreparedStatement stmt2 = conn.prepareStatement("INSERT INTO invoice_sales(FK_invoice_sales, vehicle_regsiter_number) VALUES(?,?)")){
+                        try(PreparedStatement stmt2 = conn.prepareStatement("INSERT INTO invoice_sales(FK_invoice_id, vehicle_register_number) VALUES(?,?)")){
                             stmt2.setInt(1, generatedId.getInt(1));
                             stmt2.setString(2, vehicle.getRegistrationNumber());
                             stmt2.executeUpdate();
@@ -107,7 +134,7 @@ public class InvoiceDAO {
                 }
            
             }
-            
+            JOptionPane.showMessageDialog(null, "Invoice Berhasil di Tambahkan");
         }catch(SQLException e){
             JOptionPane.showMessageDialog(null, e, "Dialog", JOptionPane.ERROR_MESSAGE);  
         }
@@ -117,7 +144,7 @@ public class InvoiceDAO {
     public List<Vehicle> getVehicle(List<Vehicle> V, int invoice_ID){
         List<Vehicle> result = new ArrayList<>(); 
         try{
-            PreparedStatement stmt = conn.prepareStatement("SELECT register_number FROM invoice LEFT JOIN invoice_sales ON invoice.id = invoice_service.FK_invoice_id WHERE invoice.id=?");
+            PreparedStatement stmt = conn.prepareStatement("SELECT vehicle_register_number FROM invoice LEFT JOIN invoice_sales ON invoice.id = invoice_sales.FK_invoice_id WHERE invoice.id=?");
             stmt.setInt(1, invoice_ID);
             ResultSet rs = stmt.executeQuery();
             while(rs.next()){

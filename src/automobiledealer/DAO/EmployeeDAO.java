@@ -6,10 +6,10 @@
 package automobiledealer.DAO;
 
 import static Connection.Connection_to_db.connection;
-import automobiledealer.Model.Employee;
-import automobiledealer.Model.Manager;
-import automobiledealer.Model.Sales;
-import automobiledealer.Model.Technician;
+import automobiledealer.Model.Employee.Employee;
+import automobiledealer.Model.Employee.Manager;
+import automobiledealer.Model.Employee.Sales;
+import automobiledealer.Model.Employee.Technician;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
@@ -46,9 +46,6 @@ public class EmployeeDAO {
                         break;
                     case "Technician":
                         E = new Technician(rs.getInt("id"),rs.getString("username"), rs.getString("password"), rs.getString("name"), rs.getDate("birth_date"), rs.getString("gender"));
-                        break;
-                    case "Admin":
-                        E = new Employee(rs.getInt("id"),rs.getString("username"),rs.getString("password"), rs.getString("name"), rs.getDate("birth_date"), rs.getString("gender"));
                         break;
                 }
                 employee.add(E);
@@ -89,6 +86,97 @@ public class EmployeeDAO {
             JOptionPane.showMessageDialog(null, e, "Dialog", JOptionPane.ERROR_MESSAGE);
         }finally{
             return count;
+        }
+    }
+    
+    
+    public List<Employee> SearchEmployeeByUsername(String username){
+        List<Employee> employees = new ArrayList<>();
+        try{
+            PreparedStatement stmt = conn.prepareStatement("SELECT * FROM employee WHERE employee.username LIKE '%" + username + "%'");
+            ResultSet rs= stmt.executeQuery();
+            while(rs.next()){
+                Employee E = null;
+                switch(rs.getString("position")){
+                    case "Manager":
+                        E = new Manager(rs.getInt("id"),rs.getString("username"),rs.getString("password"), rs.getString("name"), rs.getDate("birth_date"), rs.getString("gender")); 
+                        break;
+                    case "Sales":
+                        E = new Sales(rs.getInt("id"),rs.getString("username"), rs.getString("password"), rs.getString("name"), rs.getDate("birth_date"), rs.getString("gender"));
+                        break;
+                    case "Technician":
+                        E = new Technician(rs.getInt("id"),rs.getString("username"), rs.getString("password"), rs.getString("name"), rs.getDate("birth_date"), rs.getString("gender"));
+                        break;
+                }
+                employees.add(E);
+            }
+            stmt.close();
+            rs.close();
+        }catch(SQLException e){
+            JOptionPane.showMessageDialog(null, e, "Dialog", JOptionPane.ERROR_MESSAGE);
+        }finally{
+            return employees;
+        }
+    }
+    
+        public List<Employee> SearchEmployeeByName(String name){
+        List<Employee> employees = new ArrayList<>();
+        try{
+            PreparedStatement stmt = conn.prepareStatement("SELECT * FROM employee WHERE employee.name LIKE '%" + name + "%'");
+            ResultSet rs= stmt.executeQuery();
+            while(rs.next()){
+                Employee E = null;
+                switch(rs.getString("position")){
+                    case "Manager":
+                        E = new Manager(rs.getInt("id"),rs.getString("username"),rs.getString("password"), rs.getString("name"), rs.getDate("birth_date"), rs.getString("gender")); 
+                        break;
+                    case "Sales":
+                        E = new Sales(rs.getInt("id"),rs.getString("username"), rs.getString("password"), rs.getString("name"), rs.getDate("birth_date"), rs.getString("gender"));
+                        break;
+                    case "Technician":
+                        E = new Technician(rs.getInt("id"),rs.getString("username"), rs.getString("password"), rs.getString("name"), rs.getDate("birth_date"), rs.getString("gender"));
+                        break;
+                }
+                employees.add(E);
+            }
+            stmt.close();
+            rs.close();
+        }catch(SQLException e){
+            JOptionPane.showMessageDialog(null, e, "Dialog", JOptionPane.ERROR_MESSAGE);
+        }finally{
+            return employees;
+        }
+    }
+    
+    
+    public List<Employee> SearchEmployeeByUsername(String username, String excludedUsername){
+        List<Employee> employees = new ArrayList<>();
+        try{
+            PreparedStatement stmt = conn.prepareStatement("SELECT * FROM employee WHERE employee.username LIKE '%" + username + "%'");
+            ResultSet rs= stmt.executeQuery();
+            while(rs.next()){
+                Employee E = null;
+                switch(rs.getString("position")){
+                    case "Manager":
+                        E = new Manager(rs.getInt("id"),rs.getString("username"),rs.getString("password"), rs.getString("name"), rs.getDate("birth_date"), rs.getString("gender")); 
+                        break;
+                    case "Sales":
+                        E = new Sales(rs.getInt("id"),rs.getString("username"), rs.getString("password"), rs.getString("name"), rs.getDate("birth_date"), rs.getString("gender"));
+                        break;
+                    case "Technician":
+                        E = new Technician(rs.getInt("id"),rs.getString("username"), rs.getString("password"), rs.getString("name"), rs.getDate("birth_date"), rs.getString("gender"));
+                        break;
+                }
+                if(!E.getUsername().equals(excludedUsername)){
+                    employees.add(E);
+                }
+            }
+            stmt.close();
+            rs.close();
+        }catch(SQLException e){
+            JOptionPane.showMessageDialog(null, e, "Dialog", JOptionPane.ERROR_MESSAGE);
+        }finally{
+            return employees;
         }
     }
     

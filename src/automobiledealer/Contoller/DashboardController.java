@@ -5,9 +5,9 @@
  */
 package automobiledealer.Contoller;
 
-import automobiledealer.Model.Manager;
-import automobiledealer.Model.Sales;
-import automobiledealer.Model.Technician;
+import automobiledealer.Model.Employee.Manager;
+import automobiledealer.Model.Employee.Sales;
+import automobiledealer.Model.Employee.Technician;
 import automobiledealer.UI.MainFrame;
 import java.awt.Color;
 import java.awt.event.ActionEvent;
@@ -26,6 +26,7 @@ public class DashboardController implements ActionListener {
     PartController PC;
     InvoiceController IC;
     
+    //CONSTRUCTOR
     public DashboardController(JFrame view){
         this.view = (MainFrame) view;
         CreateMenu();
@@ -38,7 +39,7 @@ public class DashboardController implements ActionListener {
             this.IC = new InvoiceController(this.view, this.CC, this.EC, null, this.VC);
         }else if(this.view.loggedUser instanceof Technician){
             this.IC = new InvoiceController(this.view, this.CC, this.EC, this.PC, null);
-        }else{
+        }else if(this.view.loggedUser instanceof Manager){
             this.IC = new InvoiceController(this.view, this.CC, this.EC, this.PC, this.VC);
         }
         
@@ -46,6 +47,7 @@ public class DashboardController implements ActionListener {
         RefreshDashboard();
     }
     
+    //Fungsi untuk membuat menu berdasarkan Role
     private void CreateMenu(){
         view.getSidebar().removeAll();
         view.getSidebar().add(view.getHome_PanelButton());
@@ -62,6 +64,7 @@ public class DashboardController implements ActionListener {
         view.getSidebar().add(view.getInvoices_PanelButton());
     } 
     
+    //Fungsi untuk me-refresh informasi pada halaman home sesuai dengan role
     public void RefreshDashboard(){
         EC.RefreshModel();
         VC.RefreshModel();
@@ -75,13 +78,31 @@ public class DashboardController implements ActionListener {
             
             view.getHome_Label_name1().setText("Sales Employee");
             view.getHome_Label_name2().setText("Technician Employee");
-            view.getHome_Label_name3().setText("Vehicle Count");
-            view.getHome_Label_name4().setText("Spare Part Count");
-            
+            view.getHome_Label_name3().setText("Available Vehicle");
+            view.getHome_Label_name4().setText("Available Spare Part Count");
+            view.getAddInvoiceButton().setEnabled(false);
         }else if(this.view.loggedUser instanceof Sales){
-        
+            view.getHome_Label_count1().setText(VC.getCount(2)+"");
+            view.getHome_Label_count2().setText(VC.getCount(5)+"");
+            view.getHome_Label_count3().setText(VC.getCount(3)+"");
+            view.getHome_Label_count4().setText(VC.getCount(6)+"");
+            
+            view.getHome_Label_name1().setText("Available Car");
+            view.getHome_Label_name2().setText("Available Truck");
+            view.getHome_Label_name3().setText("Sold Car");
+            view.getHome_Label_name4().setText("Sold Truck");
+            
         }else if(this.view.loggedUser instanceof Technician){
-        
+            view.getHome_Label_count1().setText(PC.getCount(1)+"");
+            view.getHome_Label_count2().setText(PC.getCount(2)+"");
+            view.getHome_Label_count3().setText(PC.getCount(3)+"");
+            view.getHome_Label_count4().setText(PC.getCount(4)+"");
+            
+            view.getHome_Label_name1().setText("Available Rims");
+            view.getHome_Label_name2().setText("Available Tire");
+            view.getHome_Label_name3().setText("Available Engine");
+            view.getHome_Label_name4().setText("Available Mirror");
+
         }
     
     }

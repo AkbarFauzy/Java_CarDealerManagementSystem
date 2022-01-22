@@ -154,6 +154,7 @@ public class VehicleDAO implements ManageVehicle{
             stmt.executeUpdate();
             stmt.close();
             System.out.print(V.getRegistrationNumber());
+            JOptionPane.showMessageDialog(null, "Vehicle Berhasil di Update");
         }catch(SQLException e){
             JOptionPane.showMessageDialog(null, e, "Dialog", JOptionPane.ERROR_MESSAGE);
         }
@@ -181,6 +182,7 @@ public class VehicleDAO implements ManageVehicle{
             stmt.setString(14, V.getRegistrationNumber());
             stmt.executeUpdate();
             stmt.close();
+            JOptionPane.showMessageDialog(null, "Vehicle Berhasil di Update");
         }catch(SQLException e){
             JOptionPane.showMessageDialog(null, e, "Dialog", JOptionPane.ERROR_MESSAGE);
         }
@@ -194,6 +196,7 @@ public class VehicleDAO implements ManageVehicle{
             stmt.setString(1, index);
             stmt.executeUpdate();              
             stmt.close();
+            JOptionPane.showMessageDialog(null, "Vehicle Berhasil di Hapus");
         }catch(SQLException ex){
             System.err.println("Got an exception!");
             System.err.println(ex.getMessage()); 
@@ -212,13 +215,63 @@ public class VehicleDAO implements ManageVehicle{
         }
     }
     
-    public List<Vehicle> serachByName(String name){
+    public List<Vehicle> searchByName(String name){
         List<Vehicle> vehicle = new ArrayList<>();
         try{
             PreparedStatement stmt = conn.prepareStatement("SELECT * FROM vehicle WHERE vehicle.name LIKE '%" + name + "%'");
             ResultSet rs= stmt.executeQuery();
             while(rs.next()){
-            Vehicle V = null;
+                Vehicle V = null;
+                if(rs.getObject("load_capacity", int.class) == null){
+                    V = new Car(rs.getString("register_number"),
+                            rs.getString("name"), 
+                            rs.getString("brand"), 
+                            rs.getString("color"),
+                            rs.getInt("number_wheel"),
+                            rs.getDouble("weight"),
+                            rs.getInt("number_doors"),
+                            rs.getString("transmission"),
+                            rs.getInt("price"),
+                            rs.getString("fuel_type"),
+                            rs.getInt("horse_power"),
+                            rs.getString("status"),
+                            CarModel.valueOf(rs.getString("model"))
+                    );
+                }
+                else{
+                    V = new Truck(rs.getString("register_number"),
+                            rs.getString("name"), 
+                            rs.getString("brand"), 
+                            rs.getString("color"),
+                            rs.getInt("number_wheel"),
+                            rs.getDouble("weight"),
+                            rs.getInt("number_doors"),
+                            rs.getString("transmission"),
+                            rs.getInt("price"),
+                            rs.getString("fuel_type"),
+                            rs.getInt("horse_power"),
+                            rs.getString("status"),
+                            rs.getInt("load_capacity")
+                    );
+                }
+                vehicle.add(V);
+            }
+            stmt.close();
+            rs.close();
+        }catch(SQLException e){
+            JOptionPane.showMessageDialog(null, e, "Dialog", JOptionPane.ERROR_MESSAGE);
+        }
+        
+        return vehicle;
+    }
+    
+    public List<Vehicle> searchByRegisterNumber(String registerNumber){
+        List<Vehicle> vehicle = new ArrayList<>();
+        try{
+            PreparedStatement stmt = conn.prepareStatement("SELECT * FROM vehicle WHERE vehicle.register_number LIKE '%" + registerNumber + "%'");
+            ResultSet rs= stmt.executeQuery();
+            while(rs.next()){
+                Vehicle V = null;
                 if(rs.getObject("load_capacity", int.class) == null){
                     V = new Car(rs.getString("register_number"),
                             rs.getString("name"), 
@@ -292,6 +345,21 @@ public class VehicleDAO implements ManageVehicle{
         }
     }
     
+    public int countCarWithStatus(String status){
+        int count = 0;
+        try{
+            PreparedStatement stmt = conn.prepareStatement("SELECT count(*) AS total FROM vehicle WHERE load_capacity IS NULL AND status='"+status+"'");
+            ResultSet rs = stmt.executeQuery();
+            while(rs.next()){
+                count = rs.getInt("total");
+            }
+        }catch(SQLException e){
+            JOptionPane.showMessageDialog(null, e, "Dialog", JOptionPane.ERROR_MESSAGE);
+        }finally{
+            return count;
+        }
+    }
+    
     public int countTruck(){
         int count = 0;
         try{
@@ -307,5 +375,19 @@ public class VehicleDAO implements ManageVehicle{
         }
     }
     
+    public int countTruckWithStatus(String status){
+        int count = 0;
+        try{
+            PreparedStatement stmt = conn.prepareStatement("SELECT count(*) AS total FROM vehicle WHERE load_capacity IS NOT    NULL AND status='"+status+"'");
+            ResultSet rs = stmt.executeQuery();
+            while(rs.next()){
+                count = rs.getInt("total");
+            }
+        }catch(SQLException e){
+            JOptionPane.showMessageDialog(null, e, "Dialog", JOptionPane.ERROR_MESSAGE);
+        }finally{
+            return count;
+        }
+    }
     
 }   

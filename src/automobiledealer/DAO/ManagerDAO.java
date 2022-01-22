@@ -6,13 +6,14 @@
 package automobiledealer.DAO;
 
 import static Connection.Connection_to_db.connection;
-import automobiledealer.Model.Employee;
-import automobiledealer.Model.Manager;
-import automobiledealer.Model.Sales;
-import automobiledealer.Model.Technician;
+import automobiledealer.Model.Employee.Employee;
+import automobiledealer.Model.Employee.Manager;
+import automobiledealer.Model.Employee.Sales;
+import automobiledealer.Model.Employee.Technician;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.SQLException;
+import java.sql.SQLIntegrityConstraintViolationException;
 import javax.swing.JOptionPane;
 
 /**
@@ -48,7 +49,11 @@ public class ManagerDAO implements ManageEmployee{
             stmt.close();
             JOptionPane.showMessageDialog(null, "Employee Berhasil Ditambahkan", "Dialog", JOptionPane.INFORMATION_MESSAGE);
         }catch(SQLException ex){
-            JOptionPane.showMessageDialog(null, ex, "Dialog", JOptionPane.ERROR_MESSAGE);
+            if(ex instanceof SQLIntegrityConstraintViolationException){
+                JOptionPane.showMessageDialog(null, "Username Sudah ada di Database", "Dialog", JOptionPane.ERROR_MESSAGE);
+            }else{
+                JOptionPane.showMessageDialog(null, ex, "Dialog", JOptionPane.ERROR_MESSAGE);
+            }
         }
     }
     

@@ -5,15 +5,15 @@
  */
 package automobiledealer.UI; 
 import automobiledealer.Contoller.EmployeeController;
-import automobiledealer.Model.Admin;
-import automobiledealer.Model.Manager;
-import automobiledealer.Model.Sales;
-import automobiledealer.Model.Technician;
+import automobiledealer.Model.Others.Admin;
+import automobiledealer.Model.Employee.Manager;
+import automobiledealer.Model.Employee.Sales;
+import automobiledealer.Model.Employee.Technician;
 import java.sql.Connection;
 import java.sql.SQLException;
 import javax.swing.JOptionPane;
 import static Connection.Connection_to_db.connection;
-import automobiledealer.Model.Employee;
+import automobiledealer.Model.Employee.Employee;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 
@@ -229,7 +229,7 @@ public class Login extends javax.swing.JFrame {
     private void loginButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_loginButtonActionPerformed
         PreparedStatement stmt = null;
         try{
-            stmt = conn.prepareStatement("SELECT * FROM employee WHERE employee.username=? AND employee.password =?");
+            stmt = conn.prepareStatement("SELECT * FROM employee WHERE employee.username=? AND employee.password =? ");
             stmt.setString(1, loginUsername.getText());
             stmt.setString(2, loginPassword.getText());
             ResultSet rs = stmt.executeQuery();
@@ -245,11 +245,16 @@ public class Login extends javax.swing.JFrame {
                         User = new Technician(rs.getInt("id"),rs.getString("username"), rs.getString("password"), rs.getString("name"), rs.getDate("birth_date"), rs.getString("gender"));
                         break;
                 }
-                stmt.close();
-                rs.close();
-                dispose();
-                MainFrame home = new MainFrame(User);
-                home.setVisible(true);
+                if(!rs.getString("username").equals(loginUsername.getText()) || !rs.getString("password").equals(loginPassword.getText())){
+                    JOptionPane.showMessageDialog(this, "Username atau Password Salah", "Dialog", JOptionPane.ERROR_MESSAGE);
+                }else{
+                    stmt.close();
+                    rs.close();
+                    dispose();
+                    MainFrame home = new MainFrame(User);
+                    home.setVisible(true);
+                
+                }
             }else{
                 JOptionPane.showMessageDialog(this, "Username atau Password Salah", "Dialog", JOptionPane.ERROR_MESSAGE);
             }

@@ -6,12 +6,13 @@
 package automobiledealer.DAO;
 
 import static Connection.Connection_to_db.connection;
-import automobiledealer.Model.Customer;
+import automobiledealer.Model.Others.Customer;
 import java.awt.HeadlessException;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.sql.SQLIntegrityConstraintViolationException;
 import java.util.ArrayList;
 import java.util.List;
 import javax.swing.JOptionPane;
@@ -56,11 +57,9 @@ public class CustomerDAO {
             stmt.setString(4, _customer.getGender());
             stmt.executeUpdate();
             stmt.close();
-
-            JOptionPane.showMessageDialog(null, "Customer Berhasil di Tambahkan");
-            }catch(Exception e){
+        }catch(Exception e){
                 JOptionPane.showMessageDialog(null, e, "Dialog", JOptionPane.ERROR_MESSAGE);
-            }
+        }
     }
     
     public void editCustomer(Customer _customer){      
@@ -89,7 +88,27 @@ public class CustomerDAO {
             stmt.setInt(1, C.getId());
             stmt.executeUpdate();
         }catch(SQLException e){
+             if (e instanceof SQLIntegrityConstraintViolationException) {
+                JOptionPane.showMessageDialog(null, "Tidak Dapat Menghapus Customer, Customer Memiliki Invoice", "Dialog", JOptionPane.ERROR_MESSAGE);
+            }
+        }
+    }
+    
+    public List<Customer> SearchCustomerByName(String name){
+        List<Customer> customers = new ArrayList<>();
+        try{
+            PreparedStatement stmt = conn.prepareStatement("SELECT * FROM customer WHERE customer.name LIKE '%" + name + "%'");
+            ResultSet rs= stmt.executeQuery();
+            while(rs.next()){
+                Customer C = new Customer(rs.getInt("id"), rs.getString("name"), rs.getString("address"), rs.getString("phone_number"), rs.getString("Gender"));
+                customers.add(C);
+            }
+            stmt.close();
+            rs.close();
+        }catch(SQLException e){
             JOptionPane.showMessageDialog(null, e, "Dialog", JOptionPane.ERROR_MESSAGE);
+        }finally{
+            return customers;
         }
     }
     

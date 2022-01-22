@@ -3,8 +3,9 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package automobiledealer.Model;
+package automobiledealer.Model.Others;
 
+import automobiledealer.Model.Employee.Employee;
 import java.util.Date;
 
 

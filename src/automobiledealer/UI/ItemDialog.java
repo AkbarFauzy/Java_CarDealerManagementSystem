@@ -55,19 +55,20 @@ public class ItemDialog extends java.awt.Dialog {
 
         ItemDialog_Button_search.setText("Cari");
 
+        Item_Table.setFont(new java.awt.Font("Tahoma", 0, 12)); // NOI18N
         Item_Table.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
-                {null, null},
-                {null, null},
-                {null, null},
-                {null, null}
+                {null, null, null},
+                {null, null, null},
+                {null, null, null},
+                {null, null, null}
             },
             new String [] {
-                "Title 1", "Title 2"
+                "Register Number", "Item Name", "Price"
             }
         ) {
             boolean[] canEdit = new boolean [] {
-                false, false
+                false, false, false
             };
 
             public boolean isCellEditable(int rowIndex, int columnIndex) {

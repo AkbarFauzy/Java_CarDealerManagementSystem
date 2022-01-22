@@ -9,10 +9,10 @@ import automobiledealer.DAO.EmployeeDAO;
 import automobiledealer.DAO.ManagerDAO;
 import automobiledealer.UI.MainFrame;
 import automobiledealer.UI.ViewEmployeeDetail;
-import automobiledealer.Model.Employee;
-import automobiledealer.Model.Manager;
-import automobiledealer.Model.Sales;
-import automobiledealer.Model.Technician;
+import automobiledealer.Model.Employee.Employee;
+import automobiledealer.Model.Employee.Manager;
+import automobiledealer.Model.Employee.Sales;
+import automobiledealer.Model.Employee.Technician;
 import java.awt.Color;
 import java.awt.HeadlessException;
 import java.awt.event.ActionEvent;
@@ -34,7 +34,6 @@ import javax.swing.table.DefaultTableModel;
  * @author AkbarFauzy
  */
 public class EmployeeController implements ActionListener, MouseListener{
-
     Employee m;
     EmployeeDAO employeeDAO;
     ManagerDAO mDAO;
@@ -45,6 +44,7 @@ public class EmployeeController implements ActionListener, MouseListener{
     
     Employee selectedEmployee;
     
+    //CONSTRUCTOR
     public EmployeeController(JFrame view){
         mDAO = new ManagerDAO();
         employeeDAO = new EmployeeDAO();
@@ -53,6 +53,7 @@ public class EmployeeController implements ActionListener, MouseListener{
         this.view = (MainFrame)view;
         this.view.getEmployee_PanelButton().addActionListener(this);
         this.view.getAddEmployeeButton().addActionListener(this);
+        this.view.getSearchEmployeeButton().addActionListener(this);
         this.view.getEmployeeForm_Button_add().addActionListener(this);
         this.view.getDeleteEmployeeButton().addActionListener(this);
         this.view.getEditEmployeeButton().addActionListener(this);
@@ -61,7 +62,7 @@ public class EmployeeController implements ActionListener, MouseListener{
     
     @Override
     public void actionPerformed(ActionEvent e) {  
-        if(e.getSource()==view.getEmployee_PanelButton()){
+        if(e.getSource()==view.getEmployee_PanelButton()){ //Ketika tiombol employee pada sidebarr di tekan
             view.getCardLayout().show(view.getContentPanel(), "EmployeePageContentPanel");
             view.prevMenuButton.setBackground(new Color(255,255,255));
             view.prevMenuButton.setForeground(Color.BLACK);    
@@ -73,7 +74,11 @@ public class EmployeeController implements ActionListener, MouseListener{
             view.getEditEmployeeButton().setEnabled(false);
             view.getDeleteEmployeeButton().setEnabled(false);
         
-        }else if(e.getSource() == view.getEmployeeForm_Button_add()){
+        }else if(e.getSource() == view.getSearchEmployeeButton()){ //Ketika tombol search pada halaman Employee ditekan
+            listEmployee = employeeDAO.SearchEmployeeByName(view.getEmployee_TextIInput_search().getText());
+            EmployeeList(view.getEmployee_Table());
+        }else if(e.getSource() == view.getEmployeeForm_Button_add()){ // Ketika tomboll add pada Form Employee ditekan
+            //Memvalidasi input
             if(view.getEmployeeForm_TextInput_username().getText().trim().isEmpty()){
                 JOptionPane.showMessageDialog(view, "Username Tidak Boleh Kosong", "Dialog", JOptionPane.ERROR_MESSAGE);
             }else if(view.getEmployeeForm_TextInput_password().getText().trim().isEmpty()){
@@ -82,37 +87,52 @@ public class EmployeeController implements ActionListener, MouseListener{
                 JOptionPane.showMessageDialog(view, "Nama Tidak Boleh Kosong", "Dialog", JOptionPane.ERROR_MESSAGE);
             }else if(!view.getEmployeeForm_TextInput_password().getText().equals(view.getEmployeeForm_TextInput_confirmPassword().getText())){
                 JOptionPane.showMessageDialog(view, "Password tidak sama", "Dialog", JOptionPane.ERROR_MESSAGE);
-            }else{ 
+            }else{
                 try{
-                    if("Add".equals(view.getEmployeeForm_Button_add().getText())){
-                        InsertEmployee();
-                    }else if("Update".equals(view.getEmployeeForm_Button_add().getText())){
-                        EditEmployee();
+                    if("Add".equals(view.getEmployeeForm_Button_add().getText())){ //Ketika Form pada mode insert
+                        if(!employeeDAO.SearchEmployeeByUsername(view.getEmployeeForm_TextInput_username().getText()).isEmpty()){
+                            JOptionPane.showMessageDialog(view, "Username Sudah diambil", "Dialog", JOptionPane.ERROR_MESSAGE);
+                        }else{
+                            InsertEmployee();
+                        }
+                    }else if("Update".equals(view.getEmployeeForm_Button_add().getText())){ //Ketika Form pada mode edit
+                         if(!employeeDAO.SearchEmployeeByUsername(view.getEmployeeForm_TextInput_username().getText(), selectedEmployee.getUsername()).isEmpty()){
+                            JOptionPane.showMessageDialog(view, "Username Sudah diambil", "Dialog", JOptionPane.ERROR_MESSAGE);
+                        }else{
+                            EditEmployee();
+                        }
                     }                     
                     view.getCardLayout().show(view.getContentPanel(), "EmployeePageContentPanel");                 
-                }catch(ClassCastException ex){
-                    JOptionPane.showMessageDialog(view, "Restricted Action", "Dialog", JOptionPane.ERROR_MESSAGE);
-                }catch(HeadlessException | ParseException ex){
-                    JOptionPane.showMessageDialog(view, ex, "Dialog", JOptionPane.ERROR_MESSAGE);
-                }finally{
-                    RefreshModel();
-                    EmployeeList(view.getEmployee_Table());
-                }
+                    }catch(ClassCastException ex){
+                        JOptionPane.showMessageDialog(view, "Restricted Action", "Dialog", JOptionPane.ERROR_MESSAGE);
+                    }catch(HeadlessException | ParseException ex){
+                        JOptionPane.showMessageDialog(view, ex, "Dialog", JOptionPane.ERROR_MESSAGE);
+                    }finally{
+                        RefreshModel();
+                        EmployeeList(view.getEmployee_Table());
+                    }           
             }
-        }else if(e.getSource()==view.getAddEmployeeButton()){
+        }else if(e.getSource()==view.getAddEmployeeButton()){ //Ketika Tombol add employee pada halaman employee ditekan maka pindah halaman ke form mode insert
+            //Pindah halaman ke employee form
             view.getCardLayout().show(view.getContentPanel(), "EmployeeFormPanel");
+            //Reset Form
             resetForm();
+            //Ubah text pada tombol form menjadi add
             view.getEmployeeForm_Button_add().setText("Add"); 
     
-        }else if(e.getSource() == view.getEditEmployeeButton()){
+        }else if(e.getSource() == view.getEditEmployeeButton()){ //Ketika Tombol edit pada halaman employee ditekan maka pindah halaman ke form mode edit
+           //Mendapatkan objek Employee 
            selectedEmployee = (Employee) listEmployee.get(view.getEmployee_Table().convertRowIndexToModel(view.getEmployee_Table().getSelectedRow()));
-           view.getCardLayout().show(view.getContentPanel(), "EmployeeFormPanel");
-           
+           //Pindah halaman ke employee form
+           view.getCardLayout().show(view.getContentPanel(), "EmployeeFormPanel");   
+           //Mengisi form dengan objek employee yang telah dipilih
            fillForm();
+           //Ubah text pada tombol form menjadi update
            view.getEmployeeForm_Button_add().setText("Update");
-        }else if(e.getSource() == view.getDeleteEmployeeButton()){
-            String msg = "Are you sure want to Delete " + listEmployee.get(view.getEmployee_Table().getSelectedRow()).getName()+
-                    " with User ID : "+ listEmployee.get(view.getEmployee_Table().getSelectedRow()).getEmployeeID()+" ?";
+        }else if(e.getSource() == view.getDeleteEmployeeButton()){//Ketika Tombol delete pada halaman employee ditekan
+            //Melakukan Konfirmasi penghapusan data
+            String msg = "Apakah anda yakin ingin menghapus Employee " + listEmployee.get(view.getEmployee_Table().getSelectedRow()).getName()+
+                    " dengan User ID : "+ listEmployee.get(view.getEmployee_Table().getSelectedRow()).getEmployeeID()+" ?";
             Object[] options ={"Yes", "Cancel"};
             int option = JOptionPane.showOptionDialog(null, msg, "",JOptionPane.OK_CANCEL_OPTION, JOptionPane.PLAIN_MESSAGE,null,options,options[0]);
             if(option == JOptionPane.OK_OPTION){     
@@ -123,9 +143,11 @@ public class EmployeeController implements ActionListener, MouseListener{
         }
     }
    
+    //Implementasi Mouse Listener
     @Override
-    public void mouseClicked(MouseEvent e) {
-        if(e.getClickCount() == 2 && e.getButton() == MouseEvent.BUTTON1 && e.getSource() == view.getEmployee_Table()){
+    public void mouseClicked(MouseEvent e) { //Ketika melakukan Klik
+        // Jika melakukan Klik 2 kalai menggunakan key M1 pada table employee
+        if(e.getClickCount() == 2 && e.getButton() == MouseEvent.BUTTON1 && e.getSource() == view.getEmployee_Table()){ 
             ViewEmployeeDetail F = new ViewEmployeeDetail(view, true, listEmployee.get(view.getEmployee_Table().getSelectedRow()));
             F.addWindowListener(new java.awt.event.WindowAdapter(){
             @Override
@@ -138,6 +160,7 @@ public class EmployeeController implements ActionListener, MouseListener{
         }
     }
 
+    //Fungsi untuk mengisi table dengan employee
     public void EmployeeList(JTable table){
         tb = (DefaultTableModel)table.getModel();
         tb.setRowCount(0);  
@@ -152,6 +175,7 @@ public class EmployeeController implements ActionListener, MouseListener{
         table.setModel(tb);
     }
     
+    //Fungsi untuk memasukkan employee ke database
     public void InsertEmployee() throws ParseException{
         Date date = new SimpleDateFormat("dd/MM/yyyy").parse(view.getEmployeeForm_ComboBox_dd().getSelectedItem().toString()+"/"+
                                                             (view.getEmployeeForm_ComboBox_mm().getSelectedIndex()+1) +"/"+
@@ -182,6 +206,7 @@ public class EmployeeController implements ActionListener, MouseListener{
         }
     }
     
+    //Fungsi untuk mengupdate employee ke database
     public void EditEmployee() throws ParseException{
         Date date = new SimpleDateFormat("dd/MM/yyyy").parse(view.getEmployeeForm_ComboBox_dd().getSelectedItem().toString()+"/"+
                                                             (view.getEmployeeForm_ComboBox_mm().getSelectedIndex()+1) +"/"+
@@ -195,17 +220,33 @@ public class EmployeeController implements ActionListener, MouseListener{
         
         switch(view.getEmployeePosition().getSelection().getActionCommand()){
             case "Manager":
-                mDAO.editEmployee((Manager)selectedEmployee);
+                mDAO.editEmployee(new Manager(selectedEmployee.getEmployeeID(), 
+                                            view.getEmployeeForm_TextInput_username().getText(),
+                                            view.getEmployeeForm_TextInput_password().getText(),
+                                            view.getEmployeeForm_TextInput_name().getText(),
+                                           date,
+                                           view.getEmployeeGender().getSelection().getActionCommand()));
                 break;
             case "Sales":
-                mDAO.editEmployee((Sales)selectedEmployee);
+                mDAO.editEmployee(new Sales(selectedEmployee.getEmployeeID(),
+                                           view.getEmployeeForm_TextInput_username().getText(),
+                                           view.getEmployeeForm_TextInput_password().getText(),
+                                           view.getEmployeeForm_TextInput_name().getText(),
+                                           date,
+                                           view.getEmployeeGender().getSelection().getActionCommand()));
                 break;
             case "Technician":
-                mDAO.editEmployee((Technician)selectedEmployee);
-                break;
+                mDAO.editEmployee(new Technician(selectedEmployee.getEmployeeID(), 
+                                               view.getEmployeeForm_TextInput_username().getText(),
+                                               view.getEmployeeForm_TextInput_password().getText(),
+                                               view.getEmployeeForm_TextInput_name().getText(),
+                                               date,
+                                               view.getEmployeeGender().getSelection().getActionCommand()));
+           break;
        }
     }
     
+    //Fungsi untuk me-reset form
     public void resetForm(){
         view.getEmployeeForm_TextInput_username().setText("");
         view.getEmployeeForm_TextInput_name().setText("");
@@ -218,6 +259,7 @@ public class EmployeeController implements ActionListener, MouseListener{
         view.getEmployeeForm_ComboBox_yyyy().setSelectedIndex(0);
     }
     
+    //Fungsi untuk mengisi form
     public void fillForm(){
         if(selectedEmployee instanceof Manager){
             view.getEmployeePosition().setSelected(view.getEmployeeForm_RB_Manager().getModel(), true);
@@ -245,11 +287,14 @@ public class EmployeeController implements ActionListener, MouseListener{
         view.getEmployeeForm_ComboBox_dd().setSelectedIndex(cal.get(Calendar.DAY_OF_MONTH - 1));
     }
     
-    
+    //Fungsi untuk merefresh model
     public void RefreshModel(){
         this.listEmployee = employeeDAO.list();
     }
     
+    //Fungsi untuk Mendapatkan jumlah Employee
+    // jika x == 0 maka tampilkan jumlah sales
+    // jika x == 1 maka tampilkan jumlah technician
     public int getEmployeeCount(int x){
         if(x == 0){
             return employeeDAO.salesCount();
@@ -261,22 +306,22 @@ public class EmployeeController implements ActionListener, MouseListener{
 
     @Override
     public void mouseReleased(MouseEvent e) {
-        
+        //DO NOTHING
     }
 
     @Override
     public void mouseEntered(MouseEvent e) {
-        
+        //DO NOTHING
     }
 
     @Override
     public void mouseExited(MouseEvent e) {
-       
+       //DO NOTHING
     }
     
-        @Override
+    @Override
     public void mousePressed(MouseEvent e) {
-      
+      //DO NOTHING
     }
     
 

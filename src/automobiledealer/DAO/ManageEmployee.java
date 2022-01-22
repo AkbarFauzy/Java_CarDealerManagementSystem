@@ -5,7 +5,7 @@
  */
 package automobiledealer.DAO;
 
-import automobiledealer.Model.Employee;
+import automobiledealer.Model.Employee.Employee;
 
 /**
  *

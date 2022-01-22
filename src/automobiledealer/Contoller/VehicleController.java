@@ -37,8 +37,7 @@ public class VehicleController implements ActionListener, MouseListener{
     MainFrame view;
     List<Vehicle> listVehicle;
     
-//    Vehicle selectedVehicle;
-    
+    //CONSTRUCTOR
     public VehicleController(JFrame _view){
         vDao = new VehicleDAO();
         listVehicle = vDao.list();
@@ -46,6 +45,7 @@ public class VehicleController implements ActionListener, MouseListener{
         this.view = (MainFrame) _view;
         view.getVehicle_PanelButton().addActionListener(this);
         view.getAddVehicleButton().addActionListener(this);
+        view.getSearchVehicleButton().addActionListener(this);
         view.getEditVehicleButton().addActionListener(this);
         view.getDeleteVehicleButton().addActionListener(this);
         view.getVehicleForm_Button_add().addActionListener(this);
@@ -68,8 +68,11 @@ public class VehicleController implements ActionListener, MouseListener{
             VehicleList(view.getVehicle_Table());
             view.getEditVehicleButton().setEnabled(false);
             view.getDeleteVehicleButton().setEnabled(false);
+        }else if(e.getSource() == view.getSearchVehicleButton()){
+            SearchVehicle(view.getVehicle_TextIInput_search().getText());
+            VehicleList(view.getVehicle_Table());
         }else if(e.getSource() == view.getAddVehicleButton()){
-            String msg = "";
+            String msg = "Tipe Vehicle apa yang ingin anda tambahkan?";
             Object[] options ={"Car", "Truck"};
             int option = JOptionPane.showOptionDialog(null, msg, "",JOptionPane.DEFAULT_OPTION, JOptionPane.PLAIN_MESSAGE,null,options,options[0]);
             
@@ -92,10 +95,18 @@ public class VehicleController implements ActionListener, MouseListener{
                 JOptionPane.showMessageDialog(view, "Register Number Tidak Boleh Kosong", "Dialog", JOptionPane.ERROR_MESSAGE);
             }else if(view.getVehicleForm_TextInput_name().getText().trim().isEmpty()){
                 JOptionPane.showMessageDialog(view, "Nama Kendaraan Tidak Boleh Kosong", "Dialog", JOptionPane.ERROR_MESSAGE);
+            }else if(view.getVehicleForm_Spinner_weight().getValue().equals(0)){
+                JOptionPane.showMessageDialog(view, "Weight Tidak Boleh Kosong", "Dialog", JOptionPane.ERROR_MESSAGE);
+            }else if((Integer) view.getVehicleForm_Spinner_truckloadcapacity().getValue() == 0 && !view.getVehicleForm_ComboBox_carmodel().isEnabled()){
+                JOptionPane.showMessageDialog(view, "Load Capacity Tidak Boleh Kosong", "Dialog", JOptionPane.ERROR_MESSAGE);
             }else{
                 if("Add".equals(view.getVehicleForm_Button_add().getText())){
-                    InsertVehicle();
-                    view.getCardLayout().show(view.getContentPanel(), "VehiclePageContentPanel");
+                    if(!vDao.searchByRegisterNumber(view.getVehicleForm_TextInput_registerNumber().getText()).isEmpty()){
+                        JOptionPane.showMessageDialog(view, "Register Number sudah terdaftar", "Dialog", JOptionPane.ERROR_MESSAGE);
+                    }else{
+                        InsertVehicle();
+                        view.getCardLayout().show(view.getContentPanel(), "VehiclePageContentPanel");
+                    }
                 }else if("Update".equals(view.getVehicleForm_Button_add().getText())){
                     EditVehicle(listVehicle.get(view.getVehicle_Table().getSelectedRow()));
                     view.getCardLayout().show(view.getContentPanel(), "VehiclePageContentPanel");
@@ -104,16 +115,25 @@ public class VehicleController implements ActionListener, MouseListener{
                 VehicleList(view.getVehicle_Table());
             }
         }else if(e.getSource() == view.getEditVehicleButton()){
-            view.getCardLayout().show(view.getContentPanel(), "VehicleFormPanel");
-            FillForm(listVehicle.get(view.getVehicle_Table().getSelectedRow()));
-             view.getVehicleForm_Button_add().setText("Update");
+            if(!"Sold".equals(listVehicle.get(view.getVehicle_Table().getSelectedRow()).getStatus())){
+                view.getCardLayout().show(view.getContentPanel(), "VehicleFormPanel");
+                FillForm(listVehicle.get(view.getVehicle_Table().getSelectedRow()));
+                view.getVehicleForm_Button_add().setText("Update");   
+            }else{
+                JOptionPane.showMessageDialog(view, "Vehicle Sudah Terjual, Tidak dapat melakukan Edit", "Dialog", JOptionPane.ERROR_MESSAGE);
+            }
         }else if(e.getSource() == view.getDeleteVehicleButton()){
-            DeleteVehicle();
-            RefreshModel();
-            VehicleList(view.getVehicle_Table());
+            if(!"Sold".equals(listVehicle.get(view.getVehicle_Table().getSelectedRow()).getStatus())){
+                DeleteVehicle();
+                RefreshModel();
+                VehicleList(view.getVehicle_Table());
+            }else{
+                JOptionPane.showMessageDialog(view, "Vehicle Sudah Terjual, Tidak dapat melakukan Edit", "Dialog", JOptionPane.ERROR_MESSAGE);
+            }
         }
     }
     
+    //Fungsi untuk meambahkan kendaraan pada table
     public void VehicleList(JTable table){
         tb = (DefaultTableModel)table.getModel();
         tb.setRowCount(0);  
@@ -130,10 +150,12 @@ public class VehicleController implements ActionListener, MouseListener{
         table.setModel(tb);
     }
     
+    //Fungsi untuk merefresh model
     public void RefreshModel(){
         this.listVehicle = vDao.list();
     }
     
+    //Fungsi untuk me reset Form
     public void ResetForm(){
         view.getVehicleForm_TextInput_registerNumber().setText("");
         view.getVehicleForm_TextInput_name().setText("");
@@ -149,6 +171,7 @@ public class VehicleController implements ActionListener, MouseListener{
         view.getVehicleForm_ComboBox_fueltype().setSelectedIndex(0);
     }
     
+    //Fungsi untuk mengisi Form berdasarkan kendaraan
     public void FillForm(Vehicle selectedVehicle){
         view.getVehicleForm_TextInput_registerNumber().setText(selectedVehicle.getRegistrationNumber());
         view.getVehicleForm_TextInput_name().setText(selectedVehicle.getName());
@@ -170,8 +193,9 @@ public class VehicleController implements ActionListener, MouseListener{
         
     }
     
+    //Fungsi untuk insert ke database
     public void InsertVehicle(){
-        if((double) view.getVehicleForm_Spinner_truckloadcapacity().getValue() != 0 && !view.getVehicleForm_ComboBox_carmodel().isEnabled()){
+        if((Integer) view.getVehicleForm_Spinner_truckloadcapacity().getValue() != 0 && !view.getVehicleForm_ComboBox_carmodel().isEnabled()){
             vDao.addVehicle(new Truck(view.getVehicleForm_TextInput_registerNumber().getText(),
                                       view.getVehicleForm_TextInput_name().getText(),
                                       view.getVehicleForm_TextInput_brand().getText(),
@@ -184,7 +208,7 @@ public class VehicleController implements ActionListener, MouseListener{
                                       view.getVehicleForm_ComboBox_fueltype().getSelectedItem().toString(),
                                       (Integer) view.getVehicleForm_Spinner_horsePower().getValue(),
                                       "Ready",
-                                      (double) view.getVehicleForm_Spinner_truckloadcapacity().getValue()
+                                      (Integer) view.getVehicleForm_Spinner_truckloadcapacity().getValue()
             ));
         }else{
             vDao.addVehicle(new Car(view.getVehicleForm_TextInput_registerNumber().getText(),
@@ -204,6 +228,7 @@ public class VehicleController implements ActionListener, MouseListener{
         }
     }
     
+    //Fungsi untuk updaate kendaraan ke database
     public void EditVehicle(Vehicle selectedVehicle){
         selectedVehicle.setRegistrationNumber(view.getVehicleForm_TextInput_registerNumber().getText());
         selectedVehicle.setName(view.getVehicleForm_TextInput_name().getText());
@@ -221,11 +246,12 @@ public class VehicleController implements ActionListener, MouseListener{
             ((Car)selectedVehicle).setCarModel(CarModel.valueOf(view.getVehicleForm_ComboBox_carmodel().getSelectedItem().toString()));
             vDao.editVehicle((Car)selectedVehicle);
         }else{
-            ((Truck)selectedVehicle).setLoadCapacity((Double) view.getVehicleForm_Spinner_truckloadcapacity().getValue());
+            ((Truck)selectedVehicle).setLoadCapacity((Integer) view.getVehicleForm_Spinner_truckloadcapacity().getValue());
             vDao.editVehicle((Truck)selectedVehicle);
         }
     }
     
+    //Fungsi untuk menghapus kendaraan dari database
     public void DeleteVehicle(){
         String msg = "Apakah anda yakin ingin menghapus " + listVehicle.get(view.getVehicle_Table().getSelectedRow()).getName()+
                     " dengan Register Number : "+ listVehicle.get(view.getVehicle_Table().getSelectedRow()).getRegistrationNumber()+" ?";
@@ -241,18 +267,22 @@ public class VehicleController implements ActionListener, MouseListener{
         }
     }
     
+    //Fungsi untuk mencari kendaraan di database
     public void SearchVehicle(String name){
-        this.listVehicle = vDao.serachByName(name);
+        this.listVehicle = vDao.searchByName(name);
     }
     
+    //Fungsi untuk mengedit status kendaraan
     public void EditStatus(Vehicle V){
         vDao.editStatus(V);
     }
     
+    //Fungsi untuk memfilter kendaraan yang berstatus "Ready"
     public void EligibleVehicle(){
         this.listVehicle = this.listVehicle.stream().filter(vehicle -> "Ready".equals(vehicle.getStatus())).collect(Collectors.toList());
     }
     
+    //Fungsi untuk mendapatkan jumlah kendaraan
     public int getCount(int x){
         switch(x){
             case 0:
@@ -260,12 +290,22 @@ public class VehicleController implements ActionListener, MouseListener{
             case 1:
                 return vDao.countCar();
             case 2:
+                return vDao.countCarWithStatus("Ready");
+            case 3:
+                return vDao.countCarWithStatus("Sold");
+            case 4:
                 return vDao.countTruck();
+            case 5:
+                return vDao.countTruckWithStatus("Ready");
+            case 6:
+                return vDao.countTruckWithStatus("Sold");
+                
             default:
                 return 0;
         }
     }
     
+    //IMPLMENTASI MOUSELISTENER
     @Override
     public void mouseClicked(MouseEvent e) {
         if(e.getClickCount() == 2 && e.getButton() == MouseEvent.BUTTON1 && e.getSource() == view.getVehicle_Table()){
@@ -281,16 +321,24 @@ public class VehicleController implements ActionListener, MouseListener{
     }
 
     @Override
-    public void mousePressed(MouseEvent e) {}
+    public void mousePressed(MouseEvent e) {
+        //DO NOTHING
+    }
 
     @Override
-    public void mouseReleased(MouseEvent e) {}
+    public void mouseReleased(MouseEvent e) {
+        //DO NOTHING
+    }
 
     @Override
-    public void mouseEntered(MouseEvent e) {}
+    public void mouseEntered(MouseEvent e) {
+        //DO NOTHING
+    }
 
     @Override
-    public void mouseExited(MouseEvent e) {}
+    public void mouseExited(MouseEvent e) {
+        //DO NOTHING
+    }
     
     
     

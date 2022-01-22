@@ -5,8 +5,8 @@
  */
 package automobiledealer.Model.Invoice;
 
-import automobiledealer.Model.Customer;
-import automobiledealer.Model.Payments;
+import automobiledealer.Model.Others.Customer;
+import automobiledealer.Model.Others.Payments;
 import java.util.Date;
 
 /**
